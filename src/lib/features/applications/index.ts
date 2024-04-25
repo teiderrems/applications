@@ -10,7 +10,7 @@ type AppStore={
 
 export const ApplicationApi=createApi({
     reducerPath:'application',
-    baseQuery:fetchBaseQuery({baseUrl:'https://applications-api2-jklzthcsg-teiderrems-projects.vercel.app/api/'}),
+    baseQuery:fetchBaseQuery({baseUrl:'https://applications-api2.vercel.app/api/'}),
     endpoints:(build)=>({
         getApplications:build.query<AppStore,any>({
             query:({page,limit})=>`applications?page=${page}&limit=${limit}`

@@ -1,17 +1,29 @@
 "use client"
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Header() {
     const pathname=usePathname();
 
+    const router=useRouter();
+    const LogOut=()=>{
+      localStorage.removeItem("token");
+      router.push(`/login?ReturnUrl=${pathname}`);
+    }
     const getPath=()=>{
         return pathname.split('/').join('>');
     }
+    useEffect(()=>{
+
+    },[localStorage.getItem("token")]);
+
   return (
     <div className="flex flex-row h-12 justify-between items-center  w-full shadow">
         <span className=" capitalize">{getPath()}</span>
-        <Link href="/about" className=" mr-2 hover:rounded-xl hover:animate-pulse hover:bg-blue-400 hover:border p-1 border-gray-300">About</Link>
+        {
+          localStorage.getItem("token")?<button onClick={LogOut} className="about">LogOut</button>:<Link href="/about" className="about">About</Link>
+        }
     </div>
   )
 }
