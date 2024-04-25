@@ -22,9 +22,9 @@ export default function RootLayout({
   return (
     <StoreProvider>
       <html lang="en">
-        <head>
+        {/* <head>
           <link rel="stylesheet" href="app/global.css"/>
-        </head>
+        </head> */}
         <body className="flex min-h-screen">
           <div className="flex flex-col z-10 absolute top-100 sm:opacity-50 left-0 md:w-1/5 bg-white h-screen sm:w-1/2 md:static">
             <h1 className="text-3xl font-bold m-1 h-10">Applications</h1>

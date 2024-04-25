@@ -1,6 +1,7 @@
 "use client"
 
 import { useLoginMutation } from "@/lib/features/users";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
@@ -50,7 +51,7 @@ export default function Login() {
         }
         <div className="w-full justify-between flex h-14 md:flex-row flex-col items-center">
           <button className="md:w-1/5 w-full self-start rounded-lg bg-blue-400 h-3/4" type="submit">Submit</button>
-          <a href="/user" className="text-blue-400 hover:underline">You don't have acount <strong>SignUp</strong></a>
+          <Link href="/user" className="text-blue-400 hover:underline">You don't have acount <strong>SignUp</strong></Link>
         </div>
       </form>
     </div>

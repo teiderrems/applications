@@ -14,9 +14,6 @@ export default function Header() {
     const getPath=()=>{
         return pathname.split('/').join('>');
     }
-    useEffect(()=>{
-
-    },[localStorage.getItem("token")]);
 
   return (
     <div className="flex flex-row h-12 justify-between items-center  w-full shadow">
