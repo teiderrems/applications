@@ -3,6 +3,8 @@ import { combineSlices, configureStore } from "@reduxjs/toolkit";
 import { UserApi } from "./features/users";
 import { ApplicationApi } from "./features/applications";
 
+import UserSlice, { User } from "./features/users/UserSlice";
+
 // `combineSlices` automatically combines the reducers using
 // their `reducerPath`s, therefore we no longer need to call `combineReducers`.
 const rootReducer = combineSlices(UserApi,ApplicationApi);

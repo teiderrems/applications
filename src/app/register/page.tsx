@@ -1,6 +1,7 @@
 "use client"
 
 import { usePostUserMutation } from "@/lib/features/users";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react"
 
@@ -29,7 +30,7 @@ export default function Register() {
     }
 
   return (
-    <div className="flex flex-1 flex-col justify-center h-full  items-center">
+    <div className="flex flex-1 flex-col justify-center h-full items-center">
         <form action="" onSubmit={HandleSubmit} className="md:w-3/5 w-4/5 h-4/5 space-y-3 flex rounded-md shadow px-2 flex-col justify-center">
             {isError&&(<span className="text-red-400 text-center w-full block">{JSON.stringify(error)}</span>)}
             <div className="form-group">
@@ -56,7 +57,7 @@ export default function Register() {
             }
             <div className="w-full justify-between flex h-14 md:flex-row flex-col items-center">
                 <button className="md:w-1/5 w-full rounded-lg self-start bg-blue-400 h-3/4" type="submit">Submit</button>
-                <a href="/user/auth" className="text-blue-400 hover:underline">You have acount <strong>SignIn</strong></a>
+                <Link href="/user/auth" className="text-blue-400 hover:underline">You have acount <strong>SignIn</strong></Link>
             </div>
         </form>
     </div>

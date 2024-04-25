@@ -1,5 +1,3 @@
-import React from 'react'
-
 export default function Application() {
   return (
     <div className='container mx-auto flex-1'>
