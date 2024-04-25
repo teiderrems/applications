@@ -51,7 +51,7 @@ export default function Login() {
         }
         <div className="w-full justify-between flex h-14 md:flex-row flex-col items-center">
           <button className="md:w-1/5 w-full self-start rounded-lg bg-blue-400 h-3/4" type="submit">Submit</button>
-          <Link href="/user" className="text-blue-400 hover:underline">You don't have acount <strong>SignUp</strong></Link>
+          <Link href="/user" className="text-blue-400 hover:underline">You do not have acount <strong>SignUp</strong></Link>
         </div>
       </form>
     </div>
