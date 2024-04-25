@@ -24,17 +24,17 @@ export default function Login() {
 
   return (
     <div className="flex flex-1 flex-col justify-center h-full  items-center">
-      <form action="" onSubmit={HandleSubmit} className="w-4/5 h-4/5 flex rounded-md shadow px-2 flex-col justify-center">
+      <form action="" onSubmit={HandleSubmit} className="w-3/5 h-3/5 flex space-y-6 rounded-md shadow px-2 flex-col justify-center">
         {isError && (<span className="text-red-400 text-center w-full block">Something wrong {data}</span>)}
         {isSuccess && (<span className="text-green-400 text-center w-full block">Register success{data}</span>)}
 
         <div className="w-full h-14 md:justify-between flex md:flex-row flex-col items-center">
           <label htmlFor="Username" className="text-2xl">Username</label>
-          <input type="text" id="Username" required onChange={(e) => { setUser({ ...user, Username: e.target.value }) }} className="rounded-md shadow  h-3/4 w-3/4 focus:shadow-inner shadow-blue-200" />
+          <input type="text" id="Username" required onChange={(e) => { setUser({ ...user, Username: e.target.value }) }} className="form-input" />
         </div>
         <div className="w-full md:justify-between flex h-14 md:flex-row flex-col items-center">
           <label htmlFor="Password" className="text-2xl">Password</label>
-          <input type="password" id="Password" required min={8} pattern="[A-Za-z0-9]+[A-Za-z]+[0-9]+[;:/!]" onChange={(e) => { setUser({ ...user, Password: e.target.value }) }} className="rounded-md shadow  w-3/4 h-3/4 focus:shadow-inner shadow-blue-200" />
+          <input type="password" id="Password" required minLength={8} pattern="/[A-Za-z0-9]+[A-Za-z]+[0-9]+[;:/!]/" onChange={(e) => { setUser({ ...user, Password: e.target.value }) }} className="form-input" />
           {
                 user.Password!=""&&(!user.Password.match("[A-Za-z0-9]+[A-Za-z]+[0-9]+[;:/!]"))&&<p className="text-red-400 text-wrap">Password must contain at least 8 characters with a mixture of uppercase, lowercase, numbers with at least one character among</p>
             }

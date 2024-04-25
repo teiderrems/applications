@@ -16,6 +16,10 @@
   }
 }
 
+.active{
+  @apply w-full bg-blue-500 text-3xl shadow
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
@@ -30,4 +34,8 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+.form-input{
+  @apply rounded-md shadow px-2  w-3/4 h-3/4 focus:shadow-inner shadow-blue-200
 }

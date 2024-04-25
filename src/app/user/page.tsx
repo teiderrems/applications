@@ -36,11 +36,11 @@ export default function Register() {
 
             <div className="w-full h-14 md:justify-between flex md:flex-row flex-col items-center">
                 <label htmlFor="Username" className="text-2xl">Username</label>
-                <input type="text" id="Username" required onChange={(e)=>{setUser({...user,Username:e.target.value})}} className="rounded-md shadow  h-3/4 w-3/4 focus:shadow-inner shadow-blue-200" />
+                <input type="text" id="Username" required onChange={(e)=>{setUser({...user,Username:e.target.value})}} className="form-input" />
             </div>
             <div className="w-full flex md:justify-between h-14 md:flex-row flex-col items-center">
                 <label htmlFor="Email" className="text-2xl">Email</label>
-                <input type="email" id="Email" required onChange={(e)=>{setUser({...user,Email:e.target.value})}} className="rounded-md shadow  h-3/4 w-3/4 focus:shadow-inner shadow-blue-200" />
+                <input type="email" id="Email" required onChange={(e)=>{setUser({...user,Email:e.target.value})}} className="form-input" />
             </div>
             <div className="w-full md:justify-between flex h-14 md:flex-row flex-col items-center">
                 <label htmlFor="Password" className="text-2xl">Password</label>

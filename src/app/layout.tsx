@@ -26,7 +26,7 @@ export default function RootLayout({
           <link rel="stylesheet" href="app/global.css"/>
         </head>
         <body className="flex min-h-screen">
-          <div className="flex flex-col z-10 absolute top-100 sm:opacity-50 bg-slate-200 left-0 md:w-1/5 h-screen sm:w-1/2 md:static">
+          <div className="flex flex-col z-10 absolute top-100 sm:opacity-50 left-0 md:w-1/5 bg-white h-screen sm:w-1/2 md:static">
             <h1 className="text-3xl font-bold m-1 h-10">Applications</h1>
             <div className="flex-1 flex flex-col shadow">
             <SideBar/>
