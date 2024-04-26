@@ -21,7 +21,7 @@ body {
 }
 
 .form-group{
-  @apply w-full h-28 md:h-14 md:justify-between flex md:flex-row flex-col items-center
+  @apply w-full h-28 md:h-20 md:justify-between flex md:flex-row flex-col items-center
 }
 
 .form-input{
@@ -29,9 +29,9 @@ body {
 } 
 
 label{
-  @apply text-justify md:w-1/4 w-full
+  @apply text-justify md:w-1/5 w-full
 }
 
 .btn-submit{
-  @apply md:w-1/5 text-3xl w-full self-start rounded-lg bg-blue-400 md:h-3/4 h-full
+  @apply md:w-2/5 text-3xl w-full self-start rounded-lg bg-blue-400 md:h-3/4 h-full
 }

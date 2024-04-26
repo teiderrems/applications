@@ -12,16 +12,16 @@ export default function Header() {
       router.push(`/login?ReturnUrl=${pathname}`);
     }
     const getPath=()=>{
-        return pathname.split('/').join('>');
+        return pathname.split('/').join('>').substring(1);
     }
 
     useEffect(()=>{
       setToken(localStorage.getItem("token") as string);
-    },[setToken,token])
+    },[token])
 
   return (
-    <div className="flex flex-row h-12 justify-between items-center  w-full shadow">
-        <span className=" capitalize">{getPath()}</span>
+    <div className="flex flex-row h-12 justify-between items-center  w-full border-b">
+        <span className=" capitalize pl-1">{getPath()}</span>
         {
           token?<button onClick={LogOut} className="about">LogOut</button>:<Link href="/about" className="about">About</Link>
         }

@@ -9,6 +9,7 @@ export default function SideBar() {
   useEffect(()=>{
     if (window.localStorage&&localStorage.getItem("token")) {
       setUser(JSON.parse(atob(localStorage.getItem("token")!.split('.')[1])));
+      console.log(user,atob(localStorage.getItem("token")!.split('.')[1]));
     }
   },[user]);
 
@@ -18,7 +19,7 @@ export default function SideBar() {
         user?(
         <nav className="flex flex-col flex-1 py-3 space-y-6 text-justify w-full">
             <Link href="/application" className={`px-2 text-2xl ${pathname=="/application"&&'active'}`}>Application</Link>
-            <Link href="/user" className={`px-2 text-2xl ${pathname=="/user"?'active':''}`}>{user?.Email}</Link>
+            <Link href="/" className={`px-2 text-2xl ${pathname=="/"?'active':''}`}>{user?.username}</Link>
         </nav>
         ):(
           <nav className="flex flex-col flex-1 py-3 space-y-6 text-justify w-full">

@@ -3,9 +3,9 @@
 import { useLoginMutation } from "@/lib/features/users";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 
-export default function Login() {
+function Login() {
   const [user, setUser] = useState<{
     Username: string
     Password: string
@@ -55,5 +55,13 @@ export default function Login() {
         </div>
       </form>
     </div>
+  )
+}
+
+export default function LoginView(){
+  return(
+    <Suspense>
+      <Login/>
+    </Suspense>
   )
 }
