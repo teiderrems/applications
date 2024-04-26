@@ -20,9 +20,9 @@ export default function Login() {
 
   const [SingIn, { isError, isLoading, isSuccess, data }] = useLoginMutation();
 
-  const HandleSubmit = async(e: React.FormEvent) => {
+  const HandleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    await SingIn({ Username: user.Username, Password: user.Password });
+    SingIn({ Username: user.Username, Password: user.Password });
     if (isSuccess) {
       localStorage.setItem("token",data.token);
       if (query.get("ReturnUrl")!=null) {
@@ -36,7 +36,7 @@ export default function Login() {
 
   return (
     <div className="flex flex-1 flex-col justify-center h-full  items-center">
-      <form action="" onSubmit={HandleSubmit} className="w-3/5 h-3/5 flex space-y-6 rounded-md shadow px-2 flex-col justify-center">
+      <form action="" onSubmit={HandleSubmit} className="md:w-3/5 w-4/5 h-4/5 space-y-3 flex px-2 flex-col justify-center">
         {isError && (<span className="text-red-400 text-center w-full block">Something wrong {data}</span>)}
         <div className="form-group">
           <label htmlFor="Username" className="text-2xl">Username</label>
@@ -49,9 +49,9 @@ export default function Login() {
         {
           user.Password!=""&&(!user.Password.match("[a-zA-Z]+[a-zA-Z0-9]+[;?,@]"))&&<p className="text-red-400 text-wrap">Password must contain at least 8 characters with a mixture of uppercase, lowercase, numbers with at least one character among</p>
         }
-        <div className="w-full justify-between flex h-14 md:flex-row flex-col items-center">
-          <button className="md:w-1/5 w-full self-start rounded-lg bg-blue-400 h-3/4" type="submit">Submit</button>
-          <Link href="/user" className="text-blue-400 hover:underline">You do not have acount <strong>SignUp</strong></Link>
+        <div className="w-full justify-between flex md:h-14 h-28 md:flex-row flex-col items-center">
+          <button className="btn-submit" type="submit">Submit</button>
+          <Link href="/register" className="text-blue-400 hover:underline">You do not have acount <strong>SignUp</strong></Link>
         </div>
       </form>
     </div>
