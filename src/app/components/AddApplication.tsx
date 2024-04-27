@@ -36,7 +36,7 @@ export default function AddApplication({setHandleAdd}:{setHandleAdd:Dispatch<Set
   }
   
   return (
-    <div className='wrap-form absolute top-0 bottom-0 left-0 w-full h-full bg-gray-500 opacity-50 z-10'>
+    <div className='wrap-form absolute inset-0 w-full h-full bg-gray-500 opacity-100 z-10'>
         <form onSubmit={HandleSubmit} className='form-app'>
              <div className='form-group-app'>Title<label className='flex-1'  htmlFor="title"></label><input onChange={(e)=>setApplication({...application,Title:e.target.value})} className='input-form-app' type="text" required minLength={4} /></div>
              <div className='form-group-app'>Entreprise<label className='flex-1'  htmlFor="entreprise"></label><input onChange={(e)=>setApplication({...application,Entreprise:e.target.value})} className='input-form-app' type="text" required minLength={4} /></div>

@@ -36,7 +36,7 @@ function Login() {
 
   return (
     <div className="wrap-form">
-      <form action="" onSubmit={HandleSubmit} className="md:w-3/5 w-5/6 h-4/5 space-y-3 flex px-2 flex-col justify-center">
+      <form action="" onSubmit={HandleSubmit} className="md:w-3/5 w-5/6 h-4/5 space-y-3 flex px-2 flex-col bg-white rounded-md shadow justify-center">
         {isError && (<span className="text-red-400 text-center w-full block">Something wrong {data}</span>)}
         <div className="form-group">
           <label htmlFor="Username" className="text-2xl">Username</label>
@@ -49,7 +49,7 @@ function Login() {
         {
           user.Password!=""&&(!user.Password.match("[a-zA-Z0-9]{7,15}[;?,@]"))&&<p className="text-red-400 text-wrap">Password must contain at least 8 characters with a mixture of uppercase, lowercase, numbers with at least one character among</p>
         }
-        <div className="w-full justify-between flex md:h-14 h-28 md:flex-row flex-col items-center">
+        <div className="w-full justify-around flex md:h-14 h-28 md:flex-row flex-col items-center">
           <button className="btn-submit" type="submit">Submit</button>
           <Link href="/register" className="text-blue-400 hover:underline">You do not have acount <strong>SignUp</strong></Link>
         </div>

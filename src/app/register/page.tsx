@@ -35,7 +35,7 @@ export default function Register() {
 
   return (
     <div className="wrap-form">
-        <form action="" onSubmit={HandleSubmit} className="md:w-3/5 w-5/6 h-4/5 space-y-3 flex px-2 flex-col justify-center">
+        <form action="" onSubmit={HandleSubmit} className="md:w-3/5 w-5/6 h-4/5 space-y-3 flex px-2 bg-white rounded-md shadow flex-col justify-center">
             {isError&&(<span className="text-red-400 text-center w-full block">{JSON.stringify(error)}</span>)}
             <div className="form-group">
                 <label htmlFor="Username" className="text-2xl">Username</label>
@@ -59,7 +59,7 @@ export default function Register() {
             {
                 user.Password!=""&&user.ConfirmPassword!=""&&user.ConfirmPassword!=user.Password&&<p className="text-red-400">ConfirmPassword must be equal to Password</p>
             }
-            <div className="w-full justify-between flex  md:h-14 h-28 md:flex-row flex-col items-center">
+            <div className="w-full justify-around flex  md:h-14 h-28 md:flex-row flex-col items-center">
                 <button className="btn-submit" type="submit">Submit</button>
                 <Link href="/login" className="text-blue-400 hover:underline">You have acount <strong>SignIn</strong></Link>
             </div>

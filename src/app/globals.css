@@ -15,7 +15,7 @@ html{
 }
 
 .form-app{
-  @apply flex flex-col rounded-md justify-evenly space-y-2 shadow md:w-1/2 w-3/4 h-5/6 bg-gray-100  opacity-100
+  @apply flex flex-col rounded-md justify-evenly space-y-2 shadow md:w-1/2 w-3/4 h-5/6 bg-white  opacity-100
 }
 
 .input-form-app{
@@ -29,7 +29,7 @@ body {
 }
 
 .wrap-form{
-  @apply flex flex-1 flex-col justify-center h-full  items-center
+  @apply flex flex-1 flex-col justify-center h-full  items-center bg-gray-500
 }
 
 .form-group{
