@@ -19,6 +19,7 @@ export default function ApplicationItem({application}:{application:Props}) {
         <p className='text-justify text-wrap truncate'>
             {application.JobDescription}
         </p>
+        <h1 className='text-sm'>{application.CreatedAt?.toLocaleString().split('T')[0].split('-').reverse().join('/')}</h1>
     </div>
   )
 }

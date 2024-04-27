@@ -28,7 +28,7 @@ export default function Application() {
         (!handleAdd)?<button className="rounded-lg hover:bg-blue-500 text-center h-full w-7 mr-2 hover:text-white" onClick={()=>setHandleAdd(!handleAdd)}><AppstoreAddOutlined className="h-5/6 w-5/6"/></button>:<AddApplication setHandleAdd={setHandleAdd}/>
       }
       </div>
-      <section className="flex flex-col flex-1">
+      <section className="flex flex-col flex-1 space-y-2">
         <div className="flex-1 mx-4 grid md:grid-cols-4 gap-3 grid-cols-1">
           {
             data?.map(a=>(<ApplicationItem key={a._id} application={a}/>))
