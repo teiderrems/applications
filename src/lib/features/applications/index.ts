@@ -1,19 +1,28 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+
 type AppStore={
-    _id:String;
-    title:String;
-    description?:String;
-    entreprise:String;
-    adresse?:String;
-    fichePoste?:String;
+    _id:string;
+    Title:string;
+    Description?:string;
+    Entreprise:string;
+    Adresse?:string;
+    JobDescription?:string;
+    Status:string;
+    CreatedAt:Date;
+    UpdatedAt:Date;
 };
 
 export const ApplicationApi=createApi({
     reducerPath:'application',
     baseQuery:fetchBaseQuery({baseUrl:'https://applications-api2.vercel.app/api/'}),
     endpoints:(build)=>({
-        getApplications:build.query<AppStore,any>({
-            query:({page,limit})=>`applications?page=${page}&limit=${limit}`
+        getApplications:build.query<[AppStore],any>({
+            query:({page,limit})=>({
+                url:`applications?page=${page}&limit=${limit}`,
+                headers:{
+                    "Authorization":"Bearer "+localStorage.getItem("token")
+                }
+            })
         }),
         postApplication:build.mutation({
             query:(application)=>({
@@ -30,7 +39,10 @@ export const ApplicationApi=createApi({
             query:({id,...application})=>({
                 method:"PUT",
                 url:`application/${id}`,
-                body:application
+                body:application,
+                headers:{
+                    "Authorization":"Bearer "+localStorage.getItem("token")
+                }
             }),
             transformErrorResponse:(response)=>{response.status,response.data},
         }),
@@ -38,6 +50,9 @@ export const ApplicationApi=createApi({
             query:(id:number)=>({
                 method:"DELETE",
                 url:`application/${id}`,
+                headers:{
+                    "Authorization":"Bearer "+localStorage.getItem("token")
+                }
             })
         })
     })

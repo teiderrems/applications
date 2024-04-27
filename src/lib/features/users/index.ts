@@ -6,13 +6,21 @@ export const UserApi=createApi({
     baseQuery:fetchBaseQuery({baseUrl:'https://applications-api2.vercel.app/api/'}),
     endpoints:(build)=>({
         getUsers:build.query<any,void>({
-            query:()=>'users'
+            query:()=>({
+              url:'users',
+              headers:{
+                "Authorization":"Bearer "+localStorage.getItem("token")
+              }
+            })
         }),
         postUser:build.mutation({
             query:(user)=>({
                 method:"POST",
                 body:user,
-                url:'users'
+                url:'users',
+                headers:{
+                  "Authorization":"Bearer "+localStorage.getItem("token")
+                }
             }),
             transformResponse: (response: { data: any }, meta, arg) => response.data,
       // Pick out errors and prevent nested properties in a hook or selector
@@ -45,7 +53,10 @@ export const UserApi=createApi({
             query:({id,...User})=>({
                 method:"PUT",
                 url:`users/${id}`,
-                body:User
+                body:User,
+                headers:{
+                  "Authorization":"Bearer "+localStorage.getItem("token")
+                }
             }),
             transformErrorResponse:(response)=>{response.status,response.data},
         }),
@@ -53,13 +64,19 @@ export const UserApi=createApi({
             query:(id:String)=>({
                 method:"DELETE",
                 url:`users/${id}`,
+                headers:{
+                  "Authorization":"Bearer "+localStorage.getItem("token")
+                }
             })
         }),
         login:build.mutation<any,any>({
           query:(credential)=>({
             method:"POST",
             url:'users/auth',
-            body:credential
+            body:credential,
+            headers:{
+              "Authorization":"Bearer "+localStorage.getItem("token")
+            }
           })
         })
     })

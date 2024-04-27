@@ -23,7 +23,8 @@ export default function AddApplication({setHandleAdd}:{setHandleAdd:Dispatch<Set
   });
   const router=useRouter();
   const pathname=usePathname();
-  const HandleSubmit=()=>{
+  const HandleSubmit=(e:React.FormEvent)=>{
+    e.preventDefault();
     postApplication(application);
     if (isError) {
       console.log(error,data);
