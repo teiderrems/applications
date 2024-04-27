@@ -3,8 +3,8 @@
 export default function Home() {
   return (
     <main className="flex h-full container mx-auto flex-col">
-      <p className="text-wrap text-xl text-justify h-full w-full p-2">Nous sommes enchantés de vous accueillir sur notre plateforme d'enregistrement des candidatures. Chez <strong>Candidatura</strong>,
-       nous croyons en la force d'une équipe diversifiée et passionnée. 
+      <p className="text-wrap text-xl text-justify h-full w-full p-2">Nous sommes enchantés de vous accueillir sur notre plateforme d`&rsquo;`enregistrement des candidatures. Chez <strong>Candidatura</strong>,
+       nous croyons en la force d`&apos;`une équipe diversifiée et passionnée. 
         Que vous soyez un professionnel chevronné ou un jeune talent plein de potentiel, nous sommes impatients de découvrir ce que vous pouvez apporter à notre équipe.</p>
     </main>
   );
