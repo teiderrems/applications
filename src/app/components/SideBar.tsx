@@ -9,9 +9,8 @@ export default function SideBar() {
   useEffect(()=>{
     if (window.localStorage&&localStorage.getItem("token")) {
       setUser(JSON.parse(atob(localStorage.getItem("token")!.split('.')[1])));
-      console.log(user,atob(localStorage.getItem("token")!.split('.')[1]));
     }
-  },[user]);
+  },[user,setUser]);
 
   return (
     <>

@@ -3,7 +3,7 @@
 import { usePostUserMutation } from "@/lib/features/users";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 
 export default function Register() {
 
@@ -25,13 +25,17 @@ export default function Register() {
         e.preventDefault();
         await postUser({Username:user.Username,Password:user.Password,Email:user.Email});
         if (isSuccess) {
-            router.push('/users/auth');
+            router.push('/login');
         }
     }
 
+    useEffect(()=>{
+
+    },[isError,isLoading,isSuccess])
+
   return (
     <div className="flex flex-1 flex-col justify-center h-full items-center">
-        <form action="" onSubmit={HandleSubmit} className="md:w-3/5 w-4/5 h-4/5 space-y-3 flex px-2 flex-col justify-center">
+        <form action="" onSubmit={HandleSubmit} className="md:w-3/5 w-5/6 h-4/5 space-y-3 flex px-2 flex-col justify-center">
             {isError&&(<span className="text-red-400 text-center w-full block">{JSON.stringify(error)}</span>)}
             <div className="form-group">
                 <label htmlFor="Username" className="text-2xl">Username</label>
@@ -43,10 +47,10 @@ export default function Register() {
             </div>
             <div className="form-group">
                 <label htmlFor="Password" className="text-2xl">Password</label>
-                <input type="password" id="Password" required min={8} pattern="[A-Za-z0-9]+[A-Za-z]+[0-9]+[;:/!]" onChange={(e)=>{setUser({...user,Password:e.target.value})}} className="form-input" />
+                <input type="password" id="Password" required min={8} pattern="[a-zA-Z0-9]{7,15}[;?,@]" onChange={(e)=>{setUser({...user,Password:e.target.value})}} className="form-input" />
             </div>
             {
-                user.Password!=""&&(!user.Password.match("[a-zA-Z]+[a-zA-Z0-9]+[;?,@]"))&&<p className="text-red-400 text-wrap">Password must contain at least 8 characters with a mixture of uppercase, lowercase, numbers with at least one character among</p>
+                user.Password!=""&&(!user.Password.match("[a-zA-Z0-9]{7,15}[;?,@]"))&&<p className="text-red-400 text-wrap">Password must contain at least 8 characters with a mixture of uppercase, lowercase, numbers with at least one character among</p>
             }
             <div className="form-group">
                 <label htmlFor="ConfirmPw" className="text-2xl">ConfirmPw</label>
