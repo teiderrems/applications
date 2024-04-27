@@ -35,8 +35,8 @@ function Login() {
   }
 
   return (
-    <div className="flex flex-1 flex-col justify-center h-full  items-center">
-      <form action="" onSubmit={HandleSubmit} className="md:w-3/5 w-5/6 h-4/5 space-y-2 flex px-2 flex-col justify-center">
+    <div className="wrap-form">
+      <form action="" onSubmit={HandleSubmit} className="md:w-3/5 w-5/6 h-4/5 space-y-3 flex px-2 flex-col justify-center">
         {isError && (<span className="text-red-400 text-center w-full block">Something wrong {data}</span>)}
         <div className="form-group">
           <label htmlFor="Username" className="text-2xl">Username</label>

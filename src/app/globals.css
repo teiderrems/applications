@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .active{
-  @apply w-full bg-blue-500 shadow text-white
+  @apply w-full border-b-2 border-black text-blue-300
 }
 
 html{
@@ -14,10 +14,22 @@ html{
   @apply mr-2 hover:rounded-full hover:animate-pulse hover:bg-blue-400 hover:border p-1 border-gray-300
 }
 
+.form-app{
+  @apply flex flex-col rounded-md justify-evenly space-y-2 shadow md:w-1/2 w-3/4 h-5/6 bg-gray-100  opacity-100
+}
+
+.input-form-app{
+  @apply md:w-2/3 w-full px-2 rounded-md shadow md:h-full h-3/4 mr-1
+}
+
 body {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+.wrap-form{
+  @apply flex flex-1 flex-col justify-center h-full  items-center
 }
 
 .form-group{
@@ -33,5 +45,12 @@ label{
 }
 
 .btn-submit{
-  @apply md:w-2/5 text-3xl w-full self-start rounded-lg bg-blue-400 h-5/6
+  @apply md:w-2/5 text-3xl w-full self-start rounded-lg bg-blue-400 md:h-5/6 h-1/2 hover:text-white
+}
+.form-group-app{
+  @apply w-full justify-evenly md:h-12 h-14 px-2 flex md:flex-row md:space-x-1 space-y-1 flex-col
+}
+
+.form-group-text{
+  @apply w-full justify-evenly md:h-16 px-2 flex md:flex-row md:space-x-1 space-y-1 flex-col
 }

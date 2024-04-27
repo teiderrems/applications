@@ -30,9 +30,7 @@ export default function RootLayout({
   const [togel,setTogel]=useState(false)
   const [token,setToken]=useState<string>('');
   const [image,setImage]=useState(burgerImg);
-  // useEffect(()=>{
-  //   setToken(localStorage.getItem("token") as string);
-  // },[token])
+  const [show,setShow]=useState(true)
 
     const router=useRouter();
     
@@ -61,14 +59,14 @@ export default function RootLayout({
   return (
     <StoreProvider>
       <html lang="en">
-        <body className="flex min-h-screen" onClick={()=>{
+        <body className="flex min-h-screen " onClick={()=>{
           if (togel) {
             setTogel(false);
             setImage(burgerImg);
           }
         }}>
           <div id="toggled-menu"
-              className={`w-full absolute top-0 bottom-0 left-0 -translate-x-full -z-10  ${togel?'translate-x-0 z-20 opacity-100 w-3/4 bg-gray-400 translate-y-9':''} text-gray-800 border-b border-gray-200 flex flex-col items-center md:static md:w-min md:transform-none md:border-none`}>
+              className={`w-full absolute top-0 bottom-0 left-0 -translate-x-full md:border-r bg-gray-50  ${togel?'translate-x-0 z-20 opacity-100 w-3/4 translate-y-9':''} text-gray-800 border-b border-gray-200 flex flex-col items-center md:static md:w-min md:transform-none md:border-none`}>
             <h1 className="text-3xl font-bold p-1 w-full h-12 border-b">Applications</h1>
             <div className="flex-1 flex w-full flex-col"> 
             {/* <SideBar/> */}
@@ -76,7 +74,7 @@ export default function RootLayout({
               user?(
               <nav className="flex flex-col flex-1 py-3 space-y-6 text-justify w-full">
                   <Link href="/application" className={`px-2 text-2xl ${pathname=="/application"&&'active'}`}>Application</Link>
-                  <Link href="/" className={`px-2 text-2xl ${pathname=="/"?'active':''}`}>{user?.username}</Link>
+                  <Link href="/" className={`px-2 capitalize text-2xl ${pathname=="/"?'active':''}`}>{user?.username}</Link>
               </nav>
               ):(
                 <nav className="flex flex-col flex-1 py-3 space-y-6 text-justify w-full">
@@ -88,9 +86,8 @@ export default function RootLayout({
             </div>
             <Footer/>
             </div>
-          <div className="flex-1 flex flex-col bg-slate-50 h-screen">
-            {/* <Header/> */}
-            <div className="flex flex-row h-12 justify-between items-center  w-full border-b">
+          <div className="flex-1 flex flex-col h-screen">
+            <div className="flex flex-row h-12 bg-gray-50  justify-between items-center  w-full border-b">
               <button
                 aria-label="toggle button"
                 aria-expanded="false"
@@ -100,7 +97,7 @@ export default function RootLayout({
                 >
                   <Image src={image} alt="button"/>
               </button>
-                <span className=" capitalize pl-1 hidden md:w-1/3">{getPath()}</span>
+                <span className=" capitalize pl-1 invisible md:visible md:w-1/3">{getPath()}</span>
                 {
                   token?<button onClick={LogOut} className="about">LogOut</button>:<Link href="/about" className="about">About</Link>
                 }

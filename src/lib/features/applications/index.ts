@@ -19,7 +19,10 @@ export const ApplicationApi=createApi({
             query:(application)=>({
                 method:"POST",
                 body:application,
-                url:'applications'
+                url:'applications',
+                headers:{
+                    "Authorization":"Bearer "+localStorage.getItem("token")
+                }
             }),
             transformErrorResponse:(response)=>{response.status,response.data},
         }),
