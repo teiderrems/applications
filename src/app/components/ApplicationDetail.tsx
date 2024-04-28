@@ -77,8 +77,7 @@ export default function ApplicationDetail({application,setShowDetail}:{applicati
     }
 
     useEffect(()=>{
-        console.log(application);
-    },[application,response]);
+    },[currentApp,response]);
   return (
    <div className="fixed inset-0  flex justify-center items-center opacity-80 flex-col">
         <div onClick={()=>setShowDetail(state=>!state)} className="absolute inset-1 min-h-screen bg-gray-700 opacity-100 z-0"></div>
