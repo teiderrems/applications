@@ -52,7 +52,7 @@ function Login() {
         {response?.isError && (<span className="text-red-400 text-center w-full block">Something wrong {response?.error}</span>)}
         <div className="form-group">
           <label htmlFor="Username" className="text-2xl">Username</label>
-          <input type="text" pattern="[a-zA-Z0-9]" id="Username" required onChange={(e) => { setUser({ ...user, Username: e.target.value }) }} className="form-input" />
+          <input type="text" pattern="[a-zA-Z0-9]*" id="Username" required onChange={(e) => { setUser({ ...user, Username: e.target.value }) }} className="form-input" />
         </div>
         <div className="form-group">
           <label htmlFor="Password" className="text-2xl">Password</label>

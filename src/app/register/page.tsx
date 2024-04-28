@@ -46,7 +46,7 @@ export default function Register() {
             {response?.isError&&(<p className="text-justify text-red-400">{response?.error}</p>)}
             <div className="form-group">
                 <label htmlFor="Username" className="text-2xl">Username</label>
-                <input type="text" pattern="[a-zA-Z0-9]" id="Username" placeholder="enter your username" required onChange={(e)=>{setUser({...user,Username:e.target.value})}} className="form-input" />
+                <input type="text" pattern="[a-zA-Z0-9]*" id="Username" placeholder="enter your username" required onChange={(e)=>{setUser({...user,Username:e.target.value})}} className="form-input" />
             </div>
             <div className="form-group">
                 <label htmlFor="Email" className="text-2xl">Email</label>
