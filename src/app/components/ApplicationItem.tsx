@@ -1,4 +1,6 @@
-import React from 'react'
+
+import React, { useState } from 'react'
+import ApplicationDetail from './ApplicationDetail';
 
 type Props={
     _id?:string;
@@ -13,13 +15,28 @@ type Props={
 }
 
 export default function ApplicationItem({application}:{application:Props}) {
+  const [showDetail,setShowDetail]=useState(false);
+  
   return (
-    <div className='flex p-1 hover:cursor-pointer hover:shadow-blue-400 hover:border-inherit rounded-lg flex-col shadow'>
-        <div className='flex justify-between'><h1>{application.Title}</h1> <span className={`rounded-md shadow text-center p-1 ${application.Status==="success"?'bg-green-400':'bg-red-400'}`}>{application.Status}</span></div>
-        <p className='text-justify text-wrap truncate'>
-            {application.JobDescription}
-        </p>
-        <h1 className='text-sm'>{application.CreatedAt?.toLocaleString().split('T')[0].split('-').reverse().join('/')}</h1>
-    </div>
+    <>
+      <button onClick={()=>setShowDetail(!showDetail)} >
+      <div className='flex p-1 text-justify hover:cursor-pointer hover:shadow-blue-400 hover:border-inherit  rounded-lg flex-col shadow'>
+            <h1 className='border-b text-wrap'>Titre : {application.Title}</h1> 
+          {/* <div className='flex justify-around'>
+            <span className={`rounded-md shadow text-center p-1 
+            ${application.Status==="success"?'bg-green-400':'bg-red-400'}`}>
+              {application.Status}</span>
+          </div> */}
+          <ul>
+            <li><span>Entreprise : </span>{application.Entreprise}</li>
+            <li>Adresse : {application.Adresse}</li>
+            <li> Date de Création : {application.CreatedAt?.toLocaleString().split('T')[0].split('-').reverse().join('/')}</li>
+          </ul>
+      </div>
+    </button>
+    {
+      showDetail&&<ApplicationDetail application={application} setShowDetail={setShowDetail}/>
+    }
+    </>
   )
 }

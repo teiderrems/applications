@@ -1,9 +1,10 @@
 "use client"
 
+import useUserStore from "@/hooks/user.service";
 import { useLoginMutation } from "@/lib/features/users";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 function Login() {
   const [user, setUser] = useState<{
@@ -18,13 +19,15 @@ function Login() {
 
   const router=useRouter()
 
-  const [SingIn, { isError, isLoading, isSuccess, data }] = useLoginMutation();
+  // const login=useLogin();
 
-  const HandleSubmit = (e: React.FormEvent) => {
+  const [SingIn, { ...result}] = useLoginMutation();
+
+  const HandleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
-    SingIn({ Username: user.Username, Password: user.Password });
-    if (isSuccess) {
-      localStorage.setItem("token",data.token);
+    await SingIn({ Username: user.Username, Password: user.Password });
+    if (result.isSuccess) {
+      localStorage.setItem("token",result.data.token);
       if (query.get("ReturnUrl")!=null) {
         router.push(query.get("ReturnUrl") as string);
       }
@@ -34,10 +37,14 @@ function Login() {
     }
   }
 
+  useEffect(()=>{
+
+  },[query,result.isSuccess,result.data])
+
   return (
     <div className="wrap-form">
       <form action="" onSubmit={HandleSubmit} className="md:w-3/5 w-5/6 h-4/5 space-y-3 flex px-2 flex-col bg-white rounded-md shadow justify-center">
-        {isError && (<span className="text-red-400 text-center w-full block">Something wrong {data}</span>)}
+        {result.isError && (<span className="text-red-400 text-center w-full block">Something wrong {(result.error as any).message}</span>)}
         <div className="form-group">
           <label htmlFor="Username" className="text-2xl">Username</label>
           <input type="text" id="Username" required onChange={(e) => { setUser({ ...user, Username: e.target.value }) }} className="form-input" />

@@ -1,6 +1,12 @@
 "use client"
 
+import { useEffect, useState } from "react";
+
 export default function Home() {
+  const [token,setToken]=useState<string>();
+  useEffect(()=>{
+    setToken(localStorage.getItem("token") as string);
+  },[token])
   return (
     <main className="flex h-full container mx-auto flex-col">
       <p className="text-wrap text-xl text-justify h-full w-full p-2">Nous sommes enchantés de vous accueillir sur notre plateforme d&rsquo;enregistrement des candidatures. Chez <strong>Candidatura</strong>,

@@ -24,6 +24,14 @@ export const ApplicationApi=createApi({
                 }
             })
         }),
+        getApplication:build.query<AppStore,string>({
+            query:(id)=>({
+                url:`applications/${id}`,
+                headers:{
+                    "Authorization":"Bearer "+localStorage.getItem("token")
+                }
+            })
+        }),
         postApplication:build.mutation({
             query:(application)=>({
                 method:"POST",
@@ -38,7 +46,7 @@ export const ApplicationApi=createApi({
         updateApplication:build.mutation({
             query:({id,...application})=>({
                 method:"PUT",
-                url:`application/${id}`,
+                url:`applications/${id}`,
                 body:application,
                 headers:{
                     "Authorization":"Bearer "+localStorage.getItem("token")
@@ -49,7 +57,7 @@ export const ApplicationApi=createApi({
         deleteApplication:build.mutation({
             query:(id:number)=>({
                 method:"DELETE",
-                url:`application/${id}`,
+                url:`applications/${id}`,
                 headers:{
                     "Authorization":"Bearer "+localStorage.getItem("token")
                 }
@@ -58,4 +66,4 @@ export const ApplicationApi=createApi({
     })
 })
 
-export const {useGetApplicationsQuery,usePostApplicationMutation,useUpdateApplicationMutation,useDeleteApplicationMutation}=ApplicationApi;
+export const {useGetApplicationsQuery,useGetApplicationQuery,usePostApplicationMutation,useUpdateApplicationMutation,useDeleteApplicationMutation}=ApplicationApi;

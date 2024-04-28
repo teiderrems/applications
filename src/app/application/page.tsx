@@ -4,20 +4,28 @@ import { useEffect, useState } from "react"
 import AddApplication from "../components/AddApplication";
 import { useGetApplicationsQuery } from "@/lib/features/applications";
 import ApplicationItem from "../components/ApplicationItem";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function Application() {
   const [handleAdd,setHandleAdd]=useState(false);
   const [page,setPage]=useState(0);
   const [limit,setLimit]=useState(10);
-  const {data,isError,isLoading,isSuccess,error}=useGetApplicationsQuery({page,limit});
+  const applications=useGetApplicationsQuery({page,limit});
+  const router=useRouter();
+  const pathname=usePathname();
+  const [token,setToken]=useState<string>();
  
   useEffect(()=>{
+    setToken((localStorage.getItem('token') as string??''));
+    if (applications.error && ((applications.error as any).data?.message as string).includes("jwt")) {
+      localStorage.removeItem("token");
+      router.push(`/login?ReturnUrl=${pathname}`);
+    }
+  },[limit,page,applications,token,pathname,router])
 
-  },[limit,page])
-
-  if (isError) {
+  if (applications.isError) {
     <div className="flex justify-center items-center">
-        <pre>{JSON.stringify(data)}</pre>
+        <p className="text-justify text-red-400">{(applications.error as any).data.message}</p>
     </div>
   }
   
@@ -31,7 +39,7 @@ export default function Application() {
       <section className="flex flex-col flex-1 space-y-2">
         <div className="flex-1 mx-4 grid md:grid-cols-4 gap-3 grid-cols-1">
           {
-            data?.map(a=>(<ApplicationItem key={a._id} application={a}/>))
+            applications.data?.map(a=>(<ApplicationItem key={a._id} application={a}/>))
           }
         </div>
         <div className="flex justify-end mb-1 mr-2 space-x-3  items-end basis-1"><button onClick={()=>setPage(page-1)} className="flex hover:bg-blue-400 space-x-1 px-1 items-center justify-center shadow rounded-md"><ArrowLeftOutlined /><span>prev</span></button><button onClick={()=>setPage(page+1)} className="flex hover:bg-blue-400  px-1 items-center space-x-1 shadow justify-center rounded-md"><span>next</span><ArrowRightOutlined /></button></div>

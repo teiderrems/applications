@@ -54,7 +54,7 @@ export default function RootLayout({
     if (window.localStorage&&localStorage.getItem("token")) {
       setUser(JSON.parse(atob(localStorage.getItem("token")!.split('.')[1])));
     }
-  },[image,togel]);
+  },[image,togel,token]);
 
   return (
     <StoreProvider>

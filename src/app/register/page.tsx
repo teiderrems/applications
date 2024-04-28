@@ -19,24 +19,24 @@ export default function Register() {
         ConfirmPassword:""
     });
     const router=useRouter();
-    const [postUser,{isError,isLoading,isSuccess,data,error}]=usePostUserMutation();
+    const [postUser,{...result}]=usePostUserMutation();
 
     const HandleSubmit=async(e: React.FormEvent)=>{
         e.preventDefault();
         await postUser({Username:user.Username,Password:user.Password,Email:user.Email});
-        if (isSuccess) {
+        if (result.isSuccess) {
             router.push('/login');
         }
     }
 
     useEffect(()=>{
 
-    },[isError,isLoading,isSuccess])
+    },[result,postUser])
 
   return (
     <div className="wrap-form">
         <form action="" onSubmit={HandleSubmit} className="md:w-3/5 w-5/6 h-4/5 space-y-3 flex px-2 bg-white rounded-md shadow flex-col justify-center">
-            {isError&&(<span className="text-red-400 text-center w-full block">{JSON.stringify(error)}</span>)}
+            {result.isError&&(<p className="text-justify text-red-400">{(result.error as any).data.message}</p>)}
             <div className="form-group">
                 <label htmlFor="Username" className="text-2xl">Username</label>
                 <input type="text" id="Username" placeholder="enter your username" required onChange={(e)=>{setUser({...user,Username:e.target.value})}} className="form-input" />
