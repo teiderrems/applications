@@ -1,7 +1,6 @@
 "use client"
 
 import Axios from "@/hooks/axios.config";
-import { usePostUserMutation } from "@/lib/features/users";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react"
@@ -21,14 +20,10 @@ export default function Register() {
         ConfirmPassword:""
     });
     const router=useRouter();
-    // const [postUser,{...result}]=usePostUserMutation();
+    
     const [response,setResponse]=useState<CustomType>();
     const HandleSubmit=async(e: React.FormEvent)=>{
         e.preventDefault();
-        // await postUser({Username:user.Username,Password:user.Password,Email:user.Email});
-        // if (result.isSuccess) {
-        //     router.push('/login');
-        // }
         setResponse({...response,status:0,data:null,isLoading:true,isError:false,error:"",isSuccess:false})
         try {
             const res=await Axios.post("users",{Username:user.Username,Password:user.Password,Email:user.Email});
@@ -51,7 +46,7 @@ export default function Register() {
             {response?.isError&&(<p className="text-justify text-red-400">{response?.error}</p>)}
             <div className="form-group">
                 <label htmlFor="Username" className="text-2xl">Username</label>
-                <input type="text" id="Username" placeholder="enter your username" required onChange={(e)=>{setUser({...user,Username:e.target.value})}} className="form-input" />
+                <input type="text" pattern="[a-zA-Z0-9]" id="Username" placeholder="enter your username" required onChange={(e)=>{setUser({...user,Username:e.target.value})}} className="form-input" />
             </div>
             <div className="form-group">
                 <label htmlFor="Email" className="text-2xl">Email</label>
@@ -59,10 +54,10 @@ export default function Register() {
             </div>
             <div className="form-group">
                 <label htmlFor="Password" className="text-2xl">Password</label>
-                <input type="password" id="Password" required min={8} pattern="[a-zA-Z0-9]{7,15}[;?,@]" onChange={(e)=>{setUser({...user,Password:e.target.value})}} className="form-input" />
+                <input type="password" id="Password" required min={8} pattern="[a-zA-Z0-9;?,@]{7,15}[;?,@][a-zA-Z0-9;?,@]*" onChange={(e)=>{setUser({...user,Password:e.target.value})}} className="form-input" />
             </div>
             {
-                user.Password!=""&&(!user.Password.match("[a-zA-Z0-9]{7,15}[;?,@]"))&&<p className="text-red-400 text-wrap">Password must contain at least 8 characters with a mixture of uppercase, lowercase, numbers with at least one character among</p>
+                user.Password!=""&&(!user.Password.match("[a-zA-Z0-9;?,@]{7,15}[;?,@][a-zA-Z0-9;?,@]*"))&&<p className="text-red-400 text-wrap">Password must contain at least 8 characters with a mixture of uppercase, lowercase, numbers with at least one character among</p>
             }
             <div className="form-group">
                 <label htmlFor="ConfirmPw" className="text-2xl">ConfirmPw</label>

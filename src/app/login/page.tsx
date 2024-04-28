@@ -52,14 +52,14 @@ function Login() {
         {response?.isError && (<span className="text-red-400 text-center w-full block">Something wrong {response?.error}</span>)}
         <div className="form-group">
           <label htmlFor="Username" className="text-2xl">Username</label>
-          <input type="text" id="Username" required onChange={(e) => { setUser({ ...user, Username: e.target.value }) }} className="form-input" />
+          <input type="text" pattern="[a-zA-Z0-9]" id="Username" required onChange={(e) => { setUser({ ...user, Username: e.target.value }) }} className="form-input" />
         </div>
         <div className="form-group">
           <label htmlFor="Password" className="text-2xl">Password</label>
-          <input type="password" id="Password" required minLength={8} pattern="[a-zA-Z0-9]{7,15}[;?,@]" onChange={(e) => { setUser({ ...user, Password: e.target.value }) }} className="form-input" />
+          <input type="password" id="Password" required minLength={8} pattern="[a-zA-Z0-9;?,@]{7,15}[;?,@][a-zA-Z0-9;?,@]*" onChange={(e) => { setUser({ ...user, Password: e.target.value }) }} className="form-input" />
         </div>
         {
-          user.Password!=""&&(!user.Password.match("[a-zA-Z0-9]{7,15}[;?,@]"))&&<p className="text-red-400 text-wrap">Password must contain at least 8 characters with a mixture of uppercase, lowercase, numbers with at least one character among</p>
+          user.Password!=""&&(!user.Password.match("[a-zA-Z0-9;?,@]{7,15}[;?,@][a-zA-Z0-9;?,@]*"))&&<p className="text-red-400 text-wrap">Password must contain at least 8 characters with a mixture of uppercase, lowercase, numbers with at least one character among</p>
         }
         <div className="w-full justify-around flex md:h-14 h-28 md:flex-row flex-col items-center">
           <button className="btn-submit" type="submit">Submit</button>

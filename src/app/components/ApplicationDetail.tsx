@@ -85,9 +85,9 @@ export default function ApplicationDetail({application,setShowDetail}:{applicati
             <div className="flex md:flex-row flex-col justify-between w-5/6">
                 <input type="text" onChange={(e)=>setCurrentApp({...currentApp,Title:e.target.value})} className="text-wrap mb-2 md:mb-0 shadow shadow-blue-200 border-2 rounded-md md:w-3/4 w-full" value={currentApp.Title} />
                 <select name="status"  onChange={(e)=>setCurrentApp({...currentApp,Status:e.target.value})} className=" shadow shadow-blue-200 border-2 rounded-md" id="status">
-                    <option selected>{application.Status}</option>
+                    
                     {
-                        status.map(s=>(<option key={s} value={s} className=" uppercase">{s}</option>))
+                        status.map(s=>(<option key={s} selected={application.Status==s} value={s} className=" uppercase">{s}</option>))
                     }
                 </select>
             </div>

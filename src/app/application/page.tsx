@@ -66,7 +66,7 @@ export default function Application() {
             response?.data?.map((a: { _id: any; Title?: string | undefined; Description?: string | undefined; JobDescription?: string | undefined; Entreprise?: string | undefined; Adresse?: string | undefined; Status?: string | undefined; CreatedAt?: Date | undefined; UpdatedAt?: Date | undefined; })=>(<ApplicationItem key={a._id} application={a}/>))
           }
         </div>
-        <div className="flex justify-end mb-1 mr-2 space-x-3  items-end basis-1"><button onClick={()=>setPage(state=>state>0?state-1:state)} className="flex hover:bg-blue-400 space-x-1 px-1 items-center justify-center shadow rounded-md"><ArrowLeftOutlined /><span>prev</span></button><button onClick={()=>setPage(page+1)} className="flex hover:bg-blue-400  px-1 items-center space-x-1 shadow justify-center rounded-md"><span>next</span><ArrowRightOutlined /></button></div>
+        <div className="flex justify-end mb-1 mx-4 space-x-3  items-end basis-1"><button onClick={()=>setPage(state=>state>0?state-1:state)} className="flex hover:bg-blue-400 hover:text-white space-x-1 px-1 items-center justify-center shadow rounded-md"><ArrowLeftOutlined /><span>prev</span></button><button onClick={()=>setPage(page+1)} className="flex hover:bg-blue-400 hover:text-white  px-1 items-center space-x-1 shadow justify-center rounded-md"><span>next</span><ArrowRightOutlined /></button></div>
       </section>
     </div>
   )
