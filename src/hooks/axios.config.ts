@@ -1,11 +1,8 @@
 import axios from "axios";
-
+//'https://applications-api2.vercel.app
 
 const Axios=axios.create({
-    baseURL:'https://applications-api2.vercel.app/api/',
-    headers:{
-        "Authorization":"Bearer "+localStorage.getItem("token")
-    }
+    baseURL:'http://localhost:5000/api/',
 });
 
 export default Axios;

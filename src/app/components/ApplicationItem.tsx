@@ -28,8 +28,8 @@ export default function ApplicationItem({application}:{application:Props}) {
               {application.Status}</span>
           </div> */}
           <ul>
-            <li><span>Entreprise : </span>{application.Entreprise}</li>
-            <li>Adresse : {application.Adresse}</li>
+            <li className='text-wrap'><span>Entreprise : </span>{application.Entreprise}</li>
+            <li className='text-wrap'>Adresse : {application.Adresse}</li>
             <li> Date de Création : {application.CreatedAt?.toLocaleString().split('T')[0].split('-').reverse().join('/')}</li>
           </ul>
       </div>

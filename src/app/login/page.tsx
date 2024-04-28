@@ -1,10 +1,10 @@
 "use client"
 
-import useUserStore from "@/hooks/user.service";
-import { useLoginMutation } from "@/lib/features/users";
+import Axios from "@/hooks/axios.config";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
+import { CustomType } from "../components/ApplicationDetail";
 
 function Login() {
   const [user, setUser] = useState<{
@@ -17,34 +17,39 @@ function Login() {
 
   const query=useSearchParams();
 
-  const router=useRouter()
-
-  // const login=useLogin();
-
-  const [SingIn, { ...result}] = useLoginMutation();
-
+  const router=useRouter();
+  const [response,setResponse]=useState<CustomType>();
   const HandleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
-    await SingIn({ Username: user.Username, Password: user.Password });
-    if (result.isSuccess) {
-      localStorage.setItem("token",result.data.token);
-      if (query.get("ReturnUrl")!=null) {
-        router.push(query.get("ReturnUrl") as string);
-      }
-      else{
-        router.push('/application');
-      }
-    }
+
+        setResponse({...response,status:0,data:null,isLoading:true,isError:false,error:"",isSuccess:false})
+        try {
+            const res=await Axios.post("users/auth",{Username:user.Username,Password:user.Password});
+            if (res.status==201 || res.status==200) {
+              localStorage.setItem("token",res.data.token);
+              if (query.get("ReturnUrl")!=null) {
+                router.push(query.get("ReturnUrl") as string);
+              }
+              else{
+                router.push('/application');
+              }
+              setResponse({...response,isSuccess:true,isLoading:false,data:res.data});
+                // if (response?.isSuccess) {
+                // }
+          }
+        } catch (error:any) {
+            setResponse({...response,error:error.message,isError:true,isLoading:false});
+        }
   }
 
   useEffect(()=>{
 
-  },[query,result.isSuccess,result.data])
+  },[query]);
 
   return (
     <div className="wrap-form">
       <form action="" onSubmit={HandleSubmit} className="md:w-3/5 w-5/6 h-4/5 space-y-3 flex px-2 flex-col bg-white rounded-md shadow justify-center">
-        {result.isError && (<span className="text-red-400 text-center w-full block">Something wrong {(result.error as any).message}</span>)}
+        {response?.isError && (<span className="text-red-400 text-center w-full block">Something wrong {response?.error}</span>)}
         <div className="form-group">
           <label htmlFor="Username" className="text-2xl">Username</label>
           <input type="text" id="Username" required onChange={(e) => { setUser({ ...user, Username: e.target.value }) }} className="form-input" />

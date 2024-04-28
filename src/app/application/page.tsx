@@ -2,30 +2,54 @@
 import { AppstoreAddOutlined, ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react"
 import AddApplication from "../components/AddApplication";
-import { useGetApplicationsQuery } from "@/lib/features/applications";
 import ApplicationItem from "../components/ApplicationItem";
 import { usePathname, useRouter } from "next/navigation";
+import { CustomType } from "../components/ApplicationDetail";
+import Axios from "@/hooks/axios.config";
 
 export default function Application() {
   const [handleAdd,setHandleAdd]=useState(false);
   const [page,setPage]=useState(0);
-  const [limit,setLimit]=useState(10);
-  const applications=useGetApplicationsQuery({page,limit});
+  const [limit,setLimit]=useState(12);
   const router=useRouter();
   const pathname=usePathname();
   const [token,setToken]=useState<string>();
+  const [response,setResponse]=useState<CustomType>();
  
   useEffect(()=>{
-    setToken((localStorage.getItem('token') as string??''));
-    if (applications.error && ((applications.error as any).data?.message as string).includes("jwt")) {
-      localStorage.removeItem("token");
-      router.push(`/login?ReturnUrl=${pathname}`);
+    const findAll=async()=>{
+      setResponse({...response,isLoading:true,data:null,isError:false,isSuccess:false,error:"",status:0});
+      try {
+        const res=await Axios.get(`applications?page=${page}&limit=${limit}`,{
+            headers:{
+                "Authorization":window.localStorage?("Bearer "+window.localStorage.getItem("token")):''
+            }
+        });
+        if (res.status==201 || res.status==200) {
+            setResponse({...response,isLoading:false,status:res.status,data:res.data,isSuccess:true})
+            router.refresh();
+        }
+        } catch (error:any) {
+            if (error.response.status==401) {
+                localStorage.removeItem("token");
+                router.push(`/login?ReturnUrl=${pathname}`);
+            }
+        }
     }
-  },[limit,page,applications,token,pathname,router])
+    findAll();
+  },[limit,page,token,pathname,router]);
 
-  if (applications.isError) {
+  if (response?.isLoading) {
+    return(
+      <div className="flex flex-col justify-center h-full items-center">
+        <p className=" animate-bounce text-center">Loading...</p>
+      </div>
+    )    
+  }
+
+  if (response?.isError) {
     <div className="flex justify-center items-center">
-        <p className="text-justify text-red-400">{(applications.error as any).data.message}</p>
+        <p className="text-justify text-red-400">{response.error}</p>
     </div>
   }
   
@@ -39,10 +63,10 @@ export default function Application() {
       <section className="flex flex-col flex-1 space-y-2">
         <div className="flex-1 mx-4 grid md:grid-cols-4 gap-3 grid-cols-1">
           {
-            applications.data?.map(a=>(<ApplicationItem key={a._id} application={a}/>))
+            response?.data?.map((a: { _id: any; Title?: string | undefined; Description?: string | undefined; JobDescription?: string | undefined; Entreprise?: string | undefined; Adresse?: string | undefined; Status?: string | undefined; CreatedAt?: Date | undefined; UpdatedAt?: Date | undefined; })=>(<ApplicationItem key={a._id} application={a}/>))
           }
         </div>
-        <div className="flex justify-end mb-1 mr-2 space-x-3  items-end basis-1"><button onClick={()=>setPage(page-1)} className="flex hover:bg-blue-400 space-x-1 px-1 items-center justify-center shadow rounded-md"><ArrowLeftOutlined /><span>prev</span></button><button onClick={()=>setPage(page+1)} className="flex hover:bg-blue-400  px-1 items-center space-x-1 shadow justify-center rounded-md"><span>next</span><ArrowRightOutlined /></button></div>
+        <div className="flex justify-end mb-1 mr-2 space-x-3  items-end basis-1"><button onClick={()=>setPage(state=>state>0?state-1:state)} className="flex hover:bg-blue-400 space-x-1 px-1 items-center justify-center shadow rounded-md"><ArrowLeftOutlined /><span>prev</span></button><button onClick={()=>setPage(page+1)} className="flex hover:bg-blue-400  px-1 items-center space-x-1 shadow justify-center rounded-md"><span>next</span><ArrowRightOutlined /></button></div>
       </section>
     </div>
   )

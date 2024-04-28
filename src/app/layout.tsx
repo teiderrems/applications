@@ -2,8 +2,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import StoreProvider from "./components/StoreProvider";
-import SideBar from "./components/SideBar";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import { useEffect, useRef, useState } from "react";
@@ -12,6 +10,7 @@ import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import burgerImg from '../../public/menu.svg';
+import Head from "next/head";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -36,6 +35,8 @@ export default function RootLayout({
     
     const LogOut=()=>{
       localStorage.removeItem("token");
+      setToken('');
+      setUser('');
       router.push(`/login?ReturnUrl=${pathname}`);
     }
     const getPath=()=>{
@@ -57,8 +58,8 @@ export default function RootLayout({
   },[image,togel,token]);
 
   return (
-    <StoreProvider>
       <html lang="en">
+        <Head><title>Home Page</title></Head>
         <body className="flex min-h-screen " onClick={()=>{
           if (togel) {
             setTogel(false);
@@ -67,18 +68,18 @@ export default function RootLayout({
         }}>
           <div id="toggled-menu"
               className={`w-full absolute top-0 bottom-0 left-0 -translate-x-full md:border-r bg-gray-50  ${togel?'translate-x-0 z-20 opacity-100 w-3/4 translate-y-9':''} text-gray-800 border-b border-gray-200 flex flex-col items-center md:static md:w-min md:transform-none md:border-none`}>
-            <h1 className="text-3xl font-bold p-1 w-full h-12 border-b">Applications</h1>
+            <h1 className="text-xl font-bold p-1 w-full h-12 border-b">Applications</h1>
             <div className="flex-1 flex w-full flex-col"> 
             {/* <SideBar/> */}
             {
               user?(
               <nav className="flex flex-col flex-1 py-3 space-y-6 text-justify w-full">
-                  <Link href="/application" className={`px-2 text-2xl ${pathname=="/application"&&'active'}`}>Application</Link>
-                  <Link href="/" className={`px-2 capitalize text-2xl ${pathname=="/"?'active':''}`}>{user?.username}</Link>
+                  <Link href="/application" className={`px-2 text-xl ${pathname=="/application"&&'active'}`}>Application</Link>
+                  <Link href="/" className={`px-2 capitalize text-xl ${pathname=="/"?'active':''}`}>{user?.username}</Link>
               </nav>
               ):(
                 <nav className="flex flex-col flex-1 py-3 space-y-6 text-justify w-full">
-                    <Link href="/register" className={`px-2 text-2xl ${pathname=="/register"&&'active'}`}>Regiter</Link>
+                    <Link href="/register" className={`px-2 text-xl ${pathname=="/register"&&'active'}`}>Regiter</Link>
                     <Link href="/login" className={`px-2 text-2xl ${pathname=="/login"?'active':''}`}>Login</Link>
                 </nav>
               )
@@ -108,6 +109,5 @@ export default function RootLayout({
           </div>
         </body>
       </html>
-    </StoreProvider>
   );
 }

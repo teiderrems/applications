@@ -1,9 +1,11 @@
 "use client"
 
+import Axios from "@/hooks/axios.config";
 import { usePostUserMutation } from "@/lib/features/users";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react"
+import { CustomType } from "../components/ApplicationDetail";
 
 export default function Register() {
 
@@ -19,24 +21,34 @@ export default function Register() {
         ConfirmPassword:""
     });
     const router=useRouter();
-    const [postUser,{...result}]=usePostUserMutation();
-
+    // const [postUser,{...result}]=usePostUserMutation();
+    const [response,setResponse]=useState<CustomType>();
     const HandleSubmit=async(e: React.FormEvent)=>{
         e.preventDefault();
-        await postUser({Username:user.Username,Password:user.Password,Email:user.Email});
-        if (result.isSuccess) {
-            router.push('/login');
+        // await postUser({Username:user.Username,Password:user.Password,Email:user.Email});
+        // if (result.isSuccess) {
+        //     router.push('/login');
+        // }
+        setResponse({...response,status:0,data:null,isLoading:true,isError:false,error:"",isSuccess:false})
+        try {
+            const res=await Axios.post("users",{Username:user.Username,Password:user.Password,Email:user.Email});
+            if (res.status==201 || res.status==200) {
+                setResponse({...response,isSuccess:true,isLoading:false,data:res.data});
+                router.push('/login');
+            }
+        } catch (error:any) {
+            setResponse({...response,error:error.message,isError:true,isLoading:false});
         }
     }
 
     useEffect(()=>{
 
-    },[result,postUser])
+    },[response]);
 
   return (
     <div className="wrap-form">
         <form action="" onSubmit={HandleSubmit} className="md:w-3/5 w-5/6 h-4/5 space-y-3 flex px-2 bg-white rounded-md shadow flex-col justify-center">
-            {result.isError&&(<p className="text-justify text-red-400">{(result.error as any).data.message}</p>)}
+            {response?.isError&&(<p className="text-justify text-red-400">{response?.error}</p>)}
             <div className="form-group">
                 <label htmlFor="Username" className="text-2xl">Username</label>
                 <input type="text" id="Username" placeholder="enter your username" required onChange={(e)=>{setUser({...user,Username:e.target.value})}} className="form-input" />

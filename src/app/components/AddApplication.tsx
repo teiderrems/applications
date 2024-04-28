@@ -1,4 +1,4 @@
-import { usePostApplicationMutation } from '@/lib/features/applications';
+import Axios from '@/hooks/axios.config';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { Dispatch, SetStateAction, useState } from 'react'
 
@@ -11,9 +11,7 @@ type Application={
   Adresse:string;
 }
 
-export default function AddApplication({setHandleAdd}:{setHandleAdd:Dispatch<SetStateAction<boolean>>}) {
-  const [postApplication,{isError,isLoading,isSuccess,data,error}]=usePostApplicationMutation();
-  
+export default function AddApplication({setHandleAdd}:{setHandleAdd:Dispatch<SetStateAction<boolean>>}) {  
   const [application,setApplication]=useState<Application>({
     Title:"",
     Description:"",
@@ -23,25 +21,29 @@ export default function AddApplication({setHandleAdd}:{setHandleAdd:Dispatch<Set
   });
   const router=useRouter();
   const pathname=usePathname();
-  const HandleSubmit=(e:React.FormEvent)=>{
+  const HandleSubmit=async(e:React.FormEvent)=>{
     e.preventDefault();
-    postApplication(application);
-    if (isError && ((error as any).data?.message as string).includes("jwt")) {
-      localStorage.removeItem("token");
-      console.log(error,data);
-      router.push(`/login?ReturnUrl=${pathname}`);
-    }
-    if (isSuccess) {
-      setHandleAdd(false);
+
+    try {
+      const res=await Axios.post("applications",application,{
+        headers:{
+            "Authorization":window.localStorage?("Bearer "+window.localStorage.getItem("token")):''
+        }
+      });
       router.refresh();
+      setHandleAdd(state=>!state);
+    } catch (error:any) {
+      if (error.response.status==401) {
+        localStorage.removeItem("token");
+        router.push(`/login?ReturnUrl=${pathname}`);
+      }
     }
   }
   
   return (
-    <div className='wrap-form absolute inset-0 w-full h-full  opacity-100 z-10'>
+    <div className='wrap-form fixed inset-0 w-full h-full  opacity-100 z-10'>
         <div onClick={()=>setHandleAdd(state=>!state)} className="absolute inset-1 bg-gray-500 z-0"></div>
         <form onSubmit={HandleSubmit} className='form-app z-10'>
-            {/* { isError && (<p className="text-justify text-red-400">{(error as any).data.message}</p>)} */}
              <div className='form-group-app'>Title<label className='flex-1'  htmlFor="title"></label><input onChange={(e)=>setApplication({...application,Title:e.target.value})} className='input-form-app' type="text" required minLength={4} /></div>
              <div className='form-group-app'>Entreprise<label className='flex-1'  htmlFor="entreprise"></label><input onChange={(e)=>setApplication({...application,Entreprise:e.target.value})} className='input-form-app' type="text" required minLength={4} /></div>
              <div className='form-group-app'>Adresse<label  className='flex-1' htmlFor="adresse"></label><input onChange={(e)=>setApplication({...application,Adresse:e.target.value})} className='input-form-app' placeholder="entrez l'adresse de l'entreprise" type="text" required minLength={4} /></div>
