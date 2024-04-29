@@ -31,6 +31,7 @@ export default function ApplicationItem({application}:{application:Props}) {
             <li className='text-wrap'><span>Entreprise : </span>{application.Entreprise}</li>
             <li className='text-wrap'>Adresse : {application.Adresse}</li>
             <li> Date de Création : {application.CreatedAt?.toLocaleString().split('T')[0].split('-').reverse().join('/')}</li>
+            <li>Status : <span className={application.Status=="success"?'text-green-200 italic':'text-red-300 italic'}>{application.Status}</span></li>
           </ul>
       </div>
     </button>
