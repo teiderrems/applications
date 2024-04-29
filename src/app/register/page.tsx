@@ -25,6 +25,7 @@ export default function Register() {
     const [response,setResponse]=useState<CustomType>();
 
     const [show,setShow]=useState(false);
+    const [showC,setShowC]=useState(false);
     const HandleSubmit=async(e: React.FormEvent)=>{
         e.preventDefault();
         setResponse({...response,status:0,data:null,isLoading:true,isError:false,error:"",isSuccess:false})
@@ -69,8 +70,8 @@ export default function Register() {
             <div className="form-group">
                 <label htmlFor="ConfirmPw" className="text-2xl">ConfirmPw</label>
                 <div className="flex w-full shadow  md:w-3/4 md:h-3/4 h-full  rounded-md">
-                    <input type={show?"text":"password"} id="ConfirmPw" required onChange={(e)=>{setUser({...user,ConfirmPassword:e.target.value})}} className="flex-1 rounded-s-md" />
-                    {show?(<button onClick={()=>setShow(!show)} className="w-1/12 h-full border-l"><EyeOutlined/></button>): (<button onClick={()=>setShow(!show)}  className="w-1/12 h-full  border-l"><EyeInvisibleOutlined /></button>)}
+                    <input type={showC?"text":"password"} id="ConfirmPw" required onChange={(e)=>{setUser({...user,ConfirmPassword:e.target.value})}} className="flex-1 rounded-s-md" />
+                    {showC?(<button onClick={()=>setShowC(!showC)} className="w-1/12 h-full border-l"><EyeOutlined/></button>): (<button onClick={()=>setShowC(!showC)}  className="w-1/12 h-full  border-l"><EyeInvisibleOutlined /></button>)}
                 </div>
             </div>
             {
