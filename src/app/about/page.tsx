@@ -17,7 +17,7 @@ export default function About() {
     Commencez dès aujourd&apos;hui à transformer votre recherche en une expérience sans stress !`}]);
   return (
     <div className='flex flex-col items-center flex-1 h-full w-full justify-center bg-gray-500'>
-        <p className='w-5/6 h-5/6 p-4 bg-white rounded-md text-wrap text-justify'>
+        <p className='md:w-5/6 w-full h-full p-2  md:h-5/6 bg-white rounded-md text-wrap text-justify'>
         {/* Bienvenue sur notre application dédiée à l&apos;organisation de votre avenir professionnel !
          Ici, nous comprenons l&apos;importance de chaque étape de votre parcours.
           Que vous soyez à la recherche d&apos;une alternance ou d&apos;un stage, notre application est conçue pour vous aider à garder une trace de toutes vos candidatures.
