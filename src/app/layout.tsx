@@ -55,8 +55,7 @@ export default function RootLayout({
     if (window.localStorage&&localStorage.getItem("token")) {
       setUser(JSON.parse(atob(localStorage.getItem("token")!.split('.')[1])));
     }
-    //setUser('');
-  },[image,togel,token]);
+  },[image,togel,user]);
 
   return (
       <html lang="en">
@@ -71,7 +70,7 @@ export default function RootLayout({
               className={`w-full absolute top-0 bottom-0 left-0 -translate-x-full md:border-r bg-gray-50  ${togel?'translate-x-0 z-20 opacity-100 w-3/4 translate-y-9':''} text-gray-800 border-b border-gray-200 flex flex-col items-center md:static md:w-min md:transform-none md:border-none`}>
             <h1 className="text-xl font-bold p-1 w-full h-12 border-b">Applications</h1>
             <div className="flex-1 flex w-full flex-col"> 
-            {/* <SideBar/> */}
+            
             {
               user?(
               <nav className="flex flex-col flex-1 py-3 space-y-6 text-justify w-full">

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import AddApplication from "../components/AddApplication";
 import ApplicationItem from "../components/ApplicationItem";
 import { usePathname, useRouter } from "next/navigation";
-import { CustomType } from "../components/ApplicationDetail";
+import { CustomType, Props } from "../components/ApplicationDetail";
 import Axios from "@/hooks/axios.config";
 
 export default function Application() {
@@ -15,6 +15,7 @@ export default function Application() {
   const pathname=usePathname();
   const [token,setToken]=useState<string>();
   const [response,setResponse]=useState<CustomType>();
+  const [currentApp,setCurrentApp]=useState<Props>();
  
   useEffect(()=>{
     const findAll=async()=>{
@@ -37,7 +38,7 @@ export default function Application() {
         }
     }
     findAll();
-  },[limit,page,token,pathname,router]);
+  },[limit,page,token,pathname,router,setResponse]);
 
   if (response?.isLoading) {
     return(
@@ -63,7 +64,11 @@ export default function Application() {
       <section className="flex flex-col flex-1 space-y-2">
         <div className="flex-1 mx-4 grid md:grid-cols-4 gap-3 grid-cols-1">
           {
-            response?.data?.map((a: { _id: any; Title?: string | undefined; Description?: string | undefined; JobDescription?: string | undefined; Entreprise?: string | undefined; Adresse?: string | undefined; Status?: string | undefined; CreatedAt?: Date | undefined; UpdatedAt?: Date | undefined; })=>(<ApplicationItem key={a._id} application={a}/>))
+            response?.data?.map((a: Props)=>{
+              setCurrentApp(a);
+              return (<ApplicationItem key={currentApp!._id} application={currentApp!} setCurrentApp={setCurrentApp}/>)
+            }
+            )
           }
         </div>
         <div className="flex justify-end mb-1 mx-4 space-x-3  items-end basis-1"><button onClick={()=>setPage(state=>state>0?state-1:state)} className="flex hover:bg-blue-400 hover:text-white space-x-1 px-1 items-center justify-center shadow rounded-md"><ArrowLeftOutlined /><span>prev</span></button><button onClick={()=>setPage(page+1)} className="flex hover:bg-blue-400 hover:text-white  px-1 items-center space-x-1 shadow justify-center rounded-md"><span>next</span><ArrowRightOutlined /></button></div>

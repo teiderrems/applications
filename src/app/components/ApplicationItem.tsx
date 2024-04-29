@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react'
+import React, { SetStateAction, useState } from 'react'
 import ApplicationDetail from './ApplicationDetail';
 
 type Props={
@@ -14,7 +14,7 @@ type Props={
     UpdatedAt?:Date;
 }
 
-export default function ApplicationItem({application}:{application:Props}) {
+export default function ApplicationItem({application,setCurrentApp}:{application:Props,setCurrentApp:React.Dispatch<SetStateAction<Props|undefined>>}) {
   const [showDetail,setShowDetail]=useState(false);
   
   return (
@@ -35,7 +35,7 @@ export default function ApplicationItem({application}:{application:Props}) {
       </div>
     </button>
     {
-      showDetail&&<ApplicationDetail application={application} setShowDetail={setShowDetail}/>
+      showDetail&&<ApplicationDetail application={application} setCurrentApp={setCurrentApp} setShowDetail={setShowDetail}/>
     }
     </>
   )
