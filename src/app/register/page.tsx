@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react"
 import { CustomType } from "../components/ApplicationDetail";
+import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
 
 export default function Register() {
 
@@ -22,6 +23,8 @@ export default function Register() {
     const router=useRouter();
     
     const [response,setResponse]=useState<CustomType>();
+
+    const [show,setShow]=useState(false);
     const HandleSubmit=async(e: React.FormEvent)=>{
         e.preventDefault();
         setResponse({...response,status:0,data:null,isLoading:true,isError:false,error:"",isSuccess:false})
@@ -43,6 +46,7 @@ export default function Register() {
   return (
     <div className="wrap-form">
         <form action="" onSubmit={HandleSubmit} className="md:w-3/5 w-5/6 h-4/5 space-y-3 flex px-2 bg-white rounded-md shadow flex-col justify-center">
+        <h1 className="text-gray-400 text-justify">SignIn to continue</h1>
             {response?.isError&&(<p className="text-justify text-red-400">{response?.error}</p>)}
             <div className="form-group">
                 <label htmlFor="Username" className="text-2xl">Username</label>
@@ -54,19 +58,25 @@ export default function Register() {
             </div>
             <div className="form-group">
                 <label htmlFor="Password" className="text-2xl">Password</label>
-                <input type="password" id="Password" required min={8} pattern="[a-zA-Z0-9;?,@]{7,15}[;?,@][a-zA-Z0-9;?,@]*" onChange={(e)=>{setUser({...user,Password:e.target.value})}} className="form-input" />
+                <div className="flex w-full shadow  rounded-md  md:w-3/4 md:h-3/4 h-full">
+                    <input type={show?"text":"password"} id="Password" required min={8} pattern="[a-zA-Z0-9;?,@]{7,15}[;?,@][a-zA-Z0-9;?,@]*" onChange={(e)=>{setUser({...user,Password:e.target.value})}} className="flex-1 focus:rounded-s-md" />
+                    {show?(<button onClick={()=>setShow(!show)} className="w-1/12 h-full border-l"><EyeOutlined/></button>): (<button onClick={()=>setShow(!show)}  className="w-1/12 h-full  border-l"><EyeInvisibleOutlined /></button>)}
+                </div>
             </div>
             {
                 user.Password!=""&&(!user.Password.match("[a-zA-Z0-9;?,@]{7,15}[;?,@][a-zA-Z0-9;?,@]*"))&&<p className="text-red-400 text-wrap">Password must contain at least 8 characters with a mixture of uppercase, lowercase, numbers with at least one character among</p>
             }
             <div className="form-group">
                 <label htmlFor="ConfirmPw" className="text-2xl">ConfirmPw</label>
-                <input type="password" id="ConfirmPw" required onChange={(e)=>{setUser({...user,ConfirmPassword:e.target.value})}} className="form-input" />
+                <div className="flex w-full shadow  md:w-3/4 md:h-3/4 h-full  rounded-md">
+                    <input type={show?"text":"password"} id="ConfirmPw" required onChange={(e)=>{setUser({...user,ConfirmPassword:e.target.value})}} className="flex-1 focus:rounded-s-md" />
+                    {show?(<button onClick={()=>setShow(!show)} className="w-1/12 h-full border-l"><EyeOutlined/></button>): (<button onClick={()=>setShow(!show)}  className="w-1/12 h-full  border-l"><EyeInvisibleOutlined /></button>)}
+                </div>
             </div>
             {
                 user.Password!=""&&user.ConfirmPassword!=""&&user.ConfirmPassword!=user.Password&&<p className="text-red-400">ConfirmPassword must be equal to Password</p>
             }
-            <div className="w-full justify-around flex  md:h-14 h-28 md:flex-row flex-col items-center">
+            <div className="w-full justify-between flex  md:h-14 h-28 md:flex-row flex-col items-center">
                 <button className="btn-submit" type="submit">Submit</button>
                 <Link href="/login" className="text-blue-400 hover:underline">You have acount <strong>SignIn</strong></Link>
             </div>

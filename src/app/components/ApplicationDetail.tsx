@@ -80,7 +80,7 @@ export default function ApplicationDetail({application,setShowDetail}:{applicati
     },[currentApp,response]);
   return (
    <div className="fixed inset-0  flex justify-center items-center opacity-80 flex-col">
-        <div onClick={()=>setShowDetail(state=>!state)} className="absolute inset-1 min-h-screen bg-gray-700 opacity-100 z-0"></div>
+        <div onClick={()=>setShowDetail(state=>!state)} className="absolute inset-0 min-h-screen bg-gray-700 opacity-100 z-0"></div>
         <div className="flex flex-col w-4/6 h-5/6 p-2 justify-between items-center bg-white z-10 opacity-100 rounded shadow">
             <div className="flex md:flex-row flex-col justify-between w-5/6">
                 <input type="text" onChange={(e)=>setCurrentApp({...currentApp,Title:e.target.value})} className="text-wrap mb-2 md:mb-0 shadow shadow-blue-200 border-2 rounded-md md:w-3/4 w-full" value={currentApp.Title} />
