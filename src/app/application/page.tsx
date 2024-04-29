@@ -65,8 +65,7 @@ export default function Application() {
         <div className="flex-1 mx-4 grid md:grid-cols-4 gap-3 grid-cols-1">
           {
             response?.data?.map((a: Props)=>{
-              setCurrentApp(a);
-              return (<ApplicationItem key={currentApp!._id} application={currentApp!} setCurrentApp={setCurrentApp}/>)
+              return (<ApplicationItem key={a._id} application={a}/>)
             }
             )
           }

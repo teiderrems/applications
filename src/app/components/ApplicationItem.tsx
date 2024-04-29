@@ -14,7 +14,7 @@ type Props={
     UpdatedAt?:Date;
 }
 
-export default function ApplicationItem({application,setCurrentApp}:{application:Props,setCurrentApp:React.Dispatch<SetStateAction<Props|undefined>>}) {
+export default function ApplicationItem({application}:{application:Props}) {
   const [showDetail,setShowDetail]=useState(false);
   
   return (
@@ -35,7 +35,7 @@ export default function ApplicationItem({application,setCurrentApp}:{application
       </div>
     </button>
     {
-      showDetail&&<ApplicationDetail application={application} setCurrentApp={setCurrentApp} setShowDetail={setShowDetail}/>
+      showDetail&&<ApplicationDetail application={application} setShowDetail={setShowDetail}/>
     }
     </>
   )
