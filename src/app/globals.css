@@ -41,7 +41,7 @@ body {
 } 
 
 .password-input{
-  @apply w-full  md:w-3/4 md:h-3/4 h-full focus:shadow-inner shadow-blue-200
+  @apply w-full  md:w-3/4 md:h-3/4 h-full pl-2 focus:shadow-inner shadow-blue-200
 }
 
 label{
