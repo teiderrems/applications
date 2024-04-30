@@ -42,7 +42,7 @@ export default function UserList() {
                 router.push(`/login`);
             }
             if (error.response.status==401) {
-                localStorage.removeItem("token");
+                //localStorage.removeItem("token");
                 router.push(`/`);
             }
         }
