@@ -70,7 +70,7 @@ export default function Application() {
             )
           }
         </div>
-        <div className="flex justify-end mb-1 mx-4 space-x-3  items-end basis-1"><button onClick={()=>setPage(state=>state>0?state-1:state)} className="flex hover:bg-blue-400 hover:text-white space-x-1 px-1 items-center justify-center shadow rounded-md"><ArrowLeftOutlined /><span>prev</span></button><button onClick={()=>setPage(page+1)} className="flex hover:bg-blue-400 hover:text-white  px-1 items-center space-x-1 shadow justify-center rounded-md"><span>next</span><ArrowRightOutlined /></button></div>
+        <div className="flex justify-end mb-1 mx-4 space-x-3  items-end basis-1"><button onClick={()=>setPage(state=>state>0?state-1:state)} className="flex hover:bg-blue-400 hover:text-white space-x-1 px-1 items-center justify-center shadow rounded-md"><ArrowLeftOutlined /><span>prev</span></button><button onClick={()=>setPage(state=>(response?.data as any).lenght>=limit?state+1:state)} className="flex hover:bg-blue-400 hover:text-white  px-1 items-center space-x-1 shadow justify-center rounded-md"><span>next</span><ArrowRightOutlined /></button></div>
       </section>
     </div>
   )
