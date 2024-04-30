@@ -8,11 +8,11 @@ With our app, you can easily record and manage your applications, ensuring you n
 miss an opportunity. Start transforming your search into a stress-free experience today!`},
 {
 key:"fr",
-content:`Bienvenue sur notre application dédiée à l&apos;organisation de votre avenir professionnel !
-Ici, nous comprenons l&apos;importance de chaque étape de votre parcours.
- Que vous soyez à la recherche d&apos;une alternance ou d&apos;un stage, notre application est conçue pour vous aider à garder une trace de toutes vos candidatures.
+content:`Bienvenue sur notre application dédiée à l'organisation de votre avenir professionnel !
+Ici, nous comprenons l'importance de chaque étape de votre parcours.
+ Que vous soyez à la recherche d'une alternance ou d'un stage, notre application est conçue pour vous aider à garder une trace de toutes vos candidatures.
  Avec notre application, vous pouvez facilement historiser et gérer vos candidatures, vous assurant ainsi de ne jamais manquer une opportunité.
-Commencez dès aujourd&apos;hui à transformer votre recherche en une expérience sans stress !`}];
+Commencez dès aujourd'hui à transformer votre recherche en une expérience sans stress !`}];
 
 export default function About() {
 

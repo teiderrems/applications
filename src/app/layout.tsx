@@ -55,7 +55,7 @@ export default function RootLayout({
     if (window.localStorage&&localStorage.getItem("token")) {
       setUser(JSON.parse(atob(localStorage.getItem("token")!.split('.')[1])));
     }
-    //setUser('');
+    // return()=>localStorage.removeItem("token");
   },[image,togel,token]);
 
   return (
@@ -77,6 +77,9 @@ export default function RootLayout({
               <nav className="flex flex-col flex-1 py-3 space-y-6 text-justify w-full">
                   <Link href="/application" className={`px-2 text-xl ${pathname=="/application"&&'active'}`}>Application</Link>
                   <Link href="/" className={`px-2 capitalize text-xl ${pathname=="/"?'active':''}`}>{user?.username}</Link>
+                  {
+                    user?.role=='admin'&&<Link href="/user" className={`px-2 capitalize text-xl ${pathname=="/user"?'active':''}`}>Users</Link>
+                  }
               </nav>
               ):(
                 <nav className="flex flex-col flex-1 py-3 space-y-6 text-justify w-full">
