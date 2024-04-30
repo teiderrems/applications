@@ -8,6 +8,7 @@ type Props={
     Description?:string;
     JobDescription?:string;
     Entreprise?:string;
+    TypeContrat?:string;
     Adresse?:string;
     Status?:string;
     CreatedAt?:Date;
@@ -21,12 +22,10 @@ export default function ApplicationItem({application}:{application:Props}) {
     <>
       <button onClick={()=>setShowDetail(!showDetail)} >
       <div className='flex p-1 text-justify hover:cursor-pointer hover:shadow-blue-400 hover:border-inherit  rounded-lg flex-col shadow'>
-            <h1 className='border-b text-wrap'>Titre : {application.Title}</h1> 
-          {/* <div className='flex justify-around'>
-            <span className={`rounded-md shadow text-center p-1 
-            ${application.Status==="success"?'bg-green-400':'bg-red-400'}`}>
-              {application.Status}</span>
-          </div> */}
+            <div className='flex justify-between items-center border-b'>
+            <h1 className='text-wrap w-9/12'>Titre : {application.Title}</h1>
+            <h1 className='text-wrap flex-1 '>Type : <span className='italic capitalize'>{application.TypeContrat??'inconnu'}</span></h1> 
+            </div>
           <ul>
             <li className='text-wrap'><span>Entreprise : </span>{application.Entreprise}</li>
             <li className='text-wrap'>Adresse : {application.Adresse}</li>
