@@ -23,7 +23,7 @@ export default function ApplicationItem({application,setIsAdd}:{application:Prop
       <button onClick={()=>setShowDetail(!showDetail)} >
       <div className='flex p-1 text-justify hover:cursor-pointer hover:shadow-blue-400 hover:border-inherit  rounded-lg flex-col shadow'>
             <div className='flex justify-between items-center border-b'>
-            <h1 className='text-wrap w-9/12'>{application.Title}</h1>
+            <h1 className='text-wrap w-9/12 px-1'>{application.Title}</h1>
             <h1 className='text-wrap flex-1 '><span className='italic capitalize'>{application.TypeContrat??'inconnu'}</span></h1> 
             </div>
           <ul>
