@@ -2,7 +2,7 @@
 
 import Axios from "@/hooks/axios.config";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { SetStateAction, useEffect, useState } from "react"
 import { CustomType } from "../components/ApplicationDetail";
 import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
@@ -30,6 +30,7 @@ export default function AddUser({setHandleAdd,setIsAdd}:{setHandleAdd:React.Disp
 
     const [show,setShow]=useState(false);
     const [showC,setShowC]=useState(false);
+    const pathname=usePathname();
     const HandleSubmit=async(e: React.FormEvent)=>{
         e.preventDefault();
         setResponse({...response,status:0,data:null,isLoading:true,isError:false,error:"",isSuccess:false})
@@ -42,6 +43,21 @@ export default function AddUser({setHandleAdd,setIsAdd}:{setHandleAdd:React.Disp
             }
         } catch (error:any) {
             setResponse({...response,error:error.message,isError:true,isLoading:false});
+            if (error.response.status==401) {
+                try {
+                  const res=await Axios.post("users/refresh_token",{refresh:localStorage.getItem("refresh")});
+                  if (res.status==201 || res.status==200) {
+                    localStorage.setItem("token",res.data.token);
+                    localStorage.setItem("refresh",res.data.refresh);
+                  }
+                } catch (err:any) {
+                  localStorage.removeItem("token");
+                  localStorage.removeItem("refresh");
+                  if (err.response.status == 401) {
+                    router.push(`/login?ReturnUrl=${pathname}`);
+                  }
+                }
+            }
         }
     }
 

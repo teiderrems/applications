@@ -28,6 +28,7 @@ function Login() {
             const res=await Axios.post("users/auth",{Username:user.Username,Password:user.Password});
             if (res.status==201 || res.status==200) {
               localStorage.setItem("token",res.data.token);
+              localStorage.setItem("refresh",res.data.refresh);
               if (query.get("ReturnUrl")!=null) {
                 router.push(query.get("ReturnUrl") as string);
               }

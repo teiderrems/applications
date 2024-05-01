@@ -38,8 +38,19 @@ export default function UserList() {
             console.log(error);
             setResponse({...response,error:error.message,isLoading:false,status:error.response.status,isSuccess:true})
             if ((error.response.status==401)&&(error.response.data.message as string).includes('jwt')) {
+              try {
+                const res=await Axios.post("users/refresh_token",{refresh:localStorage.getItem("refresh")});
+                if (res.status==201 || res.status==200) {
+                  localStorage.setItem("token",res.data.token);
+                  localStorage.setItem("refresh",res.data.refresh);
+                }
+              } catch (err:any) {
                 localStorage.removeItem("token");
-                router.push(`/login`);
+                localStorage.removeItem("refresh");
+                if (err.response.status == 401) {
+                  router.push(`/login?ReturnUrl=${pathname}`);
+                }
+              }
             }
             if (error.response.status==401) {
                 router.push(`/`);

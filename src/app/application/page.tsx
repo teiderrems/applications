@@ -33,8 +33,20 @@ export default function Application() {
         }
       } catch (error: any) {
         if (error.response.status == 401) {
-          localStorage.removeItem("token");
-          router.push(`/login?ReturnUrl=${pathname}`);
+          
+          try {
+            const res=await Axios.post("users/refresh_token",{refresh:localStorage.getItem("refresh")});
+            if (res.status==201 || res.status==200) {
+              localStorage.setItem("token",res.data.token);
+              localStorage.setItem("refresh",res.data.refresh);
+            }
+          } catch (err:any) {
+            localStorage.removeItem("token");
+            localStorage.removeItem("refresh");
+            if (err.response.status == 401) {
+              router.push(`/login?ReturnUrl=${pathname}`);
+            }
+          }
         }
       }
     }
