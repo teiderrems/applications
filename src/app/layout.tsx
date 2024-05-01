@@ -11,6 +11,7 @@ import Link from "next/link";
 import Image from "next/image";
 import burgerImg from '../../public/menu.svg';
 import Head from "next/head";
+import { HomeOutlined } from "@ant-design/icons";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -75,8 +76,8 @@ export default function RootLayout({
             {
               user?(
               <nav className="flex flex-col flex-1 py-3 space-y-6 text-justify w-full">
+                  <Link href="/" className={`px-2 capitalize text-xl ${pathname=="/"?'active':''}`}><HomeOutlined /> Home</Link>
                   <Link href="/application" className={`px-2 text-xl ${pathname=="/application"&&'active'}`}>Application</Link>
-                  <Link href="/" className={`px-2 capitalize text-xl ${pathname=="/"?'active':''}`}>{user?.username}</Link>
                   {
                     user?.role=='admin'&&<Link href="/user" className={`px-2 capitalize text-xl ${pathname=="/user"?'active':''}`}>Users</Link>
                   }

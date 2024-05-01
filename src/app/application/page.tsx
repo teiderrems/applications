@@ -15,7 +15,6 @@ export default function Application() {
   const pathname = usePathname();
   const [token, setToken] = useState<string>();
   const [response, setResponse] = useState<CustomType>();
-  const [currentApp, setCurrentApp] = useState<Props>();
   const [isAdd,setIsAdd]=useState(false);
 
   useEffect(() => {
