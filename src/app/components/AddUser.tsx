@@ -9,7 +9,7 @@ import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
 
 const UserRole=['admin','user','guest'];
 
-export default function AddUser({setHandleAdd}:{setHandleAdd:React.Dispatch<SetStateAction<boolean>>}) {
+export default function AddUser({setHandleAdd,setIsAdd}:{setHandleAdd:React.Dispatch<SetStateAction<boolean>>,setIsAdd:React.Dispatch<SetStateAction<boolean>>}) {
 
     const [user,setUser]=useState<{
         Username:string
@@ -38,7 +38,7 @@ export default function AddUser({setHandleAdd}:{setHandleAdd:React.Dispatch<SetS
             if (res.status==201 || res.status==200) {
                 setHandleAdd(state=>!state);
                 setResponse({...response,isSuccess:true,isLoading:false,data:res.data});
-                router.refresh();
+                setIsAdd(state=>!state);
             }
         } catch (error:any) {
             setResponse({...response,error:error.message,isError:true,isLoading:false});
@@ -77,12 +77,12 @@ export default function AddUser({setHandleAdd}:{setHandleAdd:React.Dispatch<SetS
             <div className="form-group">
                 <label htmlFor="Password" className="text-xl">Password</label>
                 <div className="flex w-full shadow  rounded-md  md:w-3/4 md:h-3/4 h-full">
-                    <input type={show?"text":"password"} id="Password" required min={8} pattern="[a-zA-Z0-9;?,@]{7,15}[;?,@][a-zA-Z0-9;?,@]*" onChange={(e)=>{setUser({...user,Password:e.target.value})}} className="flex-1 pl-2 rounded-s-md" />
+                    <input type={show?"text":"password"} id="Password" required min={8} pattern="[a-zA-Z0-9;?,@]{8,15}" onChange={(e)=>{setUser({...user,Password:e.target.value})}} className="flex-1 pl-2 rounded-s-md" />
                     {show?(<button onClick={()=>setShow(!show)} className="w-1/12 h-full border-l"><EyeOutlined/></button>): (<button onClick={()=>setShow(!show)}  className="w-1/12 h-full  border-l"><EyeInvisibleOutlined /></button>)}
                 </div>
             </div>
             {
-                user.Password!=""&&(!user.Password.match("[a-zA-Z0-9;?,@]{7,15}[;?,@][a-zA-Z0-9;?,@]*"))&&<p className="text-red-400 text-wrap">Password must contain at least 8 characters with a mixture of uppercase, lowercase, numbers with at least one character among</p>
+                user.Password!=""&&(!user.Password.match("[a-zA-Z0-9;?,@]{8,15}"))&&<p className="text-red-400 text-wrap">Password must contain at least 8 characters with a mixture of uppercase, lowercase, numbers</p>
             }
             <div className="form-group">
                 <label htmlFor="ConfirmPw" className="text-xl">ConfirmPw</label>
@@ -94,9 +94,8 @@ export default function AddUser({setHandleAdd}:{setHandleAdd:React.Dispatch<SetS
             {
                 user.Password!=""&&user.ConfirmPassword!=""&&user.ConfirmPassword!=user.Password&&<p className="text-red-400">ConfirmPassword must be equal to Password</p>
             }
-            <div className="w-full justify-between flex  md:h-14 h-28 md:flex-row flex-col items-center">
+            <div className="w-full md:justify-start flex  md:h-14 h-28 md:flex-row flex-col items-center">
                 <button className="btn-submit" type="submit">Submit</button>
-                <Link href="/login" className="text-blue-400 hover:underline">You have acount <strong>SignIn</strong></Link>
             </div>
         </form>
     </div>

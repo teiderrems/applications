@@ -35,8 +35,6 @@ function Login() {
                 router.push('/application');
               }
               setResponse({...response,isSuccess:true,isLoading:false,data:res.data});
-                // if (response?.isSuccess) {
-                // }
           }
         } catch (error:any) {
             setResponse({...response,error:error.message,isError:true,isLoading:false});
@@ -59,12 +57,12 @@ function Login() {
         <div className="form-group">
           <label htmlFor="Password" className="text-2xl">Password</label>
           <div className="flex w-full shadow  md:w-3/4 md:h-3/4 h-full rounded-md">
-            <input type={show?"text":"password"} id="Password" required min={8} pattern="[a-zA-Z0-9;?,@]{7,15}[;?,@][a-zA-Z0-9;?,@]*" onChange={(e)=>{setUser({...user,Password:e.target.value})}} className="flex-1 pl-2 rounded-s-md" />
+            <input type={show?"text":"password"} id="Password" required min={8} pattern="[a-zA-Z0-9;?,@]{8,15}" onChange={(e)=>{setUser({...user,Password:e.target.value})}} className="flex-1 pl-2 rounded-s-md" />
             {show?(<button onClick={()=>setShow(!show)} className="w-1/12 h-full border-l"><EyeOutlined/></button>): (<button onClick={()=>setShow(!show)}  className="w-1/12 h-full  border-l"><EyeInvisibleOutlined /></button>)}
           </div>
         </div>
         {
-          user.Password!=""&&(!user.Password.match("[a-zA-Z0-9;?,@]{7,15}[;?,@][a-zA-Z0-9;?,@]*"))&&<p className="text-red-400 text-wrap">Password must contain at least 8 characters with a mixture of uppercase, lowercase, numbers with at least one character among</p>
+          user.Password!=""&&(!user.Password.match("[a-zA-Z0-9;?,@]{8,15}"))&&<p className="text-red-400 text-wrap">Password must contain at least 8 characters with a mixture of uppercase, lowercase, numbers</p>
         }
         <div className="w-full justify-between flex md:h-14 h-28 md:flex-row flex-col items-center">
           <button className="btn-submit" type="submit">Submit</button>

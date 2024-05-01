@@ -14,7 +14,7 @@ type Application={
 
 let Contrat=['alternance','stage','cdi','cdd','interim']
 
-export default function AddApplication({setHandleAdd}:{setHandleAdd:Dispatch<SetStateAction<boolean>>}) {  
+export default function AddApplication({setHandleAdd,setIsAdd}:{setHandleAdd:Dispatch<SetStateAction<boolean>>,setIsAdd:Dispatch<SetStateAction<boolean>>}) {  
   const [application,setApplication]=useState<Application>({
     Title:"",
     Description:"",
@@ -36,6 +36,7 @@ export default function AddApplication({setHandleAdd}:{setHandleAdd:Dispatch<Set
       });
       router.refresh();
       setHandleAdd(state=>!state);
+      setIsAdd(state=>!state);
     } catch (error:any) {
       if (error.response.status==401) {
         localStorage.removeItem("token");

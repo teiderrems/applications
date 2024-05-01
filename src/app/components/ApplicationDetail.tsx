@@ -24,7 +24,7 @@ export type CustomType={
     error?:string;
 }
 
-export default function ApplicationDetail({application,setShowDetail}:{application:Props,setShowDetail:React.Dispatch<SetStateAction<boolean>>}) {
+export default function ApplicationDetail({application,setShowDetail,setIsAdd}:{application:Props,setIsAdd:React.Dispatch<SetStateAction<boolean>>,setShowDetail:React.Dispatch<SetStateAction<boolean>>}) {
     
     const status=["success","pending","postponed"];
 
@@ -43,7 +43,7 @@ export default function ApplicationDetail({application,setShowDetail}:{applicati
             if (res.status==201 || res.status==200) {
                 setShowDetail(state=>!state);
                 setResponse({...response,isLoading:false,status:res.status,data:res.data,isSuccess:true})
-                router.refresh();
+                setIsAdd(state=>!state);
             }
         } catch (error:any) {
             if (error.response.status==401) {

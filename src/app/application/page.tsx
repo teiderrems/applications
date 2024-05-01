@@ -16,6 +16,7 @@ export default function Application() {
   const [token, setToken] = useState<string>();
   const [response, setResponse] = useState<CustomType>();
   const [currentApp, setCurrentApp] = useState<Props>();
+  const [isAdd,setIsAdd]=useState(false);
 
   useEffect(() => {
     const findAll = async () => {
@@ -38,7 +39,7 @@ export default function Application() {
       }
     }
     findAll();
-  }, [limit, page, token, pathname, router, setResponse]);
+  }, [limit, page, token, pathname, router, setResponse,isAdd]);
 
   if (response?.isLoading) {
     return (
@@ -59,14 +60,14 @@ export default function Application() {
     <div className='container mx-auto flex-1 flex flex-col'>
       <div className="flex justify-end h-7">
         {
-          (!handleAdd) ? <button className="rounded-lg hover:bg-blue-500 text-center h-full w-7 mr-2 hover:text-white" onClick={() => setHandleAdd(!handleAdd)}><AppstoreAddOutlined className="h-5/6 w-5/6" /></button> : <AddApplication setHandleAdd={setHandleAdd} />
+          (!handleAdd) ? <button className="rounded-lg hover:bg-blue-500 text-center h-full w-7 mr-2 hover:text-white" onClick={() => setHandleAdd(!handleAdd)}><AppstoreAddOutlined className="h-5/6 w-5/6" /></button> : <AddApplication setHandleAdd={setHandleAdd} setIsAdd={setIsAdd} />
         }
       </div>
       <section className="flex flex-col flex-1 space-y-2">
         <div className="flex-1 mx-4 grid md:grid-cols-4 gap-3 grid-cols-1">
           {
             response?.data?.map((a: Props) => {
-              return (<ApplicationItem key={a._id} application={a} />)
+              return (<ApplicationItem key={a._id} application={a} setIsAdd={setIsAdd} />)
             }
             )
           }

@@ -16,10 +16,10 @@ export default function UserList() {
   const pathname=usePathname();
   const [token,setToken]=useState<string>();
   const [response,setResponse]=useState<CustomType>();
-//   const [currentApp,setCurrentApp]=useState<Props>();
   const [page,setPage]=useState(0);
   const [limit,setLimit]=useState(12);
   const [handleAdd,setHandleAdd]=useState(false);
+  const [isAdd,setIsAdd]=useState(false);
  
   useEffect(()=>{
     const findAll=async()=>{
@@ -42,13 +42,12 @@ export default function UserList() {
                 router.push(`/login`);
             }
             if (error.response.status==401) {
-                //localStorage.removeItem("token");
                 router.push(`/`);
             }
         }
     }
     findAll();
-  },[token,pathname]);
+  },[token,pathname,isAdd]);
 
   if (response?.isLoading) {
     return(
@@ -70,7 +69,7 @@ export default function UserList() {
     <div className='container mx-auto flex-1 flex flex-col'>
     <div className="flex justify-end h-7">
     {
-      (!handleAdd)?<button className="rounded-lg hover:bg-blue-500 text-center h-full w-7 mr-2 hover:text-white" onClick={()=>setHandleAdd(!handleAdd)}><AppstoreAddOutlined className="h-5/6 w-5/6"/></button>:<AddUser setHandleAdd={setHandleAdd}/>
+      (!handleAdd)?<button className="rounded-lg hover:bg-blue-500 text-center h-full w-7 mr-2 hover:text-white" onClick={()=>setHandleAdd(!handleAdd)}><AppstoreAddOutlined className="h-5/6 w-5/6"/></button>:<AddUser setIsAdd={setIsAdd} setHandleAdd={setHandleAdd}/>
     }
     </div>
     <section className="flex flex-col flex-1 space-y-2">
