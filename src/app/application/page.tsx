@@ -16,6 +16,7 @@ export default function Application() {
   const [token, setToken] = useState<string>();
   const [response, setResponse] = useState<CustomType>();
   const [isAdd,setIsAdd]=useState(false);
+  const [reload,setReload]=useState(false);
 
 
   useEffect(() => {
@@ -39,6 +40,9 @@ export default function Application() {
             if (res.status==201 || res.status==200) {
               localStorage.setItem("token",res.data.token);
               localStorage.setItem("refresh",res.data.refresh);
+              if (localStorage.getItem("token")) {
+                setReload(true);
+              }
             }
           } catch (err:any) {
             localStorage.removeItem("token");
@@ -46,12 +50,13 @@ export default function Application() {
             if (err.response.status == 401) {
               router.push(`/login?ReturnUrl=${pathname}`);
             }
+            setReload(false);
           }
         }
       }
     }
     findAll();
-  }, [limit, page, token, pathname, router, setResponse,isAdd]);
+  }, [limit, page, token, pathname, router,isAdd,reload]);
 
   if (response?.isLoading) {
     return (

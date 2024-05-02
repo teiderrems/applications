@@ -20,6 +20,7 @@ export default function UserList() {
   const [limit,setLimit]=useState(12);
   const [handleAdd,setHandleAdd]=useState(false);
   const [isAdd,setIsAdd]=useState(false);
+  const [reload,setReload]=useState(false);
  
   useEffect(()=>{
     const findAll=async()=>{
@@ -32,7 +33,7 @@ export default function UserList() {
         });
         if (res.status==201 || res.status==200) {
             setResponse({...response,isLoading:false,status:res.status,data:res.data,isSuccess:true})
-            router.refresh();
+            // setIsAdd(state=>!state);
         }
         } catch (error:any) {
             console.log(error);
@@ -43,6 +44,9 @@ export default function UserList() {
                 if (res.status==201 || res.status==200) {
                   localStorage.setItem("token",res.data.token);
                   localStorage.setItem("refresh",res.data.refresh);
+                  if (localStorage.getItem("token")) {
+                    setReload(true);
+                  }
                 }
               } catch (err:any) {
                 localStorage.removeItem("token");
@@ -50,6 +54,7 @@ export default function UserList() {
                 if (err.response.status == 401) {
                   router.push(`/login?ReturnUrl=${pathname}`);
                 }
+                setReload(false);
               }
             }
             if (error.response.status==401) {
@@ -58,7 +63,7 @@ export default function UserList() {
         }
     }
     findAll();
-  },[token,pathname,isAdd]);
+  },[token,pathname,isAdd,reload]);
 
   if (response?.isLoading) {
     return(

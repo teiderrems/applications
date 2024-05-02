@@ -31,6 +31,7 @@ export default function ApplicationDetail({application,setShowDetail,setIsAdd}:{
     const [response,setResponse]=useState<CustomType>();
     const [currentApp,setCurrentApp]=useState(application);
     const pathname=usePathname();
+    const [reload,setReload]=useState(false);
     const router=useRouter();
     const HandleClick=async()=>{
         setResponse({...response,isLoading:true,data:null,isError:false,isSuccess:false,error:"",status:0});
@@ -52,6 +53,7 @@ export default function ApplicationDetail({application,setShowDetail,setIsAdd}:{
                   if (res.status==201 || res.status==200) {
                     localStorage.setItem("token",res.data.token);
                     localStorage.setItem("refresh",res.data.refresh);
+                    setReload(true);
                   }
                 } catch (err:any) {
                   localStorage.removeItem("token");
@@ -59,6 +61,7 @@ export default function ApplicationDetail({application,setShowDetail,setIsAdd}:{
                   if (err.response.status == 401) {
                     router.push(`/login?ReturnUrl=${pathname}`);
                   }
+                  setReload(false);
                 }
               }
         }
@@ -87,10 +90,12 @@ export default function ApplicationDetail({application,setShowDetail,setIsAdd}:{
                   if (res.status==201 || res.status==200) {
                     localStorage.setItem("token",res.data.token);
                     localStorage.setItem("refresh",res.data.refresh);
+                    setReload(true);
                   }
                 } catch (err:any) {
                   localStorage.removeItem("token");
                   localStorage.removeItem("refresh");
+                  setReload(false);
                   if (err.response.status == 401) {
                     router.push(`/login?ReturnUrl=${pathname}`);
                   }
@@ -100,7 +105,7 @@ export default function ApplicationDetail({application,setShowDetail,setIsAdd}:{
     }
 
     useEffect(()=>{
-    },[currentApp,response]);
+    },[currentApp,response,reload]);
   return (
    <div className="fixed inset-0  flex justify-center items-center opacity-80 flex-col">
         <div onClick={()=>setShowDetail(state=>!state)} className="absolute inset-0 min-h-screen bg-gray-700 opacity-100 z-0"></div>

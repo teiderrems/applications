@@ -1,6 +1,6 @@
 import Axios from '@/hooks/axios.config';
 import { usePathname, useRouter } from 'next/navigation';
-import React, { Dispatch, SetStateAction, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 
 
 type Application={
@@ -25,6 +25,7 @@ export default function AddApplication({setHandleAdd,setIsAdd}:{setHandleAdd:Dis
   });
   const router=useRouter();
   const pathname=usePathname();
+  const [reload,setReload]=useState(false);
   const HandleSubmit=async(e:React.FormEvent)=>{
     e.preventDefault();
 
@@ -44,6 +45,9 @@ export default function AddApplication({setHandleAdd,setIsAdd}:{setHandleAdd:Dis
           if (res.status==201 || res.status==200) {
             localStorage.setItem("token",res.data.token);
             localStorage.setItem("refresh",res.data.refresh);
+            if (localStorage.getItem("token")) {
+              setReload(true);
+            }
           }
         } catch (err:any) {
           localStorage.removeItem("token");
@@ -51,10 +55,15 @@ export default function AddApplication({setHandleAdd,setIsAdd}:{setHandleAdd:Dis
           if (err.response.status == 401) {
             router.push(`/login?ReturnUrl=${pathname}`);
           }
+          setReload(false);
         }
       }
     }
   }
+
+  useEffect(()=>{
+
+  },[reload])
   
   return (
     <div className='wrap-form fixed inset-0 w-full h-full  opacity-100 z-10'>

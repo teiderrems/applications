@@ -30,6 +30,7 @@ export default function AddUser({setHandleAdd,setIsAdd}:{setHandleAdd:React.Disp
 
     const [show,setShow]=useState(false);
     const [showC,setShowC]=useState(false);
+    const [reload,setReload]=useState(false);
     const pathname=usePathname();
     const HandleSubmit=async(e: React.FormEvent)=>{
         e.preventDefault();
@@ -49,6 +50,9 @@ export default function AddUser({setHandleAdd,setIsAdd}:{setHandleAdd:React.Disp
                   if (res.status==201 || res.status==200) {
                     localStorage.setItem("token",res.data.token);
                     localStorage.setItem("refresh",res.data.refresh);
+                    if (localStorage.getItem("token")) {
+                        setReload(true);
+                      }
                   }
                 } catch (err:any) {
                   localStorage.removeItem("token");
@@ -56,6 +60,7 @@ export default function AddUser({setHandleAdd,setIsAdd}:{setHandleAdd:React.Disp
                   if (err.response.status == 401) {
                     router.push(`/login?ReturnUrl=${pathname}`);
                   }
+                  setReload(false);
                 }
             }
         }
@@ -63,7 +68,7 @@ export default function AddUser({setHandleAdd,setIsAdd}:{setHandleAdd:React.Disp
 
     useEffect(()=>{
 
-    },[response]);
+    },[response,reload]);
 
   return (
     <div className="wrap-form fixed inset-0 w-full h-full  opacity-100 z-10">
