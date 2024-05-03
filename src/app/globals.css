@@ -11,7 +11,7 @@ html{
 }
 
 .about{
-  @apply mr-2 hover:rounded-full hover:animate-pulse hover:bg-blue-400 hover:border p-1 border-gray-300
+  @apply mr-2 rounded-2xl hover:animate-pulse hover:bg-gray-300 hover:text-white hover:border p-1 border-gray-300
 }
 
 .form-app{

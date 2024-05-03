@@ -47,14 +47,14 @@ export default function RootLayout({
       {
         key: '1',
         label: (
-          <button onClick={LogOut} className="hover:text-blue-300">LogOut</button>
+          <button onClick={LogOut} className="">LogOut</button>
         ),
         icon:<LogoutOutlined />
       },
       {
         key: '2',
         label: (
-          <a href="/about" onClick={(e) => e.preventDefault()} className="hover:text-blue-300">About</a>
+          <Link href="/about" className="">About</Link>
         ),
         icon: <ProfileOutlined />,
         disabled: false,
@@ -92,7 +92,7 @@ export default function RootLayout({
           }
         }}>
           <div id="toggled-menu"
-              className={`w-full absolute top-0 bottom-0 left-0 -translate-x-full md:border-r bg-gray-50  ${togel?'translate-x-0 z-20 opacity-100 w-3/4 translate-y-9':''} text-gray-800 border-b border-gray-200 flex flex-col items-center md:static md:w-1/5 md:transform-none md:border-none`}>
+              className={`w-full absolute top-0 bottom-0 left-0 -translate-x-full md:border-r bg-gray-50  ${togel?'translate-x-0 z-20 opacity-100 w-3/4 translate-y-8':''} text-gray-800 border-b border-gray-200 flex flex-col items-center md:static md:w-1/5 md:transform-none md:border-none`}>
             <h1 className="text-xl font-bold p-1 w-full h-12 border-b">Applications</h1>
             <div className="flex-1 flex w-full flex-col"> 
             
