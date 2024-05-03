@@ -107,12 +107,12 @@ export default function ApplicationDetail({application,setShowDetail,setIsAdd}:{
     useEffect(()=>{
     },[currentApp,response,reload,application,setShowDetail,setIsAdd]);
   return (
-   <div className="fixed inset-0  flex justify-center items-center opacity-80 flex-col">
-        <div onClick={()=>setShowDetail(state=>!state)} className="absolute inset-0 min-h-screen bg-gray-700 opacity-100 z-0"></div>
+   <div className="fixed inset-0  flex justify-center items-center flex-col">
+        <div onClick={()=>setShowDetail(state=>!state)} className="absolute inset-0 bg-gray-500 z-0"></div>
         <div className="flex flex-col w-4/6 h-5/6 p-2 justify-between items-center bg-white z-10 opacity-100 rounded shadow">
-            <div className="flex md:flex-row flex-col justify-between w-5/6">
+            <div className="flex md:flex-row flex-col md:space-x-1 justify-between w-5/6">
                 <input type="text" onChange={(e)=>setCurrentApp({...currentApp,Title:e.target.value})} className="text-wrap mb-2 md:mb-0 shadow shadow-blue-200 border-2 rounded-md md:w-3/4 w-full" value={currentApp.Title} />
-                <select name="status"  onChange={(e)=>setCurrentApp({...currentApp,Status:e.target.value})} className=" shadow shadow-blue-200 border-2 rounded-md" id="status">
+                <select name="status"  onChange={(e)=>setCurrentApp({...currentApp,Status:e.target.value})} className=" shadow shadow-blue-200 flex-1 border-2 rounded-md" id="status">
                     
                     {
                         status.map(s=>(<option key={s} selected={currentApp.Status==s} value={s} className=" uppercase">{s}</option>))

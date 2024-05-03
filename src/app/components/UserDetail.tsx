@@ -93,12 +93,12 @@ export default function UserDetail({user,setShowDetail,setIsAdd}:{user:UserType,
     useEffect(()=>{
     },[currentUser,response,reload]);
   return (
-   <div className="fixed inset-0  flex justify-center items-center opacity-80 flex-col">
-        <div onClick={()=>setShowDetail(state=>!state)} className="absolute inset-0 min-h-screen bg-gray-700 opacity-100 z-0"></div>
-        <div className="flex flex-col w-4/6 h-5/6 p-2 md:h-4/6 justify-between items-center bg-white z-10 opacity-100 rounded shadow">
-            <div className="w-full h-20 flex space-x-1  items-center">
-                <input type="text" onChange={(e)=>setCurrentUser({...currentUser,Username:e.target.value})} placeholder="Enter your Username" className="w-4/6 h-5/6 px-1 md:h-4/6 shadow shadow-blue-200 border-2 rounded-md" id="username" value={currentUser.Username} />
-                <input type="text" value={currentUser.Role} onChange={(e)=>setCurrentUser({...currentUser,Role:e.target.value})} className="flex-1 h-5/6 shadow md:h-4/6 px-1 shadow-blue-200 border-2 rounded-md"/>
+   <div className="fixed inset-0  flex justify-center items-center flex-col">
+        <div onClick={()=>setShowDetail(state=>!state)} className="absolute inset-0 bg-gray-500 z-0"></div>
+        <div className="flex flex-col w-4/6 h-5/6 p-2 md:h-4/6 justify-around items-center bg-white z-10 opacity-100 rounded shadow">
+            <div className="w-full h-20 flex md:space-x-1  md:space-y-0 space-y-4 md:flex-row flex-col">
+                <input type="text" onChange={(e)=>setCurrentUser({...currentUser,Username:e.target.value})} placeholder="Enter your Username" className="md:w-4/6 w-full h-1/2 pl-1 md:h-4/6 shadow shadow-blue-200 border-2 rounded-md" id="username" value={currentUser.Username} />
+                <input type="text" value={currentUser.Role} onChange={(e)=>setCurrentUser({...currentUser,Role:e.target.value})} className="flex-1 md:h-4/6 shadow pl-1 shadow-blue-200 border-2 rounded-md"/>
             </div>
             <div className=" form-group px-2">
                 <input name="Email" onChange={(e)=>setCurrentUser({...currentUser,Email:e.target.value})} type="email"  className="w-full px-2 md:h-4/6 h-5/6 shadow shadow-blue-200 border-2 rounded-md" id="email" value={currentUser.Email}></input>
