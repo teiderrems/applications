@@ -1,5 +1,5 @@
 
-import React, { Dispatch, SetStateAction, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import ApplicationDetail from './ApplicationDetail';
 
 type Props={
@@ -17,7 +17,9 @@ type Props={
 
 export default function ApplicationItem({application,setIsAdd}:{application:Props,setIsAdd:Dispatch<SetStateAction<boolean>>}) {
   const [showDetail,setShowDetail]=useState(false);
-  
+  useEffect(()=>{
+
+  },[application,setIsAdd])
   return (
     <>
       <button onClick={()=>setShowDetail(!showDetail)} >

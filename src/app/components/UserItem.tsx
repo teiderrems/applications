@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import UserDetail from "./UserDetail";
 
 export type UserType={
@@ -13,6 +13,10 @@ export type UserType={
 
 export default function UserItem({user,setIsAdd}:{user:UserType,setIsAdd:Dispatch<SetStateAction<boolean>>}) {
   const [showDetail,setShowDetail]=useState(false);
+
+  useEffect(()=>{
+
+  },[user,setIsAdd])
   return (
     <>
       <button onClick={()=>setShowDetail(!showDetail)}

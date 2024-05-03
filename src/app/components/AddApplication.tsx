@@ -69,21 +69,27 @@ export default function AddApplication({setHandleAdd,setIsAdd}:{setHandleAdd:Dis
     <div className='wrap-form fixed inset-0 w-full h-full  opacity-100 z-10'>
         <div onClick={()=>setHandleAdd(state=>!state)} className="absolute inset-1 bg-gray-500 z-0"></div>
         <form onSubmit={HandleSubmit} className='form-app z-10'>
-             <div className='form-group-app'>
-              <label className='flex-1'  htmlFor="title">Title</label>
-              <div className='md:w-2/3 w-full md:h-full h-3/4 flex justify-between'>
-              <input onChange={(e)=>setApplication({...application,Title:e.target.value})} className='md:flex-1 mr-1 shadow pl-1 rounded-md' type="text" required minLength={4} />
-                <div className='flex md:w-5/12 space-x-1'>
+             <div className='w-full justify-between md:h-12 h-16 px-2 flex md:flex-row space-y-1 flex-col'>
+                <div className='flex justify-between md:w-4/6 md:h-full w-full md:flex-row flex-col'>
+                  <label className='flex-1'  htmlFor="title">Title</label>
+                  <input onChange={(e)=>setApplication({...application,Title:e.target.value})} 
+                  className='md:flex-1 mr-1 shadow pl-1 rounded-md' type="text" required minLength={4} />
+                </div>
+                <div className='flex md:w-5/12 flex-1 md:h-full justify-between md:space-y-0 space-y-1 md:flex-row flex-col'>
                   <label htmlFor="contrat" className='flex-1 md:translate-y-2'>Type</label>
-                  <select name="contrat" defaultValue={'alternance'} id="contrat" onChange={(e)=>setApplication({...application,TypeContrat:e.target.value})} className='rounded-md w-3/4 shadow'>
+                  <select name="contrat" defaultValue={'alternance'} id="contrat" 
+                  onChange={(e)=>setApplication({...application,TypeContrat:e.target.value})} 
+                  className='rounded-md md:w-3/4 w-full shadow'>
                       {
                         Contrat.map(c=>(<option value={c} key={c} className=' uppercase'>{c}</option>))
                       }
                     </select>
                 </div>
-                </div>
              </div>
-             <div className='form-group-app'><label className='flex-1'  htmlFor="entreprise">Entreprise</label><input onChange={(e)=>setApplication({...application,Entreprise:e.target.value})} className='input-form-app' type="text" required minLength={4} /></div>
+             <div className='form-group-app'><label className='flex-1' 
+              htmlFor="entreprise">Entreprise</label>
+              <input onChange={(e)=>setApplication({...application,Entreprise:e.target.value})} 
+              className='input-form-app' type="text" required minLength={4} /></div>
              <div className='form-group-app'>
               <label  className='flex-1' htmlFor="adresse">Adresse</label>
               
