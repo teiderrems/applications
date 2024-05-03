@@ -1,36 +1,45 @@
 "use client"
-import { AppstoreAddOutlined, ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
+import { AppstoreAddOutlined, DoubleLeftOutlined, DoubleRightOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react"
 import AddApplication from "../components/AddApplication";
 import ApplicationItem from "../components/ApplicationItem";
 import { usePathname, useRouter } from "next/navigation";
 import { CustomType, Props } from "../components/ApplicationDetail";
 import Axios from "@/hooks/axios.config";
+import axios from "axios";
 
 export default function Application() {
   const [handleAdd, setHandleAdd] = useState(false);
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(12);
+  const [url,setUrl]=useState<any>(`${Axios.defaults.baseURL}`+`applications?page=${page}&limit=${limit}`);
   const router = useRouter();
   const pathname = usePathname();
   const [token, setToken] = useState<string>();
   const [response, setResponse] = useState<CustomType>();
   const [isAdd,setIsAdd]=useState(false);
   const [reload,setReload]=useState(false);
+  const [next,setNext]=useState(null);
+  const [prev,setPrev]=useState(null);
 
 
   useEffect(() => {
     const findAll = async () => {
       setResponse({ ...response, isLoading: true, data: null, isError: false, isSuccess: false, error: "", status: 0 });
       try {
-        const res = await Axios.get(`applications?page=${page}&limit=${limit}`, {
+        
+        const res = await axios.get(url, {
           headers: {
             "Authorization": window.localStorage ? ("Bearer " + window.localStorage.getItem("token")) : ''
           }
         });
         if (res.status == 201 || res.status == 200) {
-          setResponse({ ...response, isLoading: false, status: res.status, data: res.data, isSuccess: true })
-          router.refresh();
+          setResponse({ ...response, isLoading: false, status: res.status, data: res.data.data.applications, isSuccess: true });
+          setPrev(res.data.prev);
+          setNext(res.data.next);
+          if(response?.data){
+            setReload(true);
+          }
         }
       } catch (error: any) {
         if (error.response.status == 401) {
@@ -56,7 +65,7 @@ export default function Application() {
       }
     }
     findAll();
-  }, [limit, page, token, pathname, router,isAdd,reload]);
+  }, [limit, page, token, url,prev,next,pathname, router,isAdd,reload]);
 
   if (response?.isLoading) {
     return (
@@ -89,16 +98,20 @@ export default function Application() {
             )
           }
         </div>
-        <div className="flex justify-end mb-1 mx-4 space-x-3  items-end basis-1">
-          <button onClick={() => setPage(state => state > 0 ? state - 1 : state)} 
-          className="flex hover:bg-blue-400 hover:text-white space-x-1 px-1 items-center justify-center shadow rounded-md">
-            <ArrowLeftOutlined /><span>prev</span>
-          </button>
-          <button onClick={() => setPage(state => (response?.data as any).lenght >= limit ? state + 1 : state)} 
-          className="flex hover:bg-blue-400 hover:text-white  px-1 items-center space-x-1 shadow justify-center rounded-md">
-            <span>next</span><ArrowRightOutlined />
-          </button>
-        </div>
+        {
+          next &&(
+            <div className="flex justify-end mb-1 mx-4 space-x-3  items-end basis-1">
+            <button onClick={() => setUrl(prev)}
+            className="flex hover:bg-blue-400 hover:text-white space-x-1 px-1 items-center justify-center shadow rounded-md">
+              <DoubleLeftOutlined /><span>prev</span>
+            </button>
+            <button onClick={() => setUrl(next)}
+            className={`flex hover:bg-blue-400 hover:text-white  px-1 items-center space-x-1 shadow justify-center rounded-md`} disabled>
+              <span>next</span><DoubleRightOutlined />
+            </button>
+          </div>
+          )
+        }
       </section>
     </div>
   )
