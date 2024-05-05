@@ -30,6 +30,7 @@ export default function AddApplication({setHandleAdd,setIsAdd}:{setHandleAdd:Dis
     e.preventDefault();
 
     try {
+      console.log(application);
       const res=await Axios.post("applications",application,{
         headers:{
             "Authorization":window.localStorage?("Bearer "+window.localStorage.getItem("token")):''
@@ -69,17 +70,17 @@ export default function AddApplication({setHandleAdd,setIsAdd}:{setHandleAdd:Dis
     <div className='wrap-form fixed inset-0 w-full h-full  opacity-100 z-10'>
         <div onClick={()=>setHandleAdd(state=>!state)} className="absolute inset-0 bg-gray-500 z-0"></div>
         <form onSubmit={HandleSubmit} className='form-app z-10'>
-             <div className='w-full mb-2 md:mb-0 justify-between md:h-12 h-16 px-2 flex md:flex-row space-y-1 flex-col'>
+             <div className='w-full mb-2 md:mb-0 justify-around md:justify-between md:h-12 h-16 px-2 flex md:flex-row space-y-1 flex-col'>
                 <div className='flex justify-between md:w-4/6 md:h-full w-full md:flex-row flex-col'>
                   <label className='flex-1'  htmlFor="title">Title</label>
                   <input onChange={(e)=>setApplication({...application,Title:e.target.value})} 
-                  className='md:flex-1 mr-1 shadow pl-1 rounded-md' type="text" required minLength={4} />
+                  className='md:flex-1 md:mr-1 shadow pl-1 rounded-md' type="text" required minLength={4} />
                 </div>
-                <div className='flex md:w-5/12 flex-1 md:h-full justify-between md:space-y-0 space-y-1 md:flex-row flex-col'>
+                <div className='flex md:w-5/12 flex-1 md:h-full justify-between'>
                   <label htmlFor="contrat" className='flex-1 md:translate-y-2'>Type</label>
                   <select name="contrat" defaultValue={'alternance'} id="contrat" 
                   onChange={(e)=>setApplication({...application,TypeContrat:e.target.value})} 
-                  className='rounded-md md:w-3/4 w-full shadow'>
+                  className='rounded-md w-4/5 shadow'>
                       {
                         Contrat.map(c=>(<option value={c} key={c} className=' uppercase'>{c}</option>))
                       }
