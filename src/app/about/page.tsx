@@ -18,7 +18,7 @@ export default function About() {
 
   const [text,setText]=useState<{key:string,content:string}>(Text[1]);
   return (
-    <div className='flex flex-col items-center flex-1 h-full w-full justify-center  bg-gradient-radial from-slate-400 to-blue-100'>
+    <div className='flex flex-col items-center flex-1 h-full w-full justify-center  bg-gradient-radial from-blue-50 to-gray-100'>
         <p className=' px-4 text-justify text-wrap'>
           {text.content}
         </p>

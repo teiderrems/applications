@@ -50,7 +50,6 @@ export default function UserList() {
                 const res=await Axios.post("users/refresh_token",{refresh:localStorage.getItem("refresh")});
                 if (res.status==201 || res.status==200) {
                   localStorage.setItem("token",res.data.token);
-                  localStorage.setItem("refresh",res.data.refresh);
                   if (localStorage.getItem("token")) {
                     setReload(true);
                   }

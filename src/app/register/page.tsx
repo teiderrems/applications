@@ -3,7 +3,7 @@
 import Axios from "@/hooks/axios.config";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { CustomType } from "../components/ApplicationDetail";
 import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
 
@@ -23,14 +23,14 @@ export default function Register() {
     const router=useRouter();
     
     const [response,setResponse]=useState<CustomType>();
-
     const [show,setShow]=useState(false);
     const [showC,setShowC]=useState(false);
     const HandleSubmit=async(e: React.FormEvent)=>{
         e.preventDefault();
+        const data= new FormData(document.querySelector('form') as HTMLFormElement);
         setResponse({...response,status:0,data:null,isLoading:true,isError:false,error:"",isSuccess:false})
         try {
-            const res=await Axios.post("users",{Username:user.Username,Password:user.Password,Email:user.Email});
+            const res=await Axios.post("users",data);
             if (res.status==201 || res.status==200) {
                 setResponse({...response,isSuccess:true,isLoading:false,data:res.data});
                 router.push('/login');
@@ -46,40 +46,46 @@ export default function Register() {
 
   return (
     <div className="wrap-form">
-        <form action="" onSubmit={HandleSubmit} className="md:w-3/5 w-5/6 h-4/5 space-y-3 flex px-2 bg-white rounded-md shadow flex-col justify-center">
-        <h1 className="text-gray-400 text-justify">SignIn to continue</h1>
-            {response?.isError&&(<p className="text-justify text-red-400">{response?.error}</p>)}
-            <div className="form-group">
-                <label htmlFor="Username" className="text-2xl">Username</label>
-                <input type="text" id="Username" placeholder="enter your username" required onChange={(e)=>{setUser({...user,Username:e.target.value})}} className="form-input" />
+        <form action="" onSubmit={HandleSubmit} className="md:w-3/5 w-5/6 h-full flex md:space-y-4 flex-col items-center bg-white justify-center" encType="multipart/form-data">
+        <h1 className="text-gray-400 self-start mb-2 text-justify">SignIn to continue</h1>
+            {response?.isError&&(<span className="text-justify text-red-400">{response?.error}</span>)}
+            <div className="md:h-1/6 my-4 w-full md:my-0 flex space-x-2 flex-row">
+                <div className="flex-1 w-3/5 flex flex-col">
+                    <label htmlFor="Username" className="text-xl">Username</label>
+                    <input type="text" name="Username" id="Username" placeholder="enter your username" required onChange={(e)=>{setUser({...user,Username:e.target.value})}} className=" h-3/4 rounded-md px-2 shadow" />
+                </div>
+                <div className="flex-1 flex flex-col">
+                    <label htmlFor="Profile" className="text-xl">Profile</label>
+                    <input type="file" name="profile" placeholder="choose your profile" className=" hover:cursor-pointer w-full p-2 h-3/4 rounded-md shadow" id="profile" />
+                </div>
             </div>
-            <div className="form-group">
-                <label htmlFor="Email" className="text-2xl">Email</label>
-                <input type="email" id="Email" placeholder="example@gmail.com" required onChange={(e)=>{setUser({...user,Email:e.target.value})}} className="form-input" />
+            <div className="h-1/6 flex w-full flex-col">
+                <label htmlFor="Email" className="text-xl">Email</label>
+                <input type="email" name="Email" id="Email" placeholder="example@gmail.com" required onChange={(e)=>{setUser({...user,Email:e.target.value})}} className="form-input" />
             </div>
-            <div className="form-group">
-                <label htmlFor="Password" className="text-2xl">Password</label>
-                <div className="flex w-full shadow  rounded-md  md:w-3/4 md:h-3/4 h-full">
-                    <input type={show?"text":"password"} id="Password" required min={8} pattern="[a-zA-Z0-9;?,@]{8,15}" onChange={(e)=>{setUser({...user,Password:e.target.value})}} className="flex-1 pl-2 rounded-s-md" />
+            <div className="h-1/6 w-full flex flex-col">
+                <label htmlFor="Password" className="text-xl">Password</label>
+                <div className="flex w-full shadow  form-input">
+                    <input type={show?"text":"password"} id="Password" name="Password" required min={8} pattern="[a-zA-Z0-9;?,@]{8,15}" onChange={(e)=>{setUser({...user,Password:e.target.value})}} className="flex-1 pl-2 rounded-s-md" />
                     {show?(<button onClick={()=>setShow(!show)} className="w-1/12 h-full border-l"><EyeOutlined/></button>): (<button onClick={()=>setShow(!show)}  className="w-1/12 h-full  border-l"><EyeInvisibleOutlined /></button>)}
                 </div>
             </div>
             {
                 user.Password!=""&&(!user.Password.match("[a-zA-Z0-9;?,@]{8,15}"))&&<p className="text-red-400 text-wrap">Password must contain at least 8 characters with a mixture of uppercase, lowercase, numbers</p>
             }
-            <div className="form-group">
-                <label htmlFor="ConfirmPw" className="text-2xl">ConfirmPw</label>
-                <div className="flex w-full shadow  md:w-3/4 md:h-3/4 h-full  rounded-md">
-                    <input type={showC?"text":"password"} id="ConfirmPw" required onChange={(e)=>{setUser({...user,ConfirmPassword:e.target.value})}} className="flex-1 pl-2 rounded-s-md" />
+            <div className="h-1/6 w-full flex flex-col">
+                <label htmlFor="ConfirmPassword" className="text-xl">ConfirmPassword</label>
+                <div className="flex w-full shadow  form-input">
+                    <input type={showC?"text":"password"} id="ConfirmPassword" required onChange={(e)=>{setUser({...user,ConfirmPassword:e.target.value})}} className="flex-1 pl-2 rounded-s-md" />
                     {showC?(<button onClick={()=>setShowC(!showC)} className="w-1/12 h-full border-l"><EyeOutlined/></button>): (<button onClick={()=>setShowC(!showC)}  className="w-1/12 h-full  border-l"><EyeInvisibleOutlined /></button>)}
                 </div>
             </div>
             {
-                user.Password!=""&&user.ConfirmPassword!=""&&user.ConfirmPassword!=user.Password&&<p className="text-red-400">ConfirmPassword must be equal to Password</p>
+                user.Password!=""&&user.ConfirmPassword!=""&&user.ConfirmPassword!=user.Password&&<span className="text-red-400">ConfirmPassword must be equal to Password</span>
             }
-            <div className="w-full justify-between flex  md:h-14 h-28 md:flex-row flex-col items-center">
+            <div className="w-full md:justify-between justify-around flex h-1/6 md:flex-row flex-col">
                 <button className="btn-submit" type="submit">Submit</button>
-                <Link href="/login" className="text-blue-400 hover:underline">You have acount <strong>SignIn</strong></Link>
+                <Link href="/login" className="text-blue-400 md:self-center hover:underline">You have acount <strong>SignIn</strong></Link>
             </div>
         </form>
     </div>

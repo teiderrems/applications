@@ -80,7 +80,7 @@ export default function AddApplication({setHandleAdd,setIsAdd}:{setHandleAdd:Dis
                   <label htmlFor="contrat" className='flex-1 md:translate-y-2'>Type</label>
                   <select name="contrat" defaultValue={'alternance'} id="contrat" 
                   onChange={(e)=>setApplication({...application,TypeContrat:e.target.value})} 
-                  className='rounded-md w-4/5 shadow'>
+                  className='rounded-md w-3/4 shadow'>
                       {
                         Contrat.map(c=>(<option value={c} key={c} className=' uppercase'>{c}</option>))
                       }

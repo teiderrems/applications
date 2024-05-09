@@ -1,17 +1,17 @@
 "use client"
-import type { Metadata } from "next";
+// import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Footer from "./components/Footer";
-import Header from "./components/Header";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import boutonX from '../../public/cross.svg';
 import { usePathname, useRouter } from "next/navigation";
+import  profileImg  from '../../public/defaul.jpeg';
 import Link from "next/link";
 import Image from "next/image";
 import burgerImg from '../../public/menu.svg';
-import Head from "next/head";
-import { DownOutlined, HomeOutlined, LogoutOutlined, ProfileOutlined, SmileOutlined, UnorderedListOutlined, UserOutlined } from "@ant-design/icons";
+import  Head  from "next/head";
+import { EditOutlined, HomeOutlined, LogoutOutlined, ProfileOutlined, SmileOutlined, UnorderedListOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, Dropdown, MenuProps, Space } from "antd";
 
 
@@ -33,8 +33,8 @@ export default function RootLayout({
   const [token,setToken]=useState<string>('');
   const [image,setImage]=useState(burgerImg);
   const [show,setShow]=useState(true)
-
-    const router=useRouter();
+  const [user,setUser]=useState<any>(null);
+  const router=useRouter();
     
     const LogOut=()=>{
       localStorage.removeItem("token");
@@ -54,6 +54,14 @@ export default function RootLayout({
       {
         key: '2',
         label: (
+          <Link href={`/user/${user?._id}`} className="">Profile</Link>
+        ),
+        icon: <EditOutlined />,
+        disabled: false,
+      },
+      {
+        key: '3',
+        label: (
           <Link href="/about" className="">About</Link>
         ),
         icon: <ProfileOutlined />,
@@ -70,11 +78,14 @@ export default function RootLayout({
    setTogel(!togel);
  }
 
- const [user,setUser]=useState<any>(null);
+ 
   const pathname=usePathname();
   useEffect(()=>{
+    if (!(localStorage.getItem("token"))) {
+      router.push('/login');
+    }
     setToken(localStorage.getItem("token") as string);
-    if (window.localStorage&&localStorage.getItem("token")) {
+    if (window.localStorage&&localStorage.getItem("token") !=undefined && localStorage.getItem("token") !='undefined') {
       setUser(JSON.parse(atob(localStorage.getItem("token")!.split('.')[1])));
     }
     return()=>{
@@ -116,7 +127,7 @@ export default function RootLayout({
             <Footer/>
             </div>
           <div className="flex-1 flex flex-col h-screen">
-            <div className="flex flex-row h-12 bg-gradient-to-bl from-gray-50 via-slate-50 to-blue-50  justify-between items-center  w-full border-b">
+            <div className="flex flex-row h-12 sticky top-0 bg-gradient-to-bl from-gray-50 via-slate-50 to-blue-50  justify-between items-center  w-full border-b">
               <button
                 aria-label="toggle button"
                 aria-expanded="false"
@@ -132,8 +143,7 @@ export default function RootLayout({
                     <Dropdown menu={{ items }}>
                       <a onClick={(e) => e.preventDefault()}>
                         <Space>
-                        <Avatar icon={<UserOutlined />} />
-                          
+                        <Avatar icon={<Image width={45} height={45} src={(!user.profile.includes('null'))?user.profile:profileImg} alt="profile"/>} /> 
                         </Space>
                       </a>
                     </Dropdown>

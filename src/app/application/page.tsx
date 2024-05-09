@@ -46,9 +46,9 @@ export default function Application() {
           
           try {
             const res=await Axios.post("users/refresh_token",{refresh:localStorage.getItem("refresh")});
+            console.log(res);
             if (res.status==201 || res.status==200) {
               localStorage.setItem("token",res.data.token);
-              localStorage.setItem("refresh",res.data.refresh);
               if (localStorage.getItem("token")) {
                 setReload(true);
               }

@@ -48,26 +48,26 @@ function Login() {
 
   return (
     <div className="wrap-form">
-      <form action="" onSubmit={HandleSubmit} className="md:w-3/5 w-5/6 h-4/5 space-y-3 flex px-2 flex-col bg-white rounded-md shadow justify-center">
-        <h1 className="text-gray-400 text-justify">Login to continue</h1>
+      <form action="" onSubmit={HandleSubmit} className="md:w-3/5 w-5/6 h-full flex items-center  md:space-y-3 flex-col bg-white justify-center">
+        <h1 className="text-gray-400 self-start mb-4 text-justify">Login to continue</h1>
         {response?.isError && (<span className="text-red-400 text-center w-full block">Something wrong {response?.error}</span>)}
-        <div className="form-group">
-          <label htmlFor="Username" className="text-2xl">Username</label>
+        <div className="flex flex-col h-1/6 w-full space-y-1">
+          <label htmlFor="Username" className="text-xl">Username</label>
           <input type="text"  id="Username" required onChange={(e) => { setUser({ ...user, Username: e.target.value }) }} className="form-input" />
         </div>
-        <div className="form-group">
-          <label htmlFor="Password" className="text-2xl">Password</label>
-          <div className="flex w-full shadow  md:w-3/4 md:h-3/4 h-full rounded-md">
+        <div className="flex  w-full flex-col h-1/6 space-y-2">
+          <label htmlFor="Password" className="text-xl">Password</label>
+          <div className="flex w-full shadow  form-input">
             <input type={show?"text":"password"} id="Password" required min={8} pattern="[a-zA-Z0-9;?,@]{8,15}" onChange={(e)=>{setUser({...user,Password:e.target.value})}} className="flex-1 pl-2 rounded-s-md" />
             {show?(<button onClick={()=>setShow(!show)} className="w-1/12 h-full border-l"><EyeOutlined/></button>): (<button onClick={()=>setShow(!show)}  className="w-1/12 h-full  border-l"><EyeInvisibleOutlined /></button>)}
           </div>
         </div>
         {
-          user.Password!=""&&(!user.Password.match("[a-zA-Z0-9;?,@]{8,15}"))&&<p className="text-red-400 text-wrap">Password must contain at least 8 characters with a mixture of uppercase, lowercase, numbers</p>
+          user.Password!=""&&(!user.Password.match("[a-zA-Z0-9;?,@]{8,15}"))&&<span className="text-red-400 text-wrap">Password must contain at least 8 characters with a mixture of uppercase, lowercase, numbers</span>
         }
-        <div className="w-full justify-between flex md:h-14 h-28 md:flex-row flex-col items-center">
+        <div className="flex w-full flex-col md:flex-row  justify-around md:justify-between h-1/6">
           <button className="btn-submit" type="submit">Submit</button>
-          <Link href="/register" className="text-blue-400 hover:underline">You do not have acount <strong>SignUp</strong></Link>
+          <Link href="/register" className="text-blue-400 md:self-center hover:underline">You do not have acount <strong>SignUp</strong></Link>
         </div>
       </form>
     </div>
