@@ -18,7 +18,7 @@ export default function UserDetail({user,setShowDetail,setIsAdd}:{user:UserType,
         try {
             const res=await Axios.put("users/"+user._id,currentUser,{
                 headers:{
-                    "Authorization":window.localStorage?("Bearer "+window.localStorage.getItem("token")):''
+                    "Authorization":window.sessionStorage?("Bearer "+window.sessionStorage.getItem("token")):''
                 }
             });
             if (res.status==201 || res.status==200) {
@@ -29,17 +29,17 @@ export default function UserDetail({user,setShowDetail,setIsAdd}:{user:UserType,
         } catch (error:any) {
             if (error.response.status==401) {
                 try {
-                  const res=await Axios.post("users/refresh_token",{refresh:localStorage.getItem("refresh")});
+                  const res=await Axios.post("users/refresh_token",{refresh:sessionStorage.getItem("refresh")});
                   if (res.status==201 || res.status==200) {
-                    localStorage.setItem("token",res.data.token);
-                    localStorage.setItem("refresh",res.data.refresh);
-                    if (localStorage.getItem("token")) {
+                    sessionStorage.setItem("token",res.data.token);
+                    sessionStorage.setItem("refresh",res.data.refresh);
+                    if (sessionStorage.getItem("token")) {
                       setReload(true);
                     }
                   }
                 } catch (err:any) {
-                  localStorage.removeItem("token");
-                  localStorage.removeItem("refresh");
+                  sessionStorage.removeItem("token");
+                  sessionStorage.removeItem("refresh");
                   if (err.response.status == 401) {
                     router.push(`/login?ReturnUrl=${pathname}`);
                   }
@@ -56,7 +56,7 @@ export default function UserDetail({user,setShowDetail,setIsAdd}:{user:UserType,
         try {
             const res=await Axios.delete("users/"+user._id,{
                 headers:{
-                    "Authorization":window.localStorage?("Bearer "+window.localStorage.getItem("token")):''
+                    "Authorization":window.sessionStorage?("Bearer "+window.sessionStorage.getItem("token")):''
                 }
             });
             router.push(pathname);
@@ -68,19 +68,19 @@ export default function UserDetail({user,setShowDetail,setIsAdd}:{user:UserType,
         } catch (error:any) {
             if (error.response.status==401) {
                 try {
-                  const res=await Axios.post("users/refresh_token",{refresh:localStorage.getItem("refresh")});
+                  const res=await Axios.post("users/refresh_token",{refresh:sessionStorage.getItem("refresh")});
                   if (res.status==201 || res.status==200) {
-                    localStorage.setItem("token",res.data.token);
-                    localStorage.setItem("refresh",res.data.refresh);
+                    sessionStorage.setItem("token",res.data.token);
+                    sessionStorage.setItem("refresh",res.data.refresh);
 
                     // setIsAdd(state=>!state);
-                    if (localStorage.getItem("token")) {
+                    if (sessionStorage.getItem("token")) {
                       setReload(true);
                     }
                   }
                 } catch (err:any) {
-                  localStorage.removeItem("token");
-                  localStorage.removeItem("refresh");
+                  sessionStorage.removeItem("token");
+                  sessionStorage.removeItem("refresh");
                   if (err.response.status == 401) {
                     router.push(`/login?ReturnUrl=${pathname}`);
                   }
@@ -94,7 +94,7 @@ export default function UserDetail({user,setShowDetail,setIsAdd}:{user:UserType,
     },[currentUser,response,reload]);
   return (
    <div className="fixed inset-0  flex justify-center items-center flex-col">
-        <div onClick={()=>setShowDetail(state=>!state)} className="absolute inset-0 bg-gray-500 z-0"></div>
+        <div onClick={()=>setShowDetail(state=>!state)} className="absolute inset-0 bg-blue-50 z-0"></div>
         <div className="flex flex-col w-4/6 h-5/6 p-2 md:h-4/6 justify-around items-center bg-white z-10 opacity-100 rounded shadow">
             <div className="w-full h-20 flex md:space-x-1  md:space-y-0 space-y-4 md:flex-row flex-col">
                 <input type="text" onChange={(e)=>setCurrentUser({...currentUser,Username:e.target.value})} placeholder="Enter your Username" className="md:w-4/6 w-full h-1/2 pl-1 md:h-4/6 shadow shadow-blue-200 border-2 rounded-md" id="username" value={currentUser.Username} />

@@ -27,8 +27,8 @@ function Login() {
         try {
             const res=await Axios.post("users/auth",{Username:user.Username,Password:user.Password});
             if (res.status==201 || res.status==200) {
-              localStorage.setItem("token",res.data.token);
-              localStorage.setItem("refresh",res.data.refresh);
+              sessionStorage.setItem("token",res.data.token);
+              sessionStorage.setItem("refresh",res.data.refresh);
               if (query.get("ReturnUrl")!=null) {
                 router.push(query.get("ReturnUrl") as string);
               }
@@ -48,14 +48,14 @@ function Login() {
 
   return (
     <div className="wrap-form">
-      <form action="" onSubmit={HandleSubmit} className="md:w-3/5 w-5/6 h-full flex items-center  md:space-y-3 flex-col bg-white justify-center">
+      <form action="" onSubmit={HandleSubmit} className="md:w-3/5 w-5/6 h-full flex items-center md:space-y-3 flex-col bg-white justify-center">
         <h1 className="text-gray-400 self-start mb-4 text-justify">Login to continue</h1>
         {response?.isError && (<span className="text-red-400 text-center w-full block">Something wrong {response?.error}</span>)}
-        <div className="flex flex-col h-1/6 w-full space-y-1">
+        <div className="flex w-full flex-col h-1/5 space-y-1">
           <label htmlFor="Username" className="text-xl">Username</label>
-          <input type="text"  id="Username" required onChange={(e) => { setUser({ ...user, Username: e.target.value }) }} className="form-input" />
+          <input type="text"  id="Username" required onChange={(e) => { setUser({ ...user, Username: e.target.value }) }} className="form-input px-2" />
         </div>
-        <div className="flex  w-full flex-col h-1/6 space-y-2">
+        <div className="flex w-full flex-col h-1/5 space-y-2">
           <label htmlFor="Password" className="text-xl">Password</label>
           <div className="flex w-full shadow  form-input">
             <input type={show?"text":"password"} id="Password" required min={8} pattern="[a-zA-Z0-9;?,@]{8,15}" onChange={(e)=>{setUser({...user,Password:e.target.value})}} className="flex-1 pl-2 rounded-s-md" />

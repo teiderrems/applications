@@ -26,6 +26,8 @@ export default function AddApplication({setHandleAdd,setIsAdd}:{setHandleAdd:Dis
   const router=useRouter();
   const pathname=usePathname();
   const [reload,setReload]=useState(false);
+  const [token,setToken]=useState();
+  
   const HandleSubmit=async(e:React.FormEvent)=>{
     e.preventDefault();
 
@@ -33,7 +35,7 @@ export default function AddApplication({setHandleAdd,setIsAdd}:{setHandleAdd:Dis
       console.log(application);
       const res=await Axios.post("applications",application,{
         headers:{
-            "Authorization":window.localStorage?("Bearer "+window.localStorage.getItem("token")):''
+            "Authorization":window.sessionStorage?("Bearer "+window.sessionStorage.getItem("token")):''
         }
       });
       router.refresh();
@@ -42,17 +44,19 @@ export default function AddApplication({setHandleAdd,setIsAdd}:{setHandleAdd:Dis
     } catch (error:any) {
       if (error.response.status==401) {
         try {
-          const res=await Axios.post("users/refresh_token",{refresh:localStorage.getItem("refresh")});
+          const res=await Axios.post("users/refresh_token",{refresh:sessionStorage.getItem("refresh")});
           if (res.status==201 || res.status==200) {
-            localStorage.setItem("token",res.data.token);
-            localStorage.setItem("refresh",res.data.refresh);
-            if (localStorage.getItem("token")) {
+            setToken(res.data.token);
+            sessionStorage.setItem("token",res.data.token);
+            sessionStorage.setItem("refresh",res.data.refresh);
+            if (sessionStorage.getItem("token")) {
               setReload(true);
+
             }
           }
         } catch (err:any) {
-          localStorage.removeItem("token");
-          localStorage.removeItem("refresh");
+          sessionStorage.removeItem("token");
+          sessionStorage.removeItem("refresh");
           if (err.response.status == 401) {
             router.push(`/login?ReturnUrl=${pathname}`);
           }
@@ -64,11 +68,11 @@ export default function AddApplication({setHandleAdd,setIsAdd}:{setHandleAdd:Dis
 
   useEffect(()=>{
 
-  },[reload])
+  },[reload,token])
   
   return (
     <div className='wrap-form fixed inset-0 w-full h-full  opacity-100 z-10'>
-        <div onClick={()=>setHandleAdd(state=>!state)} className="absolute inset-0 bg-gray-500 z-0"></div>
+        <div onClick={()=>setHandleAdd(state=>!state)} className="absolute inset-0 bg-blue-50 z-0"></div>
         <form onSubmit={HandleSubmit} className='form-app z-10'>
              <div className='w-full mb-2 md:mb-0 justify-around md:justify-between md:h-12 h-16 px-2 flex md:flex-row space-y-1 flex-col'>
                 <div className='flex justify-between md:w-4/6 md:h-full w-full md:flex-row flex-col'>

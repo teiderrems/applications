@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const [token,setToken]=useState<string>();
   useEffect(()=>{
-    setToken(localStorage.getItem("token") as string);
+    setToken(sessionStorage.getItem("token") as string);
   },[token])
   return (
     <main className="flex h-full container mx-auto flex-col">

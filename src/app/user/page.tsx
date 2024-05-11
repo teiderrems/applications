@@ -32,7 +32,7 @@ export default function UserList() {
       try {
         const res = await axios.get(url, {
           headers: {
-            "Authorization": window.localStorage ? ("Bearer " + window.localStorage.getItem("token")) : ''
+            "Authorization": window.sessionStorage ? ("Bearer " + window.sessionStorage.getItem("token")) : ''
           }
         });
         if (res.status == 201 || res.status == 200) {
@@ -47,16 +47,16 @@ export default function UserList() {
             setResponse({...response,error:error.message,isLoading:false,status:error.response.status,isSuccess:true})
             if ((error.response.status==401)&&(error.response.data.message as string).includes('jwt')) {
               try {
-                const res=await Axios.post("users/refresh_token",{refresh:localStorage.getItem("refresh")});
+                const res=await Axios.post("users/refresh_token",{refresh:sessionStorage.getItem("refresh")});
                 if (res.status==201 || res.status==200) {
-                  localStorage.setItem("token",res.data.token);
-                  if (localStorage.getItem("token")) {
+                  sessionStorage.setItem("token",res.data.token);
+                  if (sessionStorage.getItem("token")) {
                     setReload(true);
                   }
                 }
               } catch (err:any) {
-                localStorage.removeItem("token");
-                localStorage.removeItem("refresh");
+                sessionStorage.removeItem("token");
+                sessionStorage.removeItem("refresh");
                 if (err.response.status == 401) {
                   router.push(`/login?ReturnUrl=${pathname}`);
                 }

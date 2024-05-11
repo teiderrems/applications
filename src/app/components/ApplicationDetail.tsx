@@ -38,7 +38,7 @@ export default function ApplicationDetail({application,setShowDetail,setIsAdd}:{
         try {
             const res=await Axios.put("applications/"+application._id,currentApp,{
                 headers:{
-                    "Authorization":window.localStorage?("Bearer "+window.localStorage.getItem("token")):''
+                    "Authorization":window.sessionStorage?("Bearer "+window.sessionStorage.getItem("token")):''
                 }
             });
             if (res.status==201 || res.status==200) {
@@ -49,15 +49,15 @@ export default function ApplicationDetail({application,setShowDetail,setIsAdd}:{
         } catch (error:any) {
             if (error.response.status==401) {
                 try {
-                  const res=await Axios.post("users/refresh_token",{refresh:localStorage.getItem("refresh")});
+                  const res=await Axios.post("users/refresh_token",{refresh:sessionStorage.getItem("refresh")});
                   if (res.status==201 || res.status==200) {
-                    localStorage.setItem("token",res.data.token);
-                    localStorage.setItem("refresh",res.data.refresh);
+                    sessionStorage.setItem("token",res.data.token);
+                    sessionStorage.setItem("refresh",res.data.refresh);
                     setReload(true);
                   }
                 } catch (err:any) {
-                  localStorage.removeItem("token");
-                  localStorage.removeItem("refresh");
+                  sessionStorage.removeItem("token");
+                  sessionStorage.removeItem("refresh");
                   if (err.response.status == 401) {
                     router.push(`/login?ReturnUrl=${pathname}`);
                   }
@@ -74,7 +74,7 @@ export default function ApplicationDetail({application,setShowDetail,setIsAdd}:{
         try {
             const res=await Axios.delete("applications/"+application._id,{
                 headers:{
-                    "Authorization":window.localStorage?("Bearer "+window.localStorage.getItem("token")):''
+                    "Authorization":window.sessionStorage?("Bearer "+window.sessionStorage.getItem("token")):''
                 }
             });
             router.push(pathname);
@@ -86,15 +86,15 @@ export default function ApplicationDetail({application,setShowDetail,setIsAdd}:{
         } catch (error:any) {
             if (error.response.status==401) {
                 try {
-                  const res=await Axios.post("users/refresh_token",{refresh:localStorage.getItem("refresh")});
+                  const res=await Axios.post("users/refresh_token",{refresh:sessionStorage.getItem("refresh")});
                   if (res.status==201 || res.status==200) {
-                    localStorage.setItem("token",res.data.token);
-                    localStorage.setItem("refresh",res.data.refresh);
+                    sessionStorage.setItem("token",res.data.token);
+                    sessionStorage.setItem("refresh",res.data.refresh);
                     setReload(true);
                   }
                 } catch (err:any) {
-                  localStorage.removeItem("token");
-                  localStorage.removeItem("refresh");
+                  sessionStorage.removeItem("token");
+                  sessionStorage.removeItem("refresh");
                   setReload(false);
                   if (err.response.status == 401) {
                     router.push(`/login?ReturnUrl=${pathname}`);
@@ -108,7 +108,7 @@ export default function ApplicationDetail({application,setShowDetail,setIsAdd}:{
     },[currentApp,response,reload,application,setShowDetail,setIsAdd]);
   return (
    <div className="fixed inset-0  flex justify-center items-center flex-col">
-        <div onClick={()=>setShowDetail(state=>!state)} className="absolute inset-0 bg-gray-500 z-0"></div>
+        <div onClick={()=>setShowDetail(state=>!state)} className="absolute inset-0 bg-blue-50 z-0"></div>
         <div className="flex flex-col w-4/6 h-5/6 p-2 justify-between items-center bg-white z-10 opacity-100 rounded shadow">
             <div className="flex md:flex-row flex-col md:space-x-1 justify-between w-5/6">
                 <input type="text" onChange={(e)=>setCurrentApp({...currentApp,Title:e.target.value})} className="text-wrap mb-2 md:mb-0 shadow shadow-blue-200 border-2 rounded-md md:w-3/4 w-full" value={currentApp.Title} />

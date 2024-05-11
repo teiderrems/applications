@@ -8,13 +8,13 @@ const nextConfig = {
                 protocol:'https',
                 hostname:"applications-api2.vercel.app",
                 port:'',
-                pathname:'/profiles/**'
+                pathname:'/profile/**'
             },
             {
                 protocol:'http',
                 hostname:'localhost',
                 port:'5000',
-                pathname:'/profiles/**'
+                pathname:'/**/**'
             },
             {
                 protocol:'http',

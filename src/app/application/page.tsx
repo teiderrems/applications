@@ -15,7 +15,7 @@ export default function Application() {
   const [url,setUrl]=useState<any>(`${Axios.defaults.baseURL}`+`applications?page=${page}&limit=${limit}`);
   const router = useRouter();
   const pathname = usePathname();
-  const [token, setToken] = useState<string>();
+  const [token, setToken] = useState<any>();
   const [response, setResponse] = useState<CustomType>();
   const [isAdd,setIsAdd]=useState(false);
   const [reload,setReload]=useState(false);
@@ -24,13 +24,14 @@ export default function Application() {
 
 
   useEffect(() => {
+    setToken(window&&sessionStorage.getItem('token'));
     const findAll = async () => {
       setResponse({ ...response, isLoading: true, data: null, isError: false, isSuccess: false, error: "", status: 0 });
       try {
         
         const res = await axios.get(url, {
           headers: {
-            "Authorization": window.localStorage ? ("Bearer " + window.localStorage.getItem("token")) : ''
+            "Authorization": window.sessionStorage ? ("Bearer " + window.sessionStorage.getItem("token")) : ''
           }
         });
         if (res.status == 201 || res.status == 200) {
@@ -45,17 +46,18 @@ export default function Application() {
         if (error.response.status == 401) {
           
           try {
-            const res=await Axios.post("users/refresh_token",{refresh:localStorage.getItem("refresh")});
+            const res=await Axios.post("users/refresh_token",{refresh:sessionStorage.getItem("refresh")});
             console.log(res);
             if (res.status==201 || res.status==200) {
-              localStorage.setItem("token",res.data.token);
-              if (localStorage.getItem("token")) {
+              setToken(res.data.token);
+              sessionStorage.setItem("token",res.data.token);
+              if (sessionStorage.getItem("token")) {
                 setReload(true);
               }
             }
           } catch (err:any) {
-            localStorage.removeItem("token");
-            localStorage.removeItem("refresh");
+            sessionStorage.removeItem("token");
+            sessionStorage.removeItem("refresh");
             if (err.response.status == 401) {
               router.push(`/login?ReturnUrl=${pathname}`);
             }
@@ -86,7 +88,7 @@ export default function Application() {
     <div className='container mx-auto flex-1 flex flex-col'>
       <div className="flex justify-end h-7">
         {
-          (!handleAdd) ? <button className="rounded-lg hover:bg-blue-500 text-center h-full w-7 mr-2 hover:text-white" onClick={() => setHandleAdd(!handleAdd)}><AppstoreAddOutlined className="h-5/6 w-5/6" /></button> : <AddApplication setHandleAdd={setHandleAdd} setIsAdd={setIsAdd} />
+          (!handleAdd) ? <button className="rounded-lg hover:bg-blue-500 hover:my-2 text-center h-full w-7 text-3xl md:text-xl mr-2 hover:text-white" onClick={() => setHandleAdd(!handleAdd)}><AppstoreAddOutlined className="h-5/6 w-5/6" /></button> : <AddApplication setHandleAdd={setHandleAdd} setIsAdd={setIsAdd} />
         }
       </div>
       <section className="flex flex-col flex-1 space-y-2">

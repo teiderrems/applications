@@ -46,17 +46,17 @@ export default function AddUser({setHandleAdd,setIsAdd}:{setHandleAdd:React.Disp
             setResponse({...response,error:error.message,isError:true,isLoading:false});
             if (error.response.status==401) {
                 try {
-                  const res=await Axios.post("users/refresh_token",{refresh:localStorage.getItem("refresh")});
+                  const res=await Axios.post("users/refresh_token",{refresh:sessionStorage.getItem("refresh")});
                   if (res.status==201 || res.status==200) {
-                    localStorage.setItem("token",res.data.token);
-                    localStorage.setItem("refresh",res.data.refresh);
-                    if (localStorage.getItem("token")) {
+                    sessionStorage.setItem("token",res.data.token);
+                    sessionStorage.setItem("refresh",res.data.refresh);
+                    if (sessionStorage.getItem("token")) {
                         setReload(true);
                       }
                   }
                 } catch (err:any) {
-                  localStorage.removeItem("token");
-                  localStorage.removeItem("refresh");
+                  sessionStorage.removeItem("token");
+                  sessionStorage.removeItem("refresh");
                   if (err.response.status == 401) {
                     router.push(`/login?ReturnUrl=${pathname}`);
                   }
@@ -72,7 +72,7 @@ export default function AddUser({setHandleAdd,setIsAdd}:{setHandleAdd:React.Disp
 
   return (
     <div className="wrap-form fixed inset-0 w-full h-full  opacity-100 z-10">
-        <div onClick={()=>setHandleAdd(state=>!state)} className="absolute inset-1 bg-gray-500 z-0"></div>
+        <div onClick={()=>setHandleAdd(state=>!state)} className="absolute inset-1 bg-blue-50 z-0"></div>
         <form action="" onSubmit={HandleSubmit} className="md:w-3/5 w-5/6 h-4/5 space-y-3  z-10 flex px-2 bg-white rounded-md shadow flex-col justify-center">
         <h1 className="text-gray-400 text-justify">Add User</h1>
             {response?.isError&&(<p className="text-justify text-red-400">{response?.error}</p>)}
