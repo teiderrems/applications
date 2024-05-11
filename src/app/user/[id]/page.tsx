@@ -6,7 +6,6 @@ import { useParams, usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import  profileImg  from '../../../../public/defaul.jpeg';
 import Image from 'next/image';
-import axios from 'axios';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 
@@ -68,11 +67,6 @@ export default function Userdetail() {
                 });
                 if (res.status == 201 || res.status == 200) {
                     setResponse({ ...response, isLoading: false, status: res.status, data: res.data.user, isSuccess: true });
-                    // if (response?.data) {
-                    //     const obj=JSON.parse(response?.data.Profile);
-                    //     const image=`data:${obj.type};base64,${obj.image}`;
-                    //     setProfile(image as string);
-                    // }
                 }
             } catch (error: any) {
                 if (error.response.status == 401) {
