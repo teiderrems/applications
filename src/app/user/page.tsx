@@ -94,7 +94,7 @@ export default function UserList() {
       (!handleAdd)?<button className="rounded-lg hover:text-blue-500 text-center h-full w-10 " onClick={()=>setHandleAdd(!handleAdd)}><AppstoreAddOutlined className="h-5/6 w-5/6 m-2"/></button>:<AddUser setIsAdd={setIsAdd} setHandleAdd={setHandleAdd}/>
     }
     </div>
-    <section className="flex flex-col flex-1 space-y-2">
+    <section className="flex flex-col flex-1 mt-2 space-y-2">
       <div className="flex-1 mx-4 grid md:grid-cols-4 md:grid-rows-4 grid-rows-12 gap-3 grid-cols-1">
         {
           response?.data?.map((u: UserType)=>{

@@ -78,8 +78,7 @@ export default function AddUser({setHandleAdd,setIsAdd}:{setHandleAdd:React.Disp
             {response?.isError&&(<p className="text-justify text-red-400">{response?.error}</p>)}
             <div className=" flex md:flex-row flex-col h-20 justify-between">
                 <label htmlFor="Username" className="text-xl flex-1  md:translate-y-1">Username</label>
-                {/* <input type="text" pattern="[a-zA-Z0-9]*" id="Username" placeholder="enter your username" required onChange={(e)=>{setUser({...user,Username:e.target.value})}} className="form-input" /> */}
-                <div className='flex justify-between md:w-3/4 md:h-3/4 h-full rounded-md'>
+                <div className='flex justify-between md:w-5/6 md:h-3/4 h-full rounded-md'>
                   <input onChange={(e)=>setUser({...user,Username:e.target.value})} placeholder="enter your username"  pattern="[a-zA-Z0-9]+" className='w-4/6 mr-1 shadow pl-1 rounded-md' type="text" required minLength={4} />
                     <div className='flex space-x-2'>
                       <label htmlFor="role" className='flex-1 md:translate-y-2'>Role</label>
@@ -97,7 +96,7 @@ export default function AddUser({setHandleAdd,setIsAdd}:{setHandleAdd:React.Disp
             </div>
             <div className="form-group">
                 <label htmlFor="Password" className="text-xl">Password</label>
-                <div className="flex w-full shadow  rounded-md  md:w-3/4 md:h-3/4 h-full">
+                <div className="flex w-full shadow  form-input">
                     <input type={show?"text":"password"} id="Password" required min={8} pattern="[a-zA-Z0-9;?,@]{8,15}" onChange={(e)=>{setUser({...user,Password:e.target.value})}} className="flex-1 pl-2 rounded-s-md" />
                     {show?(<button onClick={()=>setShow(!show)} className="w-1/12 h-full border-l"><EyeOutlined/></button>): (<button onClick={()=>setShow(!show)}  className="w-1/12 h-full  border-l"><EyeInvisibleOutlined /></button>)}
                 </div>
@@ -107,9 +106,9 @@ export default function AddUser({setHandleAdd,setIsAdd}:{setHandleAdd:React.Disp
             }
             <div className="form-group">
                 <label htmlFor="ConfirmPw" className="text-xl">ConfirmPw</label>
-                <div className="flex w-full shadow  md:w-3/4 md:h-3/4 h-full  rounded-md">
+                <div className="flex w-full shadow form-input">
                     <input type={showC?"text":"password"} id="ConfirmPw" required onChange={(e)=>{setUser({...user,ConfirmPassword:e.target.value})}} className="flex-1 pl-2 rounded-s-md" />
-                    {showC?(<button onClick={()=>setShowC(!showC)} className="w-1/12 h-full border-l"><EyeOutlined/></button>): (<button onClick={()=>setShowC(!showC)}  className="w-1/12 h-full  border-l"><EyeInvisibleOutlined /></button>)}
+                    {showC?(<button onClick={()=>setShowC(!showC)} className="w-1/12 h-full border-l"><EyeOutlined/></button>): (<button onClick={()=>setShowC(!showC)}  className="w-1/12  border-l"><EyeInvisibleOutlined /></button>)}
                 </div>
             </div>
             {
