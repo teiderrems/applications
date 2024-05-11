@@ -33,7 +33,8 @@ function Login() {
                 router.push(query.get("ReturnUrl") as string);
               }
               else{
-                router.push('/application');
+                const user=JSON.parse(atob(sessionStorage.getItem("token")!.split('.')[1]));
+                router.push('/user/'+user._id);
               }
               setResponse({...response,isSuccess:true,isLoading:false,data:res.data});
           }
