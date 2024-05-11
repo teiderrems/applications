@@ -1,12 +1,14 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import UserDetail from "./UserDetail";
+import Image from "next/image";
 
 export type UserType={
     Username?:string;
     Firstname?:string;
     Lastname?:string;
+    Profile:string;
     Role?:string;
-    CreatedAt:Date;
+    CreatedAt:string;
     _id:string;
     Email:string;
 }
@@ -19,11 +21,15 @@ export default function UserItem({user,setIsAdd}:{user:UserType,setIsAdd:Dispatc
   },[user,setIsAdd])
   return (
     <>
-      <button onClick={()=>setShowDetail(!showDetail)}
-      className='flex rounded-md italic hover:shadow-blue-500 hover:cursor-pointer justify-between px-2 shadow'>
-          <span className=" text-center">{user.Username}</span>
-          <h3 className="text-center">{user.Role}</h3>
-      </button>
+      <div onClick={()=>setShowDetail(!showDetail)}
+      className='flex rounded-md italic hover:shadow-blue-500 hover:cursor-pointer  justify-between shadow'>
+          <span className=" text-center"><Image className="rounded" src={user?.Profile} width={75} height={75} alt={user?.Profile}/></span>
+          <div className=" flex flex-col mr-2">
+            <h3 className="text-justify">{user.Username}</h3>
+            <h3 className="text-justify">{user.Role}</h3>
+            <h3 className="text-justify">{`${user.CreatedAt.split('T')[0].split('-').reverse().join('/')}`}</h3>
+          </div>
+      </div>
       {
         showDetail&&<UserDetail setIsAdd={setIsAdd} user={user} setShowDetail={setShowDetail}/>
       }

@@ -13,7 +13,6 @@ import burgerImg from '../../public/menu.svg';
 import  Head  from "next/head";
 import { EditOutlined, HomeOutlined, LogoutOutlined, ProfileOutlined, SmileOutlined, UnorderedListOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, Dropdown, MenuProps, Space } from "antd";
-import axios from "axios";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -31,17 +30,17 @@ export default function RootLayout({
 }>) {
 
   const [togel,setTogel]=useState(false)
-  const [token,setToken]=useState<string>('');
+  const [token,setToken]=useState<any>(undefined);
   const [image,setImage]=useState(burgerImg);
   const [show,setShow]=useState(true)
-  const [user,setUser]=useState<any>(null);
-  const [profile,setProfile]=useState<string | undefined>(undefined);
+  const [user,setUser]=useState<any>(undefined);
   const router=useRouter();
     
     const LogOut=()=>{
       sessionStorage.removeItem("token");
+      sessionStorage.removeItem("refresh");
       setToken('');
-      setUser('');
+      setUser(undefined);
       router.push(`/login?ReturnUrl=${pathname}`);
     }
 
@@ -86,26 +85,11 @@ export default function RootLayout({
     if (!(sessionStorage.getItem("token"))) {
       router.push('/login');
     }
-    setToken(sessionStorage.getItem("token") as string);
-    if (window.sessionStorage&&sessionStorage.getItem("token") !=undefined && sessionStorage.getItem("token") !='undefined') {
+    setToken((!!sessionStorage.getItem("token"))&&sessionStorage.getItem("token"));
+    if (window.sessionStorage&&(sessionStorage.getItem("token"))) {
       setUser(JSON.parse(atob(sessionStorage.getItem("token")!.split('.')[1])));
     }
-    if (user) {
-      const getProfile=async()=>{
-        try {
-          const res=await axios.get(user.profile);
-          const image=`data:${(res.data.type as string)};base64,${(res?.data?.image as string)}`;
-          setProfile(image as string);
-        } catch (error) {
-          console.log(error);
-        }
-      }
-      getProfile();
-    }
-    return()=>{
-      setUser('');
-    }
-  },[image,togel,token,profile]);
+  },[image,togel,token]);
 
   return (
       <html lang="en">
@@ -141,7 +125,7 @@ export default function RootLayout({
             <Footer/>
             </div>
           <div className="flex-1 flex flex-col h-screen">
-            <div className="flex flex-row h-14 md:h-12 sticky top-0 bg-gradient-to-bl from-gray-50 via-slate-50 to-blue-50  justify-between  w-full border-b">
+            <div className="flex flex-row h-14 md:h-12 bg-gradient-to-bl from-gray-50 via-slate-50 to-blue-50  justify-between  w-full">
               <button
                 aria-label="toggle button"
                 aria-expanded="false"
@@ -151,13 +135,13 @@ export default function RootLayout({
                 >
                   <Image src={image} alt="button"/>
               </button>
-                <span className=" capitalize pl-1 invisible md:visible md:w-1/3">{getPath()}</span>
+                <span className=" capitalize pl-1 invisible md:visible md:w-1/3"></span>
                 {
                   token?<button className="px-1 h-full">
                     <Dropdown menu={{ items }}>
                       <a onClick={(e) => e.preventDefault()}>
                         <Space>
-                        <Avatar icon={<Image width={60} priority height={60} src={(profile)?profile:profileImg} alt="profile"/>} /> 
+                        <Avatar icon={<Image width={75} priority height={75} src={(user.profile)?user.profile:profileImg} alt="profile"/>} /> 
                         </Space>
                       </a>
                     </Dropdown>

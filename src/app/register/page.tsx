@@ -6,12 +6,14 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react"
 import { CustomType } from "../components/ApplicationDetail";
 import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
+import { PutBlobResult } from "@vercel/blob";
 
 export default function Register() {
 
     const [user,setUser]=useState<{
         Username:string
         Password:string
+        Profile?:string
         Email:string
         ConfirmPassword:string
     }>({
@@ -25,18 +27,47 @@ export default function Register() {
     const [response,setResponse]=useState<CustomType>();
     const [show,setShow]=useState(false);
     const [showC,setShowC]=useState(false);
+    const inputFileRef = useRef<HTMLInputElement>(null);
+    const [blob, setBlob] = useState<PutBlobResult | null>(null);
+
     const HandleSubmit=async(e: React.FormEvent)=>{
         e.preventDefault();
-        const data= new FormData(document.querySelector('form') as HTMLFormElement);
         setResponse({...response,status:0,data:null,isLoading:true,isError:false,error:"",isSuccess:false})
         try {
-            const res=await Axios.post("users",data);
-            if (res.status==201 || res.status==200) {
-                setResponse({...response,isSuccess:true,isLoading:false,data:res.data});
-                router.push('/login');
+            await uploadProfile();
+            if (blob) {
+                const res=await Axios.post("users",{Username:user.Username,Email:user.Email,Password:user.Password,Profile:blob.url});
+                if (res.status==201 || res.status==200) {
+                    setResponse({...response,isSuccess:true,isLoading:false,data:res.data});
+                    router.push('/login');
+                }
             }
         } catch (error:any) {
             setResponse({...response,error:error.message,isError:true,isLoading:false});
+        }
+    }
+
+
+    const uploadProfile=async()=>{
+
+        if (!inputFileRef.current?.files) {
+            throw new Error("No file selected");
+        }
+
+        try {
+            const file = inputFileRef.current.files[0];
+
+            const response = await fetch(
+                `/api/avatar/upload?filename=${file.name}`,
+                {
+                method: 'POST',
+                body: file,
+                },
+            );
+            const newBlob = (await response.json()) as PutBlobResult;
+            setBlob(newBlob);
+        } catch (error) {
+            console.log(error);
         }
     }
 
@@ -56,12 +87,12 @@ export default function Register() {
                 </div>
                 <div className="flex-1 flex flex-col">
                     <label htmlFor="Profile" className="text-xl">Profile</label>
-                    <input type="file" name="profile" placeholder="choose your profile" className=" hover:cursor-pointer w-full p-2 h-3/4 rounded-md shadow" id="profile" />
+                    <input type="file" ref={inputFileRef} name="profile" placeholder="choose your profile" className=" hover:cursor-pointer w-full p-2 h-3/4 rounded-md shadow" id="profile" />
                 </div>
             </div>
             <div className="h-1/6 flex w-full flex-col">
                 <label htmlFor="Email" className="text-xl">Email</label>
-                <input type="email" name="Email" id="Email" placeholder="example@gmail.com" required onChange={(e)=>{setUser({...user,Email:e.target.value})}} className="form-input" />
+                <input type="email" name="Email" id="Email" placeholder="example@gmail.com" required onChange={(e)=>{setUser({...user,Email:e.target.value})}} className="form-input px-2" />
             </div>
             <div className="h-1/6 w-full flex flex-col">
                 <label htmlFor="Password" className="text-xl">Password</label>

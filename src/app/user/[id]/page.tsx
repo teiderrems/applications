@@ -68,6 +68,11 @@ export default function Userdetail() {
                 });
                 if (res.status == 201 || res.status == 200) {
                     setResponse({ ...response, isLoading: false, status: res.status, data: res.data.user, isSuccess: true });
+                    // if (response?.data) {
+                    //     const obj=JSON.parse(response?.data.Profile);
+                    //     const image=`data:${obj.type};base64,${obj.image}`;
+                    //     setProfile(image as string);
+                    // }
                 }
             } catch (error: any) {
                 if (error.response.status == 401) {
@@ -89,19 +94,6 @@ export default function Userdetail() {
             }
         }
         getUser();
-        if (response?.data.Profile) {
-            const getProfile=async()=>{
-                try {
-                  const res=await axios.get(response?.data.Profile);
-                  const image=`data:${(res.data.type as string)};base64,${(res?.data?.image as string)}`;
-                  setProfile(image as string);
-                } catch (error) {
-                  console.log(error);
-                }
-              }
-              getProfile();
-          }
-        
     },[param,response?.isLoading,token,response?.isSuccess,response?.isError]);
 
     if (response?.isLoading) {
@@ -119,34 +111,22 @@ export default function Userdetail() {
         </div>)
     }
     return (
-        <div className='flex-1 md:space-x-2 flex md:flex-row flex-col'>
-            <div className='flex-1 md:w-1/2 space-y-2 flex flex-col md:h-full md:m-6 w-full h-1/2 justify-center'>
-                <div className='flex-1'>
-                    <Image className=' flex-1 pt-1' width={700} height={700} src={(profile)?profile:profileImg} alt="profile"/>
+        <div className='flex-1 flex flex-col items-center justify-center'>
+            <div className='flex-1 space-y-2 mt-5 flex flex-col w-5/6 h-5/6'>
+                <div className='flex-1 flex md:flex-row flex-col rounded-md shadow'>
+                    <Image className=' md:w-2/6 w-full md:rounded-l-lg rounded-t-md float-start' width={100} height={100} src={(response?.data.Profile)?(response?.data.Profile):profileImg} alt="profile"/>
                     <div  className='flex-1 flex flex-col justify-between md:justify-center border-l'>
-                        <p className='text-justify border flex-1 flex justify-between px-3 bg-red-300'><span>Username</span><span className='w-3/5'>: {response?.data.Username}</span> </p>
-                        <p className='text-justify border flex-1 flex justify-between px-3 bg-green-300'><span>Email</span><span className='w-3/5'> : {response?.data.Email}</span></p>
-                        <p className='text-justify border flex-1 flex justify-between px-3 bg-blue-300'><span>Firstname</span><span className='w-3/5'>: {response?.data.Firstname}</span> </p>
-                        <p className='text-justify border flex-1 flex justify-between px-3 bg-gray-300'><span>Lastname</span><span className='w-3/5'>: {response?.data.Lastname}</span> </p>
-                        <p className='text-justify border flex-1 flex justify-between px-3 bg-pink-300'><span>Date de Création</span><span className='w-3/5'> : {response?.data.CreatedAt.split('T')[0].split('-').reverse().join('/')}</span></p>
+                        <p className='text-justify border flex-1 items-center flex justify-between px-2'><span className='w-4/5'>{response?.data.Username}</span> </p>
+                        <p className='text-justify border flex-1 items-center flex justify-between px-2'><span className='w-4/5'>{response?.data.Email}</span></p>
+                        <p className='text-justify border flex-1 items-center flex justify-between px-2'><span className='w-4/5'>{response?.data.Firstname}</span> </p>
+                        <p className='text-justify border flex-1 items-center flex justify-between px-2'><span className='w-4/5'>{response?.data.Lastname}</span> </p>
+                        <p className='text-justify border flex-1 items-center flex justify-between px-2'><span className='w-3/5'>{response?.data.CreatedAt.split('T')[0].split('-').reverse().join('/')}</span></p>
                     </div>
-                </div>
-                    
+                </div>   
                 <div className='flex justify-end space-x-2 h-1/12 w-full'>
-                    <button className='rounded-md bg-blue-400 my-1 w-1/12 text-white'><EditOutlined /></button>
-                    <button className='rounded-md bg-red-400 my-1 w-1/12 text-white' onClick={HandleDelete}><DeleteOutlined /></button>
+                    <button className='rounded-md bg-blue-400 my-2 h-5/6 w-1/12 text-white'><EditOutlined /></button>
+                    <button className='rounded-md bg-red-400 my-2 h-5/6 w-1/12 text-white' onClick={HandleDelete}><DeleteOutlined /></button>
                 </div>
-            </div>
-            <div className='flex-1 md:m-3 md:mx-0 md:w-1/2 md:h-full w-full h-1/2'>
-                <h1>Edit Form</h1>
-                <p className=' overflow-hidden'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus, sit incidunt. Reprehenderit, in at hic officiis laboriosam veritatis inventore, quisquam iste nulla provident recusandae deleniti officia magnam perspiciatis. Dignissimos, minima!
-                Molestias temporibus distinctio quod facere minima nobis dolorem voluptas in maiores. Omnis quo error, repudiandae optio, cum libero saepe ab magnam nobis minima dolores, dolor maiores at. Ipsam, saepe culpa!
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus ut iste, placeat fugiat rerum magnam facere repellendus, quisquam deserunt tenetur amet ab minus odio est nobis doloremque fuga sapiente expedita?
-                Amet accusamus nihil consectetur consequuntur eveniet! Pariatur accusantium similique voluptates iure, eaque fugiat! Facilis, sequi ipsum reiciendis ad praesentium quod labore excepturi nobis exercitationem facere quos dolorem nemo quasi aliquam?
-                
-                
-                
-                </p>
             </div>
         </div>
     )
