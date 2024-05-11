@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { CustomType } from "../components/ApplicationDetail";
 import UserItem, { UserType } from "../components/UserItem";
-import { AppstoreAddOutlined, ArrowLeftOutlined, ArrowRightOutlined, DoubleLeftOutlined, DoubleRightOutlined } from "@ant-design/icons";
+import { AppstoreAddOutlined, DoubleLeftOutlined, DoubleRightOutlined } from "@ant-design/icons";
 
 import AddUser from "../components/AddUser";
 import axios from "axios";
@@ -91,11 +91,11 @@ export default function UserList() {
     <div className='container mx-auto flex-1 flex flex-col'>
     <div className="flex justify-end h-7">
     {
-      (!handleAdd)?<button className="rounded-lg hover:bg-blue-500 text-center h-full w-7 mr-2 hover:text-white" onClick={()=>setHandleAdd(!handleAdd)}><AppstoreAddOutlined className="h-5/6 w-5/6"/></button>:<AddUser setIsAdd={setIsAdd} setHandleAdd={setHandleAdd}/>
+      (!handleAdd)?<button className="rounded-lg hover:text-blue-500 text-center h-full w-10 " onClick={()=>setHandleAdd(!handleAdd)}><AppstoreAddOutlined className="h-5/6 w-5/6 m-2"/></button>:<AddUser setIsAdd={setIsAdd} setHandleAdd={setHandleAdd}/>
     }
     </div>
     <section className="flex flex-col flex-1 space-y-2">
-      <div className="flex-1 mx-4 grid md:grid-cols-4 md:grid-rows-4 gap-3 grid-cols-1">
+      <div className="flex-1 mx-4 grid md:grid-cols-4 md:grid-rows-4 grid-rows-12 gap-3 grid-cols-1">
         {
           response?.data?.map((u: UserType)=>{
             return (<UserItem key={u._id} setIsAdd={setIsAdd} user={u}/>)

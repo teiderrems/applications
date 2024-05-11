@@ -11,7 +11,7 @@ html{
 }
 
 .about{
-  @apply mr-2 rounded-md text-center hover:bg-blue-300 hover:text-white hover:border p-1
+  @apply mx-2 rounded-full text-center h-2/3 hover:bg-blue-300 hover:text-white hover:border my-2 px-2
 }
 
 .form-app{
