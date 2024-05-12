@@ -7,18 +7,19 @@ import { useEffect, useState } from 'react'
 import  profileImg  from '../../../../public/defaul.jpeg';
 import Image from 'next/image';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import UserDetail from '@/app/components/UserDetail';
 
 
 
-export default function Userdetail() {
+export default function UserDetailInfo() {
 
     const param=useParams().id;
     const [response,setResponse]=useState<CustomType>();
-    const [profile,setProfile]=useState<string |undefined>(undefined);
     const router=useRouter();
     const [token,setToken]=useState<string>();
     const pathname=usePathname();
     const [reload,setReload]=useState(false);
+    const [edit,setEdit]=useState(false);
     const HandleDelete=async()=>{
         
         setResponse({...response,isLoading:true,data:null,isError:false,isSuccess:false,error:"",status:0});
@@ -88,7 +89,7 @@ export default function Userdetail() {
             }
         }
         getUser();
-    },[param,response?.isLoading,token,response?.isSuccess,response?.isError]);
+    },[param,response?.isLoading,token,response?.isSuccess,response?.isError,reload]);
 
     if (response?.isLoading) {
         return (
@@ -118,10 +119,13 @@ export default function Userdetail() {
                     </div>
                 </div>   
                 <div className='flex md:justify-end justify-between space-x-2 h-1/12 w-full'>
-                    <button className='rounded-md bg-blue-400 md:my-2 my-4  h-5/6 w-2/12 md:w-1/12 text-white'><EditOutlined /></button>
+                    <button className='rounded-md bg-blue-400 md:my-2 my-4  h-5/6 w-2/12 md:w-1/12 text-white' onClick={()=>setEdit(!edit)}><EditOutlined /></button>
                     <button className='rounded-md bg-red-400 md:my-2 my-4  h-5/6 w-2/12 md:w-1/12 text-white' onClick={HandleDelete}><DeleteOutlined /></button>
                 </div>
             </div>
+            {
+                edit&&<UserDetail canEdit={false} user={response?.data} setShowDetail={setEdit} setIsAdd={setReload}/>
+            }
         </div>
     )
 }

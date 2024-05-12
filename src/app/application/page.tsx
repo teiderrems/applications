@@ -88,10 +88,10 @@ export default function Application() {
     <div className='flex-1 flex overflow-hidden flex-col'>
       <div className="flex justify-end h-7">
         {
-          (!handleAdd) ? <button className="rounded-lg  text-center h-full w-7 text-3xl md:text-xl mr-2 hover:text-blue-400" onClick={() => setHandleAdd(!handleAdd)}><AppstoreAddOutlined className="h-5/6 w-5/6 m-2" /></button> : <AddApplication setHandleAdd={setHandleAdd} setIsAdd={setIsAdd} />
+          (!handleAdd) ? <button className="rounded-lg  text-center h-full w-7 text-2xl md:text-xl mr-2 hover:text-blue-400" onClick={() => setHandleAdd(!handleAdd)}><AppstoreAddOutlined className="h-5/6 w-5/6 m-2" /></button> : <AddApplication setHandleAdd={setHandleAdd} setIsAdd={setIsAdd} />
         }
       </div>
-      <section className="flex flex-col flex-1 space-y-2">
+      <section className="flex flex-col mt-2 flex-1 space-y-2">
         <div className="flex-1 mx-2 grid md:grid-cols-4 md:grid-rows-4 gap-3 grid-cols-1">
           {
             response?.data?.map((a: Props) => {

@@ -31,7 +31,7 @@ export default function UserItem({user,setIsAdd}:{user:UserType,setIsAdd:Dispatc
           </div>
       </div>
       {
-        showDetail&&<UserDetail setIsAdd={setIsAdd} user={user} setShowDetail={setShowDetail}/>
+        showDetail&&<UserDetail  canEdit={true} setIsAdd={setIsAdd} user={user} setShowDetail={setShowDetail}/>
       }
     </>
   )

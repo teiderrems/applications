@@ -137,15 +137,19 @@ export default function RootLayout({
               </button>
                 <span className=" capitalize pl-1 invisible md:visible md:w-1/3"></span>
                 {
-                  token?<button className="px-1 h-full">
-                    <Dropdown menu={{ items }}>
+                  token?<nav className="px-1 h-full md:w-3/4 mr-1 flex justify-end items-center space-x-4">
+                    {/* <Dropdown menu={{ items }}>
                       <a onClick={(e) => e.preventDefault()}>
                         <Space>
                         <Avatar icon={<Image width={75} priority height={75} src={(user.profile)?user.profile:profileImg} alt="profile"/>} /> 
                         </Space>
                       </a>
-                    </Dropdown>
-                  </button>:<Link href="/about" className="about">About</Link>
+                    </Dropdown> */}
+                    <button onClick={LogOut} className=" hover:rounded-lg italic hover:text-blue-400 shadow p-1 rounded-md"><LogoutOutlined /> LogOut</button>
+                    <Link href="/about" className={`hover:rounded-lg italic shadow p-1 rounded-md ${pathname=="/about"&&'bg-blue-500 text-white'}`}><ProfileOutlined /> About</Link>
+                    <Link href={`/user/${user?._id}`} className=" italic hover:text-blue-400 shadow-md shadow-slate-300 rounded-full"><Image width={25} className="rounded-xl" height={20} src={(user.profile)?user.profile:profileImg} alt="profile"/></Link>
+
+                  </nav>:<Link href="/about" className="about">About</Link>
                 }
             </div>
             <div className="flex-1">
