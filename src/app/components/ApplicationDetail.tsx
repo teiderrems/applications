@@ -3,7 +3,7 @@ import Axios from "@/hooks/axios.config";
 import { usePathname, useRouter } from "next/navigation";
 import React, { SetStateAction, useEffect, useState } from "react";
 
-export type Props={
+export interface Props{
     _id?:string;
     Title?:string;
     Description?:string;
@@ -28,7 +28,7 @@ export default function ApplicationDetail({application,setShowDetail,setIsAdd}:{
     
     const status=["success","pending","postponed"];
 
-    const [response,setResponse]=useState<CustomType>();
+    const [response,setResponse]=useState<CustomType>({ isLoading: false, status: 0, data: undefined,error:undefined, isSuccess: false });
     const [currentApp,setCurrentApp]=useState(application);
     const pathname=usePathname();
     const [reload,setReload]=useState(false);

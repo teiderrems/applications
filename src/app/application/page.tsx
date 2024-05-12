@@ -2,11 +2,11 @@
 import { AppstoreAddOutlined, DoubleLeftOutlined, DoubleRightOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react"
 import AddApplication from "../components/AddApplication";
-import ApplicationItem from "../components/ApplicationItem";
 import { usePathname, useRouter } from "next/navigation";
-import { CustomType, Props } from "../components/ApplicationDetail";
 import Axios from "@/hooks/axios.config";
 import axios from "axios";
+import { Table } from "antd";
+import { CustomType } from "../components/ApplicationDetail";
 
 export default function Application() {
   const [handleAdd, setHandleAdd] = useState(false);
@@ -16,12 +16,46 @@ export default function Application() {
   const router = useRouter();
   const pathname = usePathname();
   const [token, setToken] = useState<any>();
-  const [response, setResponse] = useState<any>(undefined);
+  const [response, setResponse] = useState<CustomType>({ isLoading: false, status: 0, data: undefined,error:undefined, isSuccess: false });
   const [isAdd,setIsAdd]=useState(false);
   const [reload,setReload]=useState(false);
   const [next,setNext]=useState(null);
   const [prev,setPrev]=useState(null);
 
+
+
+  const columns = [
+    {
+      title: 'Title',
+      dataIndex: 'Title',
+      key: 'Title',
+    },
+    {
+      title: 'Entreprise',
+      dataIndex: 'Entreprise',
+      key: 'Entreprise',
+    },
+    {
+      title: 'Adresse',
+      dataIndex: 'Adresse',
+      key: 'Adresse',
+    },
+    {
+      title: 'TypeContrat',
+      dataIndex: 'TypeContrat',
+      key: 'TypeContrat',
+    },
+    {
+      title: 'Status',
+      dataIndex: 'Status',
+      key: 'Status',
+    },
+    {
+      title: 'Date de Création',
+      dataIndex: 'CreatedAt',
+      key: 'CreatedAt',
+    },
+  ];
 
   useEffect(() => {
     setToken(window&&sessionStorage.getItem('token'));
@@ -34,7 +68,10 @@ export default function Application() {
           }
         });
         if (res.status == 201 || res.status == 200) {
-          setResponse({ ...response, isLoading: false, status: res.status, data: res.data.data.applications, isSuccess: true });
+
+          setResponse(state=>{
+            return { ...state, isLoading: false, status: res.status, data: res.data.data.applications, isSuccess: true };
+          });
           setPrev(res.data.prev);
           setNext(res.data.next);
           if(response?.data){
@@ -42,11 +79,11 @@ export default function Application() {
           }
         }
       } catch (error: any) {
+        console.log(error);
         if (error.response.status == 401) {
           
           try {
             const res=await Axios.post("users/refresh_token",{refresh:sessionStorage.getItem("refresh")});
-            console.log(res);
             if (res.status==201 || res.status==200) {
               setToken(res.data.token);
               sessionStorage.setItem("token",res.data.token);
@@ -55,6 +92,7 @@ export default function Application() {
               }
             }
           } catch (err:any) {
+            
             sessionStorage.removeItem("token");
             sessionStorage.removeItem("refresh");
             if (err.response.status == 401) {
@@ -66,7 +104,7 @@ export default function Application() {
       }
     }
     findAll();
-  }, [limit, page, token, url,prev,next,pathname,response, router,isAdd,reload]);
+  }, [limit, page, url,prev,next,pathname,response?.data, router,isAdd,reload]);
 
   if (response?.isLoading) {
     return (
@@ -84,35 +122,15 @@ export default function Application() {
   }
 
   return (
-    <div className='flex-1 flex overflow-hidden flex-col'>
+    <div className='flex-1 flex overflow-hidden flex-col space-y-5'>
       <div className="flex justify-end h-7">
         {
-          (!handleAdd) ? <button className="rounded-lg  text-center h-full w-7 text-2xl md:text-xl mr-2 hover:text-blue-400" onClick={() => setHandleAdd(!handleAdd)}><AppstoreAddOutlined className="h-5/6 w-5/6 m-2" /></button> : <AddApplication setHandleAdd={setHandleAdd} setIsAdd={setIsAdd} />
+          (!handleAdd) ? <button className="rounded-lg  text-center h-full w-7 text-2xl md:text-xl md:mr-8 mr-4 mb-2 hover:text-blue-400" onClick={() => setHandleAdd(!handleAdd)}><AppstoreAddOutlined className="h-5/6 w-5/6 m-2" /></button> : <AddApplication setHandleAdd={setHandleAdd} setIsAdd={setIsAdd} />
         }
       </div>
-      <section className="flex flex-col mt-2 flex-1 space-y-2">
-        <div className="flex-1 mx-2 grid md:grid-cols-4 md:grid-rows-4 gap-3 grid-cols-1">
-          {
-            response?.data?.map((a: Props) => {
-              return (<ApplicationItem key={a._id} application={a} setIsAdd={setIsAdd} />)
-            }
-            )
-          }
-        </div>
-        {
-          next &&(
-            <div className="flex justify-end mb-1 mx-4 space-x-3  items-end basis-1">
-            <button onClick={() => setUrl(prev)}
-            className="flex hover:bg-blue-400 hover:text-white space-x-1 px-1 items-center justify-center shadow rounded-md">
-              <DoubleLeftOutlined /><span>prev</span>
-            </button>
-            <button onClick={() => setUrl(next)}
-            className={`flex hover:bg-blue-400 hover:text-white  px-1 items-center space-x-1 shadow justify-center rounded-md`} disabled>
-              <span>next</span><DoubleRightOutlined />
-            </button>
-          </div>
-          )
-        }
+      <section className="flex flex-col justify-center m-2 items-center flex-1">
+
+        <Table pagination={false} rowKey={(record) => record._id} dataSource={response?.data} columns={columns} />
       </section>
     </div>
   )

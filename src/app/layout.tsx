@@ -75,7 +75,7 @@ export default function RootLayout({
     if (window.sessionStorage&&(sessionStorage.getItem("token"))) {
       setUser(JSON.parse(atob(sessionStorage.getItem("token")!.split('.')[1])));
     }
-  },[image,togel,token,router,user]);
+  },[image,togel,token,router]);
 
   return (
       <html lang="en">

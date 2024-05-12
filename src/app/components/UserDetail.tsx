@@ -8,7 +8,7 @@ import { CustomType } from "./ApplicationDetail";
 
 export default function UserDetail({user,setShowDetail,setIsAdd,canEdit}:{canEdit:boolean,user:UserType,setIsAdd:React.Dispatch<SetStateAction<boolean>>,setShowDetail:React.Dispatch<SetStateAction<boolean>>}) {
 
-    const [response,setResponse]=useState<CustomType>();
+    const [response,setResponse]=useState<CustomType>({ isLoading: false, status: 0, data: undefined,error:undefined, isSuccess: false });
     const [currentUser,setCurrentUser]=useState(user);
     const pathname=usePathname();
     const [reload,setReload]=useState(false);

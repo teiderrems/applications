@@ -36,8 +36,15 @@ export default function Register() {
         e.preventDefault();
         setIsSubmit(!isSubmit);
         setResponse({...response,status:0,data:null,isLoading:true,isError:false,error:"",isSuccess:false});
-        await uploadProfile();
+        const result= await uploadProfile();
         try {
+            if (result.includes('500')) {
+                const res=await Axios.post("users",{Username:user.Username,Email:user.Email,Password:user.Password,Profile:null});
+                if (res.status==201 || res.status==200) {
+                    setResponse({...response,isSuccess:true,isLoading:false,data:res.data});
+                    router.push('/login');
+                }
+            }
             if (blob) {
                 const res=await Axios.post("users",{Username:user.Username,Email:user.Email,Password:user.Password,Profile:blob.url});
                 if (res.status==201 || res.status==200) {
@@ -70,15 +77,16 @@ export default function Register() {
             if (!res.ok) {
                 setResponse({...response,status:0,data:null,isLoading:true,isError:true,error:"profile picture upload failed",isSuccess:false});
                 setIsSubmit(state=>!state);
+                return res.status.toString();
             }
-            else{
-                const newBlob = (await res.json()) as PutBlobResult;
-                setBlob(newBlob);
-            } 
-        } catch (error) {
+            const newBlob = (await res.json()) as PutBlobResult;
+            setBlob(newBlob);
+            return res.status.toString();
+        } catch (error:any) {
             setResponse({...response,status:0,data:null,isLoading:true,isError:true,error:"profile picture upload failed",isSuccess:false});
             setIsSubmit(state=>!state);
             console.log(error);
+            return error.message;
         }
     }
 

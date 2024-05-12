@@ -16,7 +16,7 @@ export default function UserList() {
     const router=useRouter();
   const pathname=usePathname();
   const [token,setToken]=useState<string>();
-  const [response,setResponse]=useState<any>(undefined);
+  const [response,setResponse]=useState<CustomType>({ isLoading: false, status: 0, data: undefined,error:undefined, isSuccess: false });
   const [page,setPage]=useState(0);
   const [limit,setLimit]=useState(12);
   const [handleAdd,setHandleAdd]=useState(false);
@@ -35,7 +35,9 @@ export default function UserList() {
           }
         });
         if (res.status == 201 || res.status == 200) {
-          setResponse({ ...response, isLoading: false, status: res.status, data: res.data.data.users, isSuccess: true });
+          setResponse(state=>{
+            return { ...state, isLoading: false, status: res.status, data: res.data.data.users, isSuccess: true };
+          });
           setPrev(res.data.prev);
           setNext(res.data.next);
           if(response?.data){
@@ -43,7 +45,9 @@ export default function UserList() {
           }
         }
         } catch (error:any) {
-            setResponse({...response,error:error.message,isLoading:false,status:error.response.status,isSuccess:true})
+            setResponse(state=>{
+              return {...state,error:error.message,isLoading:false,status:error.response.status,isSuccess:true}
+            })
             if ((error.response.status==401)&&(error.response.data.message as string).includes('jwt')) {
               try {
                 const res=await Axios.post("users/refresh_token",{refresh:sessionStorage.getItem("refresh")});

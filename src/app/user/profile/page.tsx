@@ -14,7 +14,7 @@ import UserDetail from '@/app/components/UserDetail';
 export default function UserDetailInfo() {
 
     const [param,setParam]=useState<string|undefined>(undefined);
-    const [response,setResponse]=useState<any>(undefined);
+    const [response,setResponse]=useState<CustomType>({ isLoading: false, status: 0, data: undefined,error:undefined, isSuccess: false });
     const router=useRouter();
     const [token,setToken]=useState<string>();
     const pathname=usePathname();
@@ -31,7 +31,9 @@ export default function UserDetailInfo() {
             });
             router.push(pathname);
             if (res.status==204) {
-                setResponse({...response,isLoading:false,status:res.status,data:res.data,isSuccess:true});
+                setResponse(state=>{
+                    return {...state,isLoading:false,status:res.status,data:res.data,isSuccess:true}
+                });
                 router.push('/register');
             }
         } catch (error:any) {
@@ -68,7 +70,9 @@ export default function UserDetailInfo() {
                     }
                 });
                 if (res.status == 201 || res.status == 200) {
-                    setResponse({ ...response, isLoading: false, status: res.status, data: res.data.user, isSuccess: true });
+                    setResponse(state=>{
+                        return{ ...state, isLoading: false, status: res.status, data: res.data.user, isSuccess: true }
+                    });
                 }
             } catch (error: any) {
                 if (error.response.status == 401) {
@@ -112,13 +116,13 @@ export default function UserDetailInfo() {
         <div className='flex-1 flex flex-col items-center justify-center'>
             <div className='flex-1 space-y-2 mt-5 flex flex-col w-5/6 h-5/6'>
                 <div className='flex-1 flex md:flex-row flex-col rounded-md shadow'>
-                    <Image className=' md:w-2/6 w-full md:rounded-l-lg rounded-t-md float-start' width={100} height={100} src={(response?.data.Profile)?(response?.data.Profile):profileImg} alt="profile"/>
+                    <Image className=' md:w-2/6 w-full md:rounded-l-lg rounded-t-md float-start' width={100} height={100} src={(response?.data?.Profile)?(response?.data?.Profile):profileImg} alt="profile"/>
                     <div  className='flex-1 flex flex-col justify-between md:justify-center border-l'>
-                        <p className='text-justify border flex-1 items-center flex justify-between px-2'><span className='w-4/5'>{response?.data.Username}</span> </p>
-                        <p className='text-justify border flex-1 items-center flex justify-between px-2'><span className='w-4/5'>{response?.data.Email}</span></p>
-                        <p className='text-justify border flex-1 items-center flex justify-between px-2'><span className='w-4/5'>{response?.data.Firstname}</span> </p>
-                        <p className='text-justify border flex-1 items-center flex justify-between px-2'><span className='w-4/5'>{response?.data.Lastname}</span> </p>
-                        <p className='text-justify border flex-1 items-center flex justify-between px-2'><span className='w-3/5'>{response?.data.CreatedAt.split('T')[0].split('-').reverse().join('/')}</span></p>
+                        <p className='text-justify border flex-1 items-center flex justify-between px-2'><span className='w-4/5'>{response?.data?.Username}</span> </p>
+                        <p className='text-justify border flex-1 items-center flex justify-between px-2'><span className='w-4/5'>{response?.data?.Email}</span></p>
+                        <p className='text-justify border flex-1 items-center flex justify-between px-2'><span className='w-4/5'>{response?.data?.Firstname}</span> </p>
+                        <p className='text-justify border flex-1 items-center flex justify-between px-2'><span className='w-4/5'>{response?.data?.Lastname}</span> </p>
+                        <p className='text-justify border flex-1 items-center flex justify-between px-2'><span className='w-3/5'>{response?.data?.CreatedAt.split('T')[0].split('-').reverse().join('/')}</span></p>
                     </div>
                 </div>   
                 <div className='flex md:justify-end justify-between space-x-2 h-1/12 w-full'>
