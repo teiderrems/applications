@@ -75,7 +75,6 @@ export default function AddUser({setHandleAdd,setIsAdd}:{setHandleAdd:React.Disp
         <div onClick={()=>setHandleAdd(state=>!state)} className="absolute inset-1 bg-blue-50 z-0"></div>
         <form action="" onSubmit={HandleSubmit} className="md:w-3/5 w-5/6 h-4/5 space-y-3  z-10 flex px-2 bg-white rounded-md shadow flex-col justify-center">
         <h1 className="text-gray-400 text-justify">Add User</h1>
-            {response?.isError&&(<p className="text-justify text-red-400">{response?.error}</p>)}
             <div className=" flex md:flex-row flex-col h-20 justify-between">
                 <label htmlFor="Username" className="text-xl flex-1  md:translate-y-1">Username</label>
                 <div className='flex justify-between md:w-5/6 md:h-3/5 h-full rounded-md'>

@@ -5,8 +5,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react"
 import { CustomType } from "../components/ApplicationDetail";
-import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
+import { EyeInvisibleOutlined, EyeOutlined, LoadingOutlined } from "@ant-design/icons";
 import { PutBlobResult } from "@vercel/blob";
+import { Spin } from "antd";
 
 export default function Register() {
 
@@ -29,12 +30,20 @@ export default function Register() {
     const [showC,setShowC]=useState(false);
     const inputFileRef = useRef<HTMLInputElement>(null);
     const [blob, setBlob] = useState<PutBlobResult | null>(null);
+    const [isSubmit,setIsSubmit]=useState(false);
 
     const HandleSubmit=async(e: React.FormEvent)=>{
         e.preventDefault();
+        setIsSubmit(!isSubmit);
         setResponse({...response,status:0,data:null,isLoading:true,isError:false,error:"",isSuccess:false})
         try {
             await uploadProfile();
+        } catch (error) {
+            setIsSubmit(!isSubmit);
+            setResponse({...response,status:0,data:null,isLoading:true,isError:false,error:"profile picture upload failed",isSuccess:false})
+            console.log(error);
+        }
+        try {
             if (blob) {
                 const res=await Axios.post("users",{Username:user.Username,Email:user.Email,Password:user.Password,Profile:blob.url});
                 if (res.status==201 || res.status==200) {
@@ -43,7 +52,8 @@ export default function Register() {
                 }
             }
         } catch (error:any) {
-            setResponse({...response,error:error.message,isError:true,isLoading:false});
+            setIsSubmit(!isSubmit);
+            setResponse({...response,error:"register failed please try again",isError:true,isLoading:false});
         }
     }
 
@@ -56,7 +66,6 @@ export default function Register() {
 
         try {
             const file = inputFileRef.current.files[0];
-
             const response = await fetch(
                 `/api/avatar/upload?filename=${file.name}`,
                 {
@@ -67,19 +76,20 @@ export default function Register() {
             const newBlob = (await response.json()) as PutBlobResult;
             setBlob(newBlob);
         } catch (error) {
+            setIsSubmit(!isSubmit);
             console.log(error);
         }
     }
 
     useEffect(()=>{
 
-    },[response]);
+    },[response,isSubmit]);
 
   return (
     <div className="wrap-form">
         <form action="" onSubmit={HandleSubmit} className="md:w-3/5 w-5/6 h-full flex md:space-y-4 flex-col items-center bg-white justify-center" encType="multipart/form-data">
         <h1 className="text-gray-400 self-start mb-2 text-justify">SignIn to continue</h1>
-            {response?.isError&&(<span className="text-justify text-red-400">{response?.error}</span>)}
+        {response?.isError && (<span className="text-red-400 text-center w-full block">{response?.error}</span>)}
             <div className="md:h-1/6 my-4 w-full md:my-0 flex space-x-2 flex-row">
                 <div className="flex-1 w-3/5 flex flex-col">
                     <label htmlFor="Username" className="text-xl">Username</label>
@@ -114,9 +124,11 @@ export default function Register() {
             {
                 user.Password!=""&&user.ConfirmPassword!=""&&user.ConfirmPassword!=user.Password&&<span className="text-red-400">ConfirmPassword must be equal to Password</span>
             }
-            <div className="w-full md:justify-between justify-around flex h-1/6 md:flex-row flex-col">
-                <button className="btn-submit" type="submit">Submit</button>
-                <Link href="/login" className="text-blue-400 md:self-center hover:underline">You have acount <strong>SignIn</strong></Link>
+            <div className="w-full md:justify-between justify-around items-center flex h-1/6 md:flex-row flex-col">
+                {
+                    isSubmit?<Spin  className='md:text-center' indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />:<button className="btn-submit" type="submit">Submit</button>
+                }
+                <Link href="/login" className="text-blue-400 md:self-center self-start hover:underline">You have acount <strong>SignIn</strong></Link>
             </div>
         </form>
     </div>
