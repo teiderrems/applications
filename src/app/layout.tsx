@@ -32,7 +32,6 @@ export default function RootLayout({
   const [togel,setTogel]=useState(false)
   const [token,setToken]=useState<any>(undefined);
   const [image,setImage]=useState(burgerImg);
-  const [show,setShow]=useState(true);
   const [user,setUser]=useState<any>(undefined);
   const router=useRouter();
     
@@ -61,11 +60,6 @@ export default function RootLayout({
         disabled: false,
       }
     ];
-    
-    const getPath=()=>{
-        return pathname.split('/').join('>').substring(1);
-    }
- 
  function toggleNav(){
    setImage((!togel)?boutonX:burgerImg);
    setTogel(!togel);
@@ -81,7 +75,7 @@ export default function RootLayout({
     if (window.sessionStorage&&(sessionStorage.getItem("token"))) {
       setUser(JSON.parse(atob(sessionStorage.getItem("token")!.split('.')[1])));
     }
-  },[image,togel,token,router]);
+  },[image,togel,token,router,user]);
 
   return (
       <html lang="en">

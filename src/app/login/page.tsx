@@ -23,10 +23,10 @@ function Login() {
   const [response,setResponse]=useState<CustomType>();
   const [isSubmit,setIsSubmit]=useState(false);
 
-  
+
   const HandleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
-      setIsSubmit(!isSubmit);
+    setIsSubmit(state=>!state);
         setResponse({...response,status:0,data:null,isLoading:true,isError:false,error:"",isSuccess:false})
         try {
             const res=await Axios.post("users/auth",{Username:user.Username,Password:user.Password});
@@ -44,7 +44,7 @@ function Login() {
               setResponse({...response,isSuccess:true,isLoading:false,data:res.data});
           }
         } catch (error:any) {
-            setIsSubmit(!isSubmit);
+            setIsSubmit(state=>!state);
             setResponse({...response,error:error.message,isError:true,isLoading:false});
         }
   }
@@ -57,7 +57,7 @@ function Login() {
     <div className="wrap-form">
       <form action="" onSubmit={HandleSubmit} className="md:w-3/5 w-5/6 h-full flex items-center md:space-y-3 flex-col bg-white justify-center">
         <h1 className="text-gray-400 self-start mb-4 text-justify">Login to continue</h1>
-        {response?.isError && (<span className="text-red-400 text-center w-full block">Something wrong username or password isn't valid please try again</span>)}
+        {response?.isError && (<span className="text-red-400 text-center w-full block">Something wrong username or password isn&rsquo;t valid please try again</span>)}
         <div className="flex w-full flex-col h-1/5 space-y-1">
           <label htmlFor="Username" className="text-xl">Username</label>
           <input type="text"  id="Username" required onChange={(e) => { setUser({ ...user, Username: e.target.value }) }} className="form-input px-2" />

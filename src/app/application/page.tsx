@@ -16,7 +16,7 @@ export default function Application() {
   const router = useRouter();
   const pathname = usePathname();
   const [token, setToken] = useState<any>();
-  const [response, setResponse] = useState<CustomType>({isLoading: true, data: undefined, isError: false, isSuccess: false, error: "", status: 0 });
+  const [response, setResponse] = useState<any>(undefined);
   const [isAdd,setIsAdd]=useState(false);
   const [reload,setReload]=useState(false);
   const [next,setNext]=useState(null);
@@ -66,7 +66,7 @@ export default function Application() {
       }
     }
     findAll();
-  }, [limit, page, token, url,prev,next,pathname, router,isAdd,reload]);
+  }, [limit, page, token, url,prev,next,pathname,response, router,isAdd,reload]);
 
   if (response?.isLoading) {
     return (

@@ -35,14 +35,8 @@ export default function Register() {
     const HandleSubmit=async(e: React.FormEvent)=>{
         e.preventDefault();
         setIsSubmit(!isSubmit);
-        setResponse({...response,status:0,data:null,isLoading:true,isError:false,error:"",isSuccess:false})
-        try {
-            await uploadProfile();
-        } catch (error) {
-            setIsSubmit(!isSubmit);
-            setResponse({...response,status:0,data:null,isLoading:true,isError:false,error:"profile picture upload failed",isSuccess:false})
-            console.log(error);
-        }
+        setResponse({...response,status:0,data:null,isLoading:true,isError:false,error:"",isSuccess:false});
+        await uploadProfile();
         try {
             if (blob) {
                 const res=await Axios.post("users",{Username:user.Username,Email:user.Email,Password:user.Password,Profile:blob.url});
@@ -66,17 +60,24 @@ export default function Register() {
 
         try {
             const file = inputFileRef.current.files[0];
-            const response = await fetch(
+            const res = await fetch(
                 `/api/avatar/upload?filename=${file.name}`,
                 {
                 method: 'POST',
                 body: file,
                 },
             );
-            const newBlob = (await response.json()) as PutBlobResult;
-            setBlob(newBlob);
+            if (!res.ok) {
+                setResponse({...response,status:0,data:null,isLoading:true,isError:true,error:"profile picture upload failed",isSuccess:false});
+                setIsSubmit(state=>!state);
+            }
+            else{
+                const newBlob = (await res.json()) as PutBlobResult;
+                setBlob(newBlob);
+            } 
         } catch (error) {
-            setIsSubmit(!isSubmit);
+            setResponse({...response,status:0,data:null,isLoading:true,isError:true,error:"profile picture upload failed",isSuccess:false});
+            setIsSubmit(state=>!state);
             console.log(error);
         }
     }

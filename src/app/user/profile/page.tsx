@@ -2,7 +2,7 @@
 
 import { CustomType } from '@/app/components/ApplicationDetail';
 import Axios from '@/hooks/axios.config';
-import { useParams, usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import  profileImg  from '../../../../public/defaul.jpeg';
 import Image from 'next/image';
@@ -14,7 +14,7 @@ import UserDetail from '@/app/components/UserDetail';
 export default function UserDetailInfo() {
 
     const [param,setParam]=useState<string|undefined>(undefined);
-    const [response,setResponse]=useState<CustomType>({isLoading:true,data:null,isError:false,isSuccess:false,error:"",status:0});
+    const [response,setResponse]=useState<any>(undefined);
     const router=useRouter();
     const [token,setToken]=useState<string>();
     const pathname=usePathname();
@@ -92,7 +92,7 @@ export default function UserDetailInfo() {
         if (param) {
             getUser();
         }
-    },[param,reload,router,response.isLoading]); //,response,pathname,router,reload
+    },[param,reload,router,response,pathname]); //,response,pathname,router,reload
 
     if (response?.isLoading || !param) {
         return (

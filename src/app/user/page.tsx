@@ -16,7 +16,7 @@ export default function UserList() {
     const router=useRouter();
   const pathname=usePathname();
   const [token,setToken]=useState<string>();
-  const [response,setResponse]=useState<CustomType>({isLoading: true, data: undefined, isError: false, isSuccess: false, error: "", status: 0 });
+  const [response,setResponse]=useState<any>(undefined);
   const [page,setPage]=useState(0);
   const [limit,setLimit]=useState(12);
   const [handleAdd,setHandleAdd]=useState(false);
