@@ -32,7 +32,7 @@ export default function RootLayout({
   const [togel,setTogel]=useState(false)
   const [token,setToken]=useState<any>(undefined);
   const [image,setImage]=useState(burgerImg);
-  const [show,setShow]=useState(true)
+  const [show,setShow]=useState(true);
   const [user,setUser]=useState<any>(undefined);
   const router=useRouter();
     
@@ -54,14 +54,6 @@ export default function RootLayout({
       },
       {
         key: '2',
-        label: (
-          <Link href={`/user/${user?._id}`} className="">Profile</Link>
-        ),
-        icon: <EditOutlined />,
-        disabled: false,
-      },
-      {
-        key: '3',
         label: (
           <Link href="/about" className="">About</Link>
         ),
@@ -89,7 +81,7 @@ export default function RootLayout({
     if (window.sessionStorage&&(sessionStorage.getItem("token"))) {
       setUser(JSON.parse(atob(sessionStorage.getItem("token")!.split('.')[1])));
     }
-  },[image,togel,token]);
+  },[image,togel,token,router]);
 
   return (
       <html lang="en">
@@ -102,7 +94,7 @@ export default function RootLayout({
         }}>
           <div id="toggled-menu"
               className={`w-full absolute top-14 bottom-0 left-0 -translate-x-full bg-gradient-to-br from-gray-50 via-slate-50 to-blue-50  ${togel?'translate-x-0 z-20 opacity-100 w-1/5':''} text-gray-800 border-b border-gray-200 flex flex-col items-center md:static min-h-full md:w-1/5 md:transform-none md:border-none`}>
-            <h1 className="text-xl font-bold p-1 w-full h-12 border-b">Applications</h1>
+            <h1 className="md:text-2xl text-xl italic p-1 w-full h-12 border-b">Applications</h1>
             <div className="flex-1 flex w-full flex-col"> 
             
             {
@@ -110,6 +102,7 @@ export default function RootLayout({
               <nav className="flex flex-col flex-1 py-3 space-y-6 text-justify w-full">
                   <Link href="/" className={`px-2 capitalize text-xl ${pathname=="/"?'active':''}`}><HomeOutlined /> Home</Link>
                   <Link href="/application" className={`px-2 text-xl ${pathname=="/application"&&'active'}`}><UnorderedListOutlined /> Application</Link>
+                  <Link href="/user/profile" className={`px-2 text-xl ${pathname=="/user/profile"&&'active'}`}><EditOutlined /> Profile</Link>
                   {
                     user?.role=='admin'&&<Link href="/user" className={`px-2 capitalize text-xl ${pathname=="/user"?'active':''}`}><UnorderedListOutlined /> Users</Link>
                   }
@@ -137,19 +130,16 @@ export default function RootLayout({
               </button>
                 <span className=" capitalize pl-1 invisible md:visible md:w-1/3"></span>
                 {
-                  token?<nav className="px-1 h-full md:w-3/4 mr-1 flex justify-end items-center space-x-4">
-                    {/* <Dropdown menu={{ items }}>
+                  token?<button className="px-1 h-full">
+                    <Dropdown menu={{ items }}>
                       <a onClick={(e) => e.preventDefault()}>
                         <Space>
                         <Avatar icon={<Image width={75} priority height={75} src={(user.profile)?user.profile:profileImg} alt="profile"/>} /> 
                         </Space>
                       </a>
-                    </Dropdown> */}
-                    <button onClick={LogOut} className=" hover:rounded-lg italic hover:text-blue-400 shadow p-1 rounded-md"><LogoutOutlined /> LogOut</button>
-                    <Link href="/about" className={`hover:rounded-lg italic shadow p-1 rounded-md ${pathname=="/about"&&'bg-blue-500 text-white'}`}><ProfileOutlined /> About</Link>
-                    <Link href={`/user/${user?._id}`} className=" italic hover:text-blue-400 shadow-md shadow-slate-300 rounded-full"><Image width={25} className="rounded-xl" height={20} src={(user.profile)?user.profile:profileImg} alt="profile"/></Link>
+                    </Dropdown>
 
-                  </nav>:<Link href="/about" className="about">About</Link>
+                  </button>:<Link href="/about" className="about">About</Link>
                 }
             </div>
             <div className="flex-1">

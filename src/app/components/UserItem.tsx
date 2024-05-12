@@ -23,7 +23,7 @@ export default function UserItem({user,setIsAdd}:{user:UserType,setIsAdd:Dispatc
     <>
       <div onClick={()=>setShowDetail(!showDetail)}
       className='flex rounded-md italic hover:shadow-blue-500 hover:cursor-pointer  justify-between shadow'>
-          <span className=" text-center"><Image className="rounded" src={user?.Profile} width={75} height={75} alt={user?.Profile}/></span>
+          <span className=" text-center md:w-1/2"><Image className="rounded" src={user?.Profile} width={75} height={75} alt={user?.Profile}/></span>
           <div className=" flex flex-col mr-2">
             <h3 className="text-justify">{user.Username}</h3>
             <h3 className="text-justify">{user.Role}</h3>

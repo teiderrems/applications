@@ -16,7 +16,7 @@ export default function UserList() {
     const router=useRouter();
   const pathname=usePathname();
   const [token,setToken]=useState<string>();
-  const [response,setResponse]=useState<CustomType>();
+  const [response,setResponse]=useState<CustomType>({isLoading: true, data: undefined, isError: false, isSuccess: false, error: "", status: 0 });
   const [page,setPage]=useState(0);
   const [limit,setLimit]=useState(12);
   const [handleAdd,setHandleAdd]=useState(false);
@@ -28,7 +28,6 @@ export default function UserList() {
   
   useEffect(()=>{
     const findAll=async()=>{
-      setResponse({...response,isLoading:true,data:null,isError:false,isSuccess:false,error:"",status:0});
       try {
         const res = await axios.get(url, {
           headers: {
@@ -69,7 +68,7 @@ export default function UserList() {
         }
     }
     findAll();
-  },[token,pathname,isAdd,reload]);
+  },[token,pathname,isAdd,reload,response,url,router]);
 
   if (response?.isLoading) {
     return(
@@ -88,7 +87,7 @@ export default function UserList() {
   }
   
   return (
-    <div className='container mx-auto flex-1 flex flex-col'>
+    <div className='container mx-auto flex-1 overflow-hidden flex flex-col'>
     <div className="flex justify-end h-7">
     {
       (!handleAdd)?<button className="rounded-lg hover:text-blue-500 text-center h-full w-10 " onClick={()=>setHandleAdd(!handleAdd)}><AppstoreAddOutlined className="h-5/6 w-5/6 m-2"/></button>:<AddUser setIsAdd={setIsAdd} setHandleAdd={setHandleAdd}/>

@@ -34,6 +34,7 @@ function Login() {
               }
               else{
                 const user=JSON.parse(atob(sessionStorage.getItem("token")!.split('.')[1]));
+                sessionStorage.setItem('userId',user?._id);
                 router.push('/application');
               }
               setResponse({...response,isSuccess:true,isLoading:false,data:res.data});

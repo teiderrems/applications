@@ -13,8 +13,8 @@ import UserDetail from '@/app/components/UserDetail';
 
 export default function UserDetailInfo() {
 
-    const param=useParams().id;
-    const [response,setResponse]=useState<CustomType>();
+    const [param,setParam]=useState<string|undefined>(undefined);
+    const [response,setResponse]=useState<CustomType>({isLoading:true,data:null,isError:false,isSuccess:false,error:"",status:0});
     const router=useRouter();
     const [token,setToken]=useState<string>();
     const pathname=usePathname();
@@ -22,7 +22,7 @@ export default function UserDetailInfo() {
     const [edit,setEdit]=useState(false);
     const HandleDelete=async()=>{
         
-        setResponse({...response,isLoading:true,data:null,isError:false,isSuccess:false,error:"",status:0});
+        
         try {
             const res=await Axios.delete("users/"+param,{
                 headers:{
@@ -58,6 +58,7 @@ export default function UserDetailInfo() {
     }
 
     useEffect(()=>{
+        setParam(window&& (sessionStorage.getItem('userId') as string)&&(sessionStorage.getItem('userId') as string));
         setToken(window&& (sessionStorage.getItem('token') as string)&&(sessionStorage.getItem('token') as string));
         const getUser=async()=>{
             try {
@@ -88,12 +89,14 @@ export default function UserDetailInfo() {
                 }
             }
         }
-        getUser();
-    },[param,response?.isLoading,token,response?.isSuccess,response?.isError,reload]);
+        if (param) {
+            getUser();
+        }
+    },[param,reload,router,response.isLoading]); //,response,pathname,router,reload
 
-    if (response?.isLoading) {
+    if (response?.isLoading || !param) {
         return (
-            <div className="flex flex-col justify-center h-full items-center">
+            <div className="flex flex-1 flex-col justify-center h-full items-center">
             <p className=" animate-bounce text-center">Loading...</p>
             </div>
         )
@@ -101,7 +104,7 @@ export default function UserDetailInfo() {
 
     if (response?.isError) {
         return (
-        <div className="flex justify-center items-center">
+        <div className="flex  flex-1 justify-center items-center">
             <p className="text-justify text-red-400">{response.error}</p>
         </div>)
     }

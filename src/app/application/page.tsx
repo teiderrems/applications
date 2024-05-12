@@ -16,7 +16,7 @@ export default function Application() {
   const router = useRouter();
   const pathname = usePathname();
   const [token, setToken] = useState<any>();
-  const [response, setResponse] = useState<CustomType>();
+  const [response, setResponse] = useState<CustomType>({isLoading: true, data: undefined, isError: false, isSuccess: false, error: "", status: 0 });
   const [isAdd,setIsAdd]=useState(false);
   const [reload,setReload]=useState(false);
   const [next,setNext]=useState(null);
@@ -26,7 +26,6 @@ export default function Application() {
   useEffect(() => {
     setToken(window&&sessionStorage.getItem('token'));
     const findAll = async () => {
-      setResponse({ ...response, isLoading: true, data: null, isError: false, isSuccess: false, error: "", status: 0 });
       try {
         
         const res = await axios.get(url, {
