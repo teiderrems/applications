@@ -11,7 +11,7 @@ import Link from "next/link";
 import Image from "next/image";
 import burgerImg from '../../public/menu.svg';
 import  Head  from "next/head";
-import { EditOutlined, HomeOutlined, LogoutOutlined, ProfileOutlined, SmileOutlined, UnorderedListOutlined, UserOutlined } from "@ant-design/icons";
+import { EditOutlined, HomeOutlined, LogoutOutlined, ProfileOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import { Avatar, Dropdown, MenuProps, Space } from "antd";
 
 
@@ -61,8 +61,8 @@ export default function RootLayout({
       }
     ];
  function toggleNav(){
-   setImage((!togel)?boutonX:burgerImg);
-   setTogel(!togel);
+   setImage((state: any)=>state=(!togel)?boutonX:burgerImg);
+   setTogel(state=>state=!togel);
  }
 
  
@@ -71,11 +71,11 @@ export default function RootLayout({
     if (!(sessionStorage.getItem("token"))) {
       router.push('/login');
     }
-    setToken((!!sessionStorage.getItem("token"))&&sessionStorage.getItem("token"));
+    setToken((state:any)=>state=(!!sessionStorage.getItem("token"))&&sessionStorage.getItem("token"));
     if (window.sessionStorage&&(sessionStorage.getItem("token"))) {
-      setUser(JSON.parse(atob(sessionStorage.getItem("token")!.split('.')[1])));
+      setUser((state: any)=>state=JSON.parse(atob(sessionStorage.getItem("token")!.split('.')[1])));
     }
-  },[image,togel,token,router]);
+  },[image,togel,token,router,window && sessionStorage.getItem('token')]);
 
   return (
       <html lang="en">

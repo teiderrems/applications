@@ -64,7 +64,10 @@ export default function Application() {
   }
 
   useEffect(() => {
-    setToken(window && sessionStorage.getItem('token'));
+    setToken((state:any)=>{
+      state=window && sessionStorage.getItem('token');
+      return state;
+    });
     const findAll = async () => {
       try {
 
@@ -78,23 +81,26 @@ export default function Application() {
           setResponse(state => {
             return { ...state, isLoading: false, status: res.status, data: res.data.data.applications, isSuccess: true };
           });
-          setPrev(res.data.prev);
-          setNext(res.data.next);
+          setPrev(state=>{
+            return state = res.data.prev;
+          });
+          setNext(state=>{
+            return state=res.data.next;
+          });
           if (response?.data) {
-            setReload(true);
+            setReload(state=>!state);
           }
         }
       } catch (error: any) {
-        console.log(error);
         if (error.response.status == 401) {
 
           try {
             const res = await Axios.post("users/refresh_token", { refresh: sessionStorage.getItem("refresh") });
             if (res.status == 201 || res.status == 200) {
-              setToken(res.data.token);
+              setToken((state: any)=>state=res.data.token);
               sessionStorage.setItem("token", res.data.token);
               if (sessionStorage.getItem("token")) {
-                setReload(true);
+                setReload(state=>!state);
               }
             }
           } catch (err: any) {

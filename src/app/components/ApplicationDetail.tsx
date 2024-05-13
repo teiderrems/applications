@@ -1,7 +1,6 @@
 "use client"
-import Axios from "@/hooks/axios.config";
-import { usePathname, useRouter } from "next/navigation";
-import React, { SetStateAction, useEffect, useState } from "react";
+
+import  { SetStateAction, useEffect } from "react";
 
 export interface Props{
     _id?:string;
