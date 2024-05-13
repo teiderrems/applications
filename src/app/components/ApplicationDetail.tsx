@@ -48,8 +48,7 @@ export default function ApplicationDetail({application,setShowDetail}:{applicati
                     <h2 className="text-xl md:border-l">Description du Poste</h2>
                     <p className="flex-1">{application.Description}</p>
                 </article>
-            </div>
-            
+            </div>  
         </div>
    </div>
   )

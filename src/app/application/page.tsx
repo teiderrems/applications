@@ -26,9 +26,9 @@ export default function Application() {
   const [currentApp, setCurrentApp] = useState<any>({});
   const [viewDetail,setViewDetail]=useState(false);
 
-  const SaveChange = async () => {
+  const SaveChange = async (a:Props) => {
     setShowDetail(state => !state);
-    if (currentApp) {
+    if (currentApp && a.Status!==currentApp.Status) {
       try {
         const res = await Axios.put(`applications/${currentApp._id}`, currentApp, {
           headers: {
@@ -39,7 +39,6 @@ export default function Application() {
           setReload(true);
         }
       } catch (error: any) {
-        console.log(error);
         if (error.response.status == 401) {
           try {
             const res = await Axios.post("users/refresh_token", { refresh: sessionStorage.getItem("refresh") });
@@ -255,7 +254,7 @@ export default function Application() {
                         <button className='text-blue w-1/3 text-xl' onClick={()=>setViewDetail(state=>!state)}><ReadOutlined className="p-1 hover:rounded-md text-green-400 hover:text-white hover:bg-blue-500 hover:shadow"/></button>
                         <button className='w-1/3 text-cyan-300 text-xl' onClick={()=>HandleDelete(a)}><DeleteOutlined className="p-1 hover:shadow hover:rounded-md hover:bg-red-300 hover:text-white" /></button>
                       </div>
-                      : <button onClick={SaveChange}
+                      : <button onClick={()=>SaveChange(a)}
                         className="font-medium text-blue-600 dark:text-blue-500 hover:underline">SaveChange</button>
                     }
                   </td>

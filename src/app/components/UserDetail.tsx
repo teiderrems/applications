@@ -59,8 +59,8 @@ export default function UserDetail({user,setShowDetail,setIsAdd,canEdit}:{canEdi
                     "Authorization":window.sessionStorage?("Bearer "+window.sessionStorage.getItem("token")):''
                 }
             });
-            router.push(pathname);
             if (res.status==204) {
+                router.push('/register');
                 setResponse({...response,isLoading:false,status:res.status,data:res.data,isSuccess:true});
                 setShowDetail(state=>!state);
                 setIsAdd(state=>!state);
@@ -72,8 +72,6 @@ export default function UserDetail({user,setShowDetail,setIsAdd,canEdit}:{canEdi
                   if (res.status==201 || res.status==200) {
                     sessionStorage.setItem("token",res.data.token);
                     sessionStorage.setItem("refresh",res.data.refresh);
-
-                    // setIsAdd(state=>!state);
                     if (sessionStorage.getItem("token")) {
                       setReload(true);
                     }
