@@ -10,9 +10,10 @@ export interface Props{
     JobDescription?:string;
     Entreprise?:string;
     Adresse?:string;
+    ContratType?:string;
     Status?:string;
-    CreatedAt?:Date;
-    UpdatedAt?:Date;
+    CreatedAt?:string;
+    UpdatedAt?:string;
 }
 
 export type CustomType={
@@ -24,113 +25,32 @@ export type CustomType={
     error?:string;
 }
 
-export default function ApplicationDetail({application,setShowDetail,setIsAdd}:{application:Props,setIsAdd:React.Dispatch<SetStateAction<boolean>>,setShowDetail:React.Dispatch<SetStateAction<boolean>>}) {
+export default function ApplicationDetail({application,setShowDetail}:{application:Props,setShowDetail:React.Dispatch<SetStateAction<boolean>>}) {
     
-    const status=["success","pending","postponed"];
-
-    const [response,setResponse]=useState<CustomType>({ isLoading: false, status: 0, data: undefined,error:undefined, isSuccess: false });
-    const [currentApp,setCurrentApp]=useState(application);
-    const pathname=usePathname();
-    const [reload,setReload]=useState(false);
-    const router=useRouter();
-    const HandleClick=async()=>{
-        setResponse({...response,isLoading:true,data:null,isError:false,isSuccess:false,error:"",status:0});
-        try {
-            const res=await Axios.put("applications/"+application._id,currentApp,{
-                headers:{
-                    "Authorization":window.sessionStorage?("Bearer "+window.sessionStorage.getItem("token")):''
-                }
-            });
-            if (res.status==201 || res.status==200) {
-                setShowDetail(state=>!state);
-                setResponse({...response,isLoading:false,status:res.status,data:res.data,isSuccess:true})
-                setIsAdd(state=>!state);
-            }
-        } catch (error:any) {
-            if (error.response.status==401) {
-                try {
-                  const res=await Axios.post("users/refresh_token",{refresh:sessionStorage.getItem("refresh")});
-                  if (res.status==201 || res.status==200) {
-                    sessionStorage.setItem("token",res.data.token);
-                    sessionStorage.setItem("refresh",res.data.refresh);
-                    setReload(true);
-                  }
-                } catch (err:any) {
-                  sessionStorage.removeItem("token");
-                  sessionStorage.removeItem("refresh");
-                  if (err.response.status == 401) {
-                    router.push(`/login?ReturnUrl=${pathname}`);
-                  }
-                  setReload(false);
-                }
-              }
-        }
-
-    }
-
-    const HandleDelete=async()=>{
-        
-        setResponse({...response,isLoading:true,data:null,isError:false,isSuccess:false,error:"",status:0});
-        try {
-            const res=await Axios.delete("applications/"+application._id,{
-                headers:{
-                    "Authorization":window.sessionStorage?("Bearer "+window.sessionStorage.getItem("token")):''
-                }
-            });
-            router.push(pathname);
-            if (res.status==204) {
-                setResponse({...response,isLoading:false,status:res.status,data:res.data,isSuccess:true});
-                setShowDetail(state=>!state);
-                setIsAdd(state=>!state);
-            }
-        } catch (error:any) {
-            if (error.response.status==401) {
-                try {
-                  const res=await Axios.post("users/refresh_token",{refresh:sessionStorage.getItem("refresh")});
-                  if (res.status==201 || res.status==200) {
-                    sessionStorage.setItem("token",res.data.token);
-                    sessionStorage.setItem("refresh",res.data.refresh);
-                    setReload(true);
-                  }
-                } catch (err:any) {
-                  sessionStorage.removeItem("token");
-                  sessionStorage.removeItem("refresh");
-                  setReload(false);
-                  if (err.response.status == 401) {
-                    router.push(`/login?ReturnUrl=${pathname}`);
-                  }
-                }
-              }
-        }
-    }
-
     useEffect(()=>{
-    },[currentApp,response,reload,application,setShowDetail,setIsAdd]);
+    },[application,setShowDetail]);
   return (
-   <div className="fixed inset-0  flex justify-center items-center flex-col">
-        <div onClick={()=>setShowDetail(state=>!state)} className="absolute inset-0 bg-blue-50 z-0"></div>
-        <div className="flex flex-col w-4/6 h-5/6 p-2 justify-between items-center bg-white z-10 opacity-100 rounded shadow">
-            <div className="flex md:flex-row flex-col md:space-x-1 justify-between w-5/6">
-                <input type="text" onChange={(e)=>setCurrentApp({...currentApp,Title:e.target.value})} className="text-wrap mb-2 md:mb-0 shadow shadow-blue-200 border-2 rounded-md md:w-3/4 w-full" value={currentApp.Title} />
-                <select name="status"  onChange={(e)=>setCurrentApp({...currentApp,Status:e.target.value})} className=" shadow shadow-blue-200 flex-1 border-2 rounded-md" id="status">
-                    
-                    {
-                        status.map(s=>(<option key={s} selected={currentApp.Status==s} value={s} className=" uppercase">{s}</option>))
-                    }
-                </select>
+   <div className="absolute inset-0 flex justify-center items-center flex-col">
+        <div  onClick={()=>setShowDetail(state=>!state)} className="absolute inset-0 opacity-50 bg-gray-100 z-1"></div>
+        <div className="flex flex-col flex-1 space-y-3 z-30 w-8/12 my-10 bg-white opacity-100 md:rounded ">
+            <h1 className="mx-2 py-2  font-bold">{application.Title}</h1>
+            <ul className="flex border-b-2 italic md:flex-row flex-col justify-between items-center">
+                <li className="md:pl-2">{application.Entreprise}</li>
+                <li className="">{application.Adresse}</li>
+                <li className="">{application.Status}</li>
+                <li className="md:pr-2">{application.CreatedAt?.split('T')[0].split('-').reverse().join('/')}</li>
+            </ul>
+            <div className=" flex-1 flex md:flex-row flex-col">
+                <article className=" flex-1 px-2 flex flex-col space-y-2">
+                    <h2 className="text-xl">Fiche de Poste</h2>
+                    <p className="flex-1 text-wrap">{application.JobDescription}</p>
+                </article>
+                <article className="flex flex-1  px-2 flex-col space-y-2">
+                    <h2 className="text-xl md:border-l">Description du Poste</h2>
+                    <p className="flex-1">{application.Description}</p>
+                </article>
             </div>
-            <div className="flex flex-col w-5/6 h-2/3">
-                <div className=" w-full h-1/2">
-                    <textarea name="description"  onChange={(e)=>setCurrentApp({...currentApp,Description:e.target.value})} className="w-full h-5/6 shadow shadow-blue-200 border-2 rounded-md" id="description" value={currentApp.Description}></textarea>
-                </div>
-                <div className="w-full h-1/2">
-                    <textarea name="description"  onChange={(e)=>setCurrentApp({...currentApp,JobDescription:e.target.value})} className="w-full h-5/6 shadow shadow-blue-200 border-2 rounded-md" id="description" value={currentApp.JobDescription}></textarea>
-                </div>
-            </div>
-            <div className="flex w-5/6 md:flex-row flex-col justify-between">
-                <button onClick={HandleClick} className=" bg-blue-500 md:w-2/12 w-full text-xl hover:text-white mb-2 md:mb-0 rounded-md shadow">Save</button>
-                <button onClick={HandleDelete} className=" bg-red-400 md:w-2/12 w-full text-xl hover:text-white rounded-md shadow" >Delete</button>
-            </div>
+            
         </div>
    </div>
   )
