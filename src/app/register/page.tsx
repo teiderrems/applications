@@ -3,7 +3,7 @@
 import Axios from "@/hooks/axios.config";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useRef, useState } from "react"
+import {  useRef, useState } from "react"
 import { CustomType } from "../components/ApplicationDetail";
 import { EyeInvisibleOutlined, EyeOutlined, LoadingOutlined } from "@ant-design/icons";
 import { PutBlobResult } from "@vercel/blob";
@@ -48,8 +48,8 @@ export default function Register() {
             if (blob) {
                 const res=await Axios.post("users",{Username:user.Username,Email:user.Email,Password:user.Password,Profile:blob.url});
                 if (res.status==201 || res.status==200) {
-                    setResponse({...response,isSuccess:true,isLoading:false,data:res.data});
                     router.push('/login');
+                    setResponse({...response,isSuccess:true,isLoading:false,data:res.data});
                 }
             }
         } catch (error:any) {
@@ -85,14 +85,10 @@ export default function Register() {
         } catch (error:any) {
             setResponse({...response,status:0,data:null,isLoading:true,isError:true,error:"profile picture upload failed",isSuccess:false});
             setIsSubmit(state=>!state);
-            console.log(error);
             return error.message;
         }
     }
 
-    useEffect(()=>{
-
-    },[response,isSubmit]);
 
   return (
     <div className="wrap-form">
