@@ -242,7 +242,7 @@ export default function Application() {
                     }
                   </td>
                   <td className="px-4 py-4">
-                    {a.ContratType}
+                    {a.TypeContrat}
                   </td>
                   <td className="px-4 py-4">
                     {a.CreatedAt?.split('T')[0].split('-').reverse().join('/')}

@@ -9,7 +9,7 @@ export interface Props{
     JobDescription?:string;
     Entreprise?:string;
     Adresse?:string;
-    ContratType?:string;
+    TypeContrat?:string;
     Status?:string;
     CreatedAt?:string;
     UpdatedAt?:string;
