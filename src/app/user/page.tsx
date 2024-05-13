@@ -98,7 +98,7 @@ export default function UserList() {
     }
     </div>
     <section className="flex flex-col flex-1 mt-2 space-y-2">
-      <div className="flex-1 mx-4 grid md:grid-cols-4 md:grid-rows-4 grid-rows-12 gap-3 grid-cols-1">
+      <div className="flex-1 mx-4 flex md:flex-row flex-col flex-wrap">
         {
           response?.data?.map((u: UserType)=>{
             return (<UserItem key={u._id} setIsAdd={setIsAdd} user={u}/>)

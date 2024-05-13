@@ -23,13 +23,9 @@ export default function UserItem({user,setIsAdd}:{user:UserType,setIsAdd:Dispatc
   return (
     <>
       <div onClick={()=>setShowDetail(!showDetail)}
-      className='flex rounded-md space-y-4 md:space-y-0 md:space-x-4 italic hover:shadow-blue-500 hover:cursor-pointer  justify-between shadow'>
-          <Image className=" rounded-l-lg flex-1" src={user?.Profile??profileImg} width={100} height={100} alt={user?.Profile}/>
-          <div className=" flex flex-1 flex-col">
-            <h3 className="text-justify">{user?.Username}</h3>
-            <h3 className="text-justify">{user?.Role}</h3>
-            <h3 className="text-justify">{`${user?.CreatedAt.split('T')[0].split('-').reverse().join('/')}`}</h3>
-          </div>
+      className='flex rounded-full shadow hover:scale-110 space-y-4 h-1/6 md:space-y-0 md:space-x-4 italic hover:shadow-blue-500 hover:cursor-pointer  justify-between'>
+          <Image className=" rounded-full" src={user?.Profile??profileImg} width={25} height={25} alt={user?.Profile}/>
+          <h3 className="text-justify px-2 hover:text-blue-400 hover:underline">{user?.Email}</h3>
       </div>
       {
         showDetail&&<UserDetail  canEdit={true} setIsAdd={setIsAdd} user={user} setShowDetail={setShowDetail}/>

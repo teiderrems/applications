@@ -29,11 +29,10 @@ export default function UserDetailInfo() {
                     "Authorization":window.sessionStorage?("Bearer "+window.sessionStorage.getItem("token")):''
                 }
             });
-            router.push(pathname);
             if (res.status==204) {
-                setResponse(state=>{
-                    return {...state,isLoading:false,status:res.status,data:res.data,isSuccess:true}
-                });
+                sessionStorage.removeItem('token');
+                sessionStorage.removeItem('refresh');
+                sessionStorage.removeItem('userId');
                 router.push('/register');
             }
         } catch (error:any) {
@@ -70,10 +69,14 @@ export default function UserDetailInfo() {
                     }
                 });
                 if (res.status == 201 || res.status == 200) {
+                    if (!res.data.user) {
+                        router.push('/register');
+                    }
                     setResponse(state=>{
                         return{ ...state, isLoading: false, status: res.status, data: res.data.user, isSuccess: true }
                     });
                 }
+                
             } catch (error: any) {
                 if (error.response.status == 401) {
                 try {
@@ -96,7 +99,7 @@ export default function UserDetailInfo() {
         if (param) {
             getUser();
         }
-    },[param,reload,router,response,pathname]); //,response,pathname,router,reload
+    },[param,reload,router,pathname]);
 
     if (response?.isLoading || !param) {
         return (
