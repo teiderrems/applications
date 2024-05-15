@@ -37,7 +37,7 @@ body {
 }
 
 .form-input{
-  @apply rounded-md shadow w-full md:h-4/5 h-2/5 focus:shadow-inner shadow-blue-200
+  @apply rounded-md shadow w-full md:h-3/5 h-2/5 focus:shadow-inner shadow-blue-200
 } 
 
 .password-input{

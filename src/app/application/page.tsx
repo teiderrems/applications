@@ -1,13 +1,16 @@
 "use client"
-import { AppstoreAddOutlined, DeleteOutlined, DoubleLeftOutlined, DoubleRightOutlined, EditOutlined, ReadOutlined } from "@ant-design/icons";
+import { AppstoreAddOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react"
 import AddApplication from "../components/AddApplication";
 import { usePathname, useRouter } from "next/navigation";
 import Axios from "@/hooks/axios.config";
 import axios from "axios";
-import ApplicationDetail, { CustomType, Props } from "../components/ApplicationDetail";
+import { CustomType, Props } from "../components/ApplicationDetail";
+import ApplicationItem from "../components/ApplicationItem";
 
-const Status = ['pendding', 'postponed', 'success', 'reject'];
+
+const Status = ['pending', 'postponed', 'success', 'reject'];
+
 
 export default function Application() {
   const [handleAdd, setHandleAdd] = useState(false);
@@ -22,45 +25,10 @@ export default function Application() {
   const [reload, setReload] = useState(false);
   const [next, setNext] = useState(null);
   const [prev, setPrev] = useState(null);
-  const [showDetail, setShowDetail] = useState(false);
-  const [currentApp, setCurrentApp] = useState<any>({});
-  const [viewDetail,setViewDetail]=useState(false);
+  const [filter,setFilter]=useState('all');
+  
 
-  const SaveChange = async (a:Props) => {
-    setShowDetail(state => !state);
-    if (currentApp && a.Status!==currentApp.Status) {
-      try {
-        const res = await Axios.put(`applications/${currentApp._id}`, currentApp, {
-          headers: {
-            "Authorization": window.sessionStorage ? ("Bearer " + window.sessionStorage.getItem("token")) : ''
-          }
-        });
-        if (res.status == 201 || res.status == 200) {
-          setReload(true);
-        }
-      } catch (error: any) {
-        if (error.response.status == 401) {
-          try {
-            const res = await Axios.post("users/refresh_token", { refresh: sessionStorage.getItem("refresh") });
-            if (res.status == 201 || res.status == 200) {
-              setToken(res.data.token);
-              sessionStorage.setItem("token", res.data.token);
-              if (sessionStorage.getItem("token")) {
-                setReload(true);
-              }
-            }
-          } catch (err: any) {
-            sessionStorage.removeItem("token");
-            sessionStorage.removeItem("refresh");
-            if (err.response.status == 401) {
-              router.push(`/login?ReturnUrl=${pathname}`);
-            }
-            setReload(false);
-          }
-        }
-      }
-    }
-  }
+  
 
   useEffect(() => {
     setToken((state:any)=>{
@@ -70,7 +38,7 @@ export default function Application() {
     const findAll = async () => {
       try {
 
-        const res = await axios.get(url, {
+        const res = await axios.get(url+`&status=${filter}`, {
           headers: {
             "Authorization": window.sessionStorage ? ("Bearer " + window.sessionStorage.getItem("token")) : ''
           }
@@ -115,7 +83,7 @@ export default function Application() {
       }
     }
     findAll();
-  }, [limit, page, url, prev, token, next, pathname,window&&sessionStorage.getItem('token'), router, isAdd, reload, showDetail]);
+  }, [limit, page, url,response?.isLoading, prev,filter, token, next, pathname,window&&sessionStorage.getItem('token'), router, isAdd, reload]);
 
   if (response?.isLoading) {
     return (
@@ -134,43 +102,19 @@ export default function Application() {
 
 
 
-  async function HandleDelete(a:Props): Promise<void> {
-    try {
-      const res = await Axios.delete(`applications/${currentApp._id}`,{
-        headers: {
-          "Authorization": window.sessionStorage ? ("Bearer " + window.sessionStorage.getItem("token")) : ''
-        }
-      });
-      if (res.status == 204 || res.status == 200) {
-        setReload(true);
-      }
-    } catch (error: any) {
-      console.log(error);
-      if (error.response.status == 401) {
-        try {
-          const res = await Axios.post("users/refresh_token", { refresh: sessionStorage.getItem("refresh") });
-          if (res.status == 201 || res.status == 200) {
-            setToken(res.data.token);
-            sessionStorage.setItem("token", res.data.token);
-            if (sessionStorage.getItem("token")) {
-              setReload(true);
-            }
-          }
-        } catch (err: any) {
-          sessionStorage.removeItem("token");
-          sessionStorage.removeItem("refresh");
-          if (err.response.status == 401) {
-            router.push(`/login?ReturnUrl=${pathname}`);
-          }
-          setReload(false);
-        }
-      }
-    }
-  }
 
   return (
     <div className='flex-1 flex overflow-hidden flex-col space-y-5'>
-      <div className="flex justify-end h-7">
+      <div className="flex justify-end space-x-3 h-7">
+      <select className=" capitalize rounded-md shadow-md hover:shadow-blue-400 mt-2 h-5/6" onChange={(e) => {
+          setFilter(e.target.value);
+          setReload(!reload);              
+        }}>
+            <option value={filter} selected>{filter}</option>
+            {Status.filter(s => s !== filter).map(s => (
+                <option key={s} value={s}>{s}</option>
+            ))}
+        </select>
         {
           (!handleAdd) ? <button className="rounded-lg  text-center h-full w-7 text-2xl md:text-xl  mr-4 mb-2 hover:text-blue-400" onClick={() => setHandleAdd(!handleAdd)}><AppstoreAddOutlined className="h-5/6 w-5/6 m-2" /></button> : <AddApplication setHandleAdd={setHandleAdd} setIsAdd={setIsAdd} />
         }
@@ -205,52 +149,7 @@ export default function Application() {
           <tbody>
             {
               response.data?.map((a: Props) => (
-                <tr key={a._id} className={`border-b dark:bg-gray-800 hover:cursor-pointer dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 ${a.Status == 'reject' ? 'bg-red-300' : 'bg-white'}`}>
-                  
-                  <td scope="row" className="px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    {a.Title}
-                  </td>
-                  <td className="px-4 py-4">
-                    {a.Entreprise}
-                  </td>
-                  <td className="px-4 py-4">
-                    {a.Adresse}
-                  </td>
-                  <td className="px-4 py-4">
-                    {
-                      showDetail ? <select onChange={(e) => {
-                        setCurrentApp((state: Props) => {
-                          return { ...a, Status: (e.target.value != a.Status) ? e.target.value : a.Status }
-                        });
-                      }}>
-                        <option value={a.Status} selected>{a.Status}</option>
-                        {Status.filter(s => s !== a.Status).map(s => (
-                          <option key={s} value={s}>{s}</option>
-                        ))}
-                      </select> : <>{a.Status}</>
-                    }
-                  </td>
-                  <td className="px-4 py-4">
-                    {a.TypeContrat}
-                  </td>
-                  <td className="px-4 py-4">
-                    {a.CreatedAt?.split('T')[0].split('-').reverse().join('/')}
-                  </td>
-                  <td className="px-4 py-4">
-                    {(!showDetail) ?
-                      <div className='flex space-x-2'>
-                        <button className='text-blue w-1/3 text-xl' onClick={() => setShowDetail(state => !state)}><EditOutlined className="p-1 hover:rounded-md text-blue-400 hover:text-white hover:bg-blue-300 hover:shadow"/></button>
-                        <button className='text-blue w-1/3 text-xl' onClick={()=>setViewDetail(state=>!state)}><ReadOutlined className="p-1 hover:rounded-md text-green-400 hover:text-white hover:bg-blue-500 hover:shadow"/></button>
-                        <button className='w-1/3 text-cyan-300 text-xl' onClick={()=>HandleDelete(a)}><DeleteOutlined className="p-1 hover:shadow hover:rounded-md hover:bg-red-300 hover:text-white" /></button>
-                      </div>
-                      : <button onClick={()=>SaveChange(a)}
-                        className="font-medium text-blue-600 dark:text-blue-500 hover:underline">SaveChange</button>
-                    }
-                  </td>
-                  {
-                    viewDetail&&<ApplicationDetail application={a} setShowDetail={setViewDetail}/>
-                  }
-                </tr>
+                <ApplicationItem application={a} setIsAdd={setIsAdd}/>
               ))
             }
           </tbody>

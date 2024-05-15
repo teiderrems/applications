@@ -42,7 +42,7 @@ export default function Register() {
             const res=await Axios.post("users",new FormData(document.querySelector('form')!));
             if (res.status==201 || res.status==200) {
                 setResponse({...response,isSuccess:true,isLoading:false,data:res.data});
-                router.push('/login');
+                router.push('/check_email');
             }
         } catch (error:any) {
             setIsSubmit(state=>!state);

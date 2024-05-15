@@ -30,7 +30,7 @@ export default function UserItem({user,setIsAdd}:{user:UserType,setIsAdd:Dispatc
 
   async function HandleDelete(a:UserType): Promise<void> {
     try {
-      const res = await Axios.delete(`users/${currentUser._id}`,{
+      const res = await Axios.delete(`users/${a._id}`,{
         headers: {
           "Authorization": window.sessionStorage ? ("Bearer " + window.sessionStorage.getItem("token")) : ''
         }
@@ -105,21 +105,21 @@ export default function UserItem({user,setIsAdd}:{user:UserType,setIsAdd:Dispatc
   return (
     <tr key={user._id} className={`border-b dark:bg-gray-800 hover:cursor-pointer dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 ${user.Role == 'reject' ? 'bg-red-300' : 'bg-white'}`}>
                   
-      <td scope="row" className="px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+      <td scope="row" className="px-4 py-4 capitalize font-medium text-gray-900 whitespace-nowrap dark:text-white">
         {user.Username}
       </td>
       <td className="px-4 py-4">
         {user.Email}
       </td>
-      <td className="px-4 py-4">
+      <td className="px-4 py-4 capitalize">
         {user.Firstname}
       </td>
-      <td className="px-4 py-4">
+      <td className="px-4 py-4 capitalize">
         {user.Lastname}
       </td>
-      <td className="px-4 py-4">
+      <td className="px-4 py-4 capitalize">
         {
-          showDetail ? <select onChange={(e) => {
+          showDetail ? <select className=" capitalize" onChange={(e) => {
             setCurrentUser((state: UserType) => {
               return { ...user, Role: (e.target.value != user.Role) ? e.target.value : user.Role }
             });
