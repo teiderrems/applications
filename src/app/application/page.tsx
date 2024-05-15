@@ -149,7 +149,7 @@ export default function Application() {
           <tbody>
             {
               response.data?.map((a: Props) => (
-                <ApplicationItem application={a} setIsAdd={setIsAdd}/>
+                <ApplicationItem key={a._id} application={a} setIsAdd={setIsAdd}/>
               ))
             }
           </tbody>
