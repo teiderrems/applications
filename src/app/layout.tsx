@@ -13,6 +13,7 @@ import burgerImg from '../../public/menu.svg';
 import  Head  from "next/head";
 import { EditOutlined, HomeOutlined, LogoutOutlined, ProfileOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import { Avatar, Dropdown, MenuProps, Space } from "antd";
+import Axios from "@/hooks/axios.config";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -33,6 +34,7 @@ export default function RootLayout({
   const [token,setToken]=useState<any>(undefined);
   const [image,setImage]=useState(burgerImg);
   const [user,setUser]=useState<any>(undefined);
+  const [profile,setProfile]=useState<any>(undefined);
   const router=useRouter();
     
     const LogOut=()=>{
@@ -75,7 +77,19 @@ export default function RootLayout({
     if (window.sessionStorage&&(sessionStorage.getItem("token"))) {
       setUser((state: any)=>state=JSON.parse(atob(sessionStorage.getItem("token")!.split('.')[1])));
     }
-  },[image,togel,token,router,window && sessionStorage.getItem('token')]);
+    const getProfile=async()=>{
+      try {
+        const res=await Axios.get(`profile/${user.profileId}`);
+        const imgb64=Buffer.from((res.data.image)).toString('base64');
+        setProfile((state: string)=>state=`data:${res.data.minetype};base64,${imgb64}`);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    if (user && user.profileId) {
+      getProfile();
+    }
+  },[image,togel,token,router,profile,window && sessionStorage.getItem('token')]);
 
   return (
       <html lang="en">
@@ -128,7 +142,7 @@ export default function RootLayout({
                     <Dropdown menu={{ items }}>
                       <a onClick={(e) => e.preventDefault()}>
                         <Space>
-                        <Avatar icon={<Image width={75} priority height={75} src={(user.profile)?user.profile:profileImg} alt="profile"/>} /> 
+                        <Avatar icon={<Image width={75} priority height={75} src={(profile)?profile:profileImg} alt="profile"/>} /> 
                         </Space>
                       </a>
                     </Dropdown>

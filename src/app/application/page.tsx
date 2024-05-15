@@ -115,7 +115,7 @@ export default function Application() {
       }
     }
     findAll();
-  }, [limit, page, url, prev, token, next, pathname, response?.data, router, isAdd, reload, showDetail]);
+  }, [limit, page, url, prev, token, next, pathname,window&&sessionStorage.getItem('token'), router, isAdd, reload, showDetail]);
 
   if (response?.isLoading) {
     return (

@@ -50,8 +50,8 @@ function Login() {
   }
   const [show,setShow]=useState(false);
   useEffect(()=>{
-
-  },[query,isSubmit]);
+    sessionStorage.removeItem('token');
+  },[query,isSubmit,window && sessionStorage.getItem('token')]);
 
   return (
     <div className="wrap-form">

@@ -5,15 +5,17 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { CustomType } from "../components/ApplicationDetail";
 import UserItem, { UserType } from "../components/UserItem";
-import { AppstoreAddOutlined, DoubleLeftOutlined, DoubleRightOutlined } from "@ant-design/icons";
+import { AppstoreAddOutlined } from "@ant-design/icons";
 
 import AddUser from "../components/AddUser";
 import axios from "axios";
 
+
+
 export default function UserList() {
 
 
-    const router=useRouter();
+  const router=useRouter();
   const pathname=usePathname();
   const [token,setToken]=useState<string>();
   const [response,setResponse]=useState<CustomType>({ isLoading: false, status: 0, data: undefined,error:undefined, isSuccess: false });
@@ -24,7 +26,8 @@ export default function UserList() {
   const [reload,setReload]=useState(false);
   const [url,setUrl]=useState<any>(`${Axios.defaults.baseURL}`+`users?page=${page}&limit=${limit}`);
   const [next,setNext]=useState(null);
-    const [prev,setPrev]=useState(null);
+  const [prev,setPrev]=useState(null);
+  
   
   useEffect(()=>{
     const findAll=async()=>{
@@ -66,13 +69,15 @@ export default function UserList() {
                 setReload(false);
               }
             }
-            if (error.response.status==401) {
+            if (error.response.Role==401) {
                 router.push(`/`);
             }
         }
     }
     findAll();
-  },[token,pathname,isAdd,reload,response,url,router]);
+    
+  },[token,pathname,isAdd,window&&sessionStorage.getItem('token'),reload,url,router]);
+
 
   if (response?.isLoading) {
     return(
@@ -91,35 +96,65 @@ export default function UserList() {
   }
   
   return (
-    <div className='container mx-auto flex-1 overflow-hidden flex flex-col'>
-    <div className="flex justify-end h-7">
-    {
-      (!handleAdd)?<button className="rounded-lg hover:text-blue-500 text-center h-full w-10 " onClick={()=>setHandleAdd(!handleAdd)}><AppstoreAddOutlined className="h-5/6 w-5/6 m-2"/></button>:<AddUser setIsAdd={setIsAdd} setHandleAdd={setHandleAdd}/>
-    }
-    </div>
-    <section className="flex flex-col flex-1 mt-2 space-y-2">
-      <div className="flex-1 mx-4 flex md:flex-row flex-col flex-wrap">
+    <div className='flex-1 flex overflow-hidden flex-col space-y-5'>
+      <div className="flex justify-end h-7">
         {
-          response?.data?.map((u: UserType)=>{
-            return (<UserItem key={u._id} setIsAdd={setIsAdd} user={u}/>)
-          })
+          (!handleAdd) ? <button className="rounded-lg  text-center h-full w-7 text-2xl md:text-xl  mr-4 mb-2 hover:text-blue-400" onClick={() => setHandleAdd(!handleAdd)}><AppstoreAddOutlined className="h-5/6 w-5/6 m-2" /></button> : <AddUser setHandleAdd={setHandleAdd} setIsAdd={setIsAdd} />
         }
       </div>
-      {
-        next &&(
-          <div className="flex justify-end mb-1 mx-4 space-x-3  items-end basis-1">
-          <button onClick={() => setUrl(prev)}
-          className="flex hover:bg-blue-400 hover:text-white space-x-1 px-1 items-center justify-center shadow rounded-md">
-            <DoubleLeftOutlined /><span>prev</span>
-          </button>
-          <button onClick={() => setUrl(next)}
-          className={`flex hover:bg-blue-400 hover:text-white  px-1 items-center space-x-1 shadow justify-center rounded-md`} disabled>
-            <span>next</span><DoubleRightOutlined />
-          </button>
-        </div>
-        )
-      }
-    </section>
-  </div>
-  )
+      <div className="shadow-md sm:rounded-lg w-full">
+        <table className="w-full text-sm px-2 text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+              <th scope="col" className="px-4 py-3">
+                Username
+              </th>
+              <th scope="col" className="px-4 py-3">
+                Email
+              </th>
+              <th scope="col" className="px-4 py-3">
+                Firstname
+              </th>
+              <th scope="col" className="px-4 py-3">
+                Lastname
+              </th>
+              <th scope="col" className="px-4 py-3">
+                Role
+              </th>
+              <th scope="col" className="px-4 py-3">
+                Date Création
+              </th>
+              <th scope="col" className="px-4 py-3">
+                Action
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              response.data?.map((u: UserType) => (
+                  <UserItem key={u._id} user={u} setIsAdd={setIsAdd}/>
+                ))
+            }
+          </tbody>
+        </table>
+        {
+          next && <nav className="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
+            <span className="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">Showing <span className="font-semibold text-gray-900 dark:text-white">1-10</span> of <span className="font-semibold text-gray-900 dark:text-white">1000</span></span>
+            <ul className="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
+              <li onClick={() => setUrl(prev)}>
+                <a href="#" className="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a>
+              </li>
+              <li>
+                <a href="#" className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</a>
+              </li>
+              <li onClick={() => setUrl(next)}>
+                <a href="#" className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
+              </li>
+            </ul>
+          </nav>
+        }
+      </div>
+    </div>
+
+)
 }

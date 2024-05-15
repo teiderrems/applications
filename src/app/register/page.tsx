@@ -3,7 +3,7 @@
 import Axios from "@/hooks/axios.config";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {  useRef, useState } from "react"
+import {  useEffect, useRef, useState } from "react"
 import { CustomType } from "../components/ApplicationDetail";
 import { EyeInvisibleOutlined, EyeOutlined, LoadingOutlined } from "@ant-design/icons";
 import { PutBlobResult } from "@vercel/blob";
@@ -25,6 +25,7 @@ export default function Register() {
     });
     const router=useRouter();
     
+    const userInfo=useRef();
     const [response,setResponse]=useState<CustomType>();
     const [show,setShow]=useState(false);
     const [showC,setShowC]=useState(false);
@@ -36,60 +37,21 @@ export default function Register() {
         e.preventDefault();
         setIsSubmit(!isSubmit);
         setResponse({...response,status:0,data:null,isLoading:true,isError:false,error:"",isSuccess:false});
-        const result= await uploadProfile();
+        // const result= await uploadProfile();
         try {
-            if (result.includes('500')) {
-                const res=await Axios.post("users",{Username:user.Username,Email:user.Email,Password:user.Password,Profile:null});
-                if (res.status==201 || res.status==200) {
-                    setResponse({...response,isSuccess:true,isLoading:false,data:res.data});
-                    router.push('/login');
-                }
-            }
-            if (blob) {
-                const res=await Axios.post("users",{Username:user.Username,Email:user.Email,Password:user.Password,Profile:blob.url});
-                if (res.status==201 || res.status==200) {
-                    router.push('/login');
-                    setResponse({...response,isSuccess:true,isLoading:false,data:res.data});
-                }
+            const res=await Axios.post("users",new FormData(document.querySelector('form')!));
+            if (res.status==201 || res.status==200) {
+                setResponse({...response,isSuccess:true,isLoading:false,data:res.data});
+                router.push('/login');
             }
         } catch (error:any) {
-            setIsSubmit(!isSubmit);
+            setIsSubmit(state=>!state);
             setResponse({...response,error:"register failed please try again",isError:true,isLoading:false});
         }
     }
-
-
-    const uploadProfile=async()=>{
-
-        if (!inputFileRef.current?.files) {
-            throw new Error("No file selected");
-        }
-
-        try {
-            const file = inputFileRef.current.files[0];
-            const res = await fetch(
-                `/api/avatar/upload?filename=${file.name}`,
-                {
-                method: 'POST',
-                body: file,
-                },
-            );
-            if (!res.ok) {
-                setResponse({...response,status:0,data:null,isLoading:true,isError:true,error:"profile picture upload failed",isSuccess:false});
-                setIsSubmit(state=>!state);
-                return res.status.toString();
-            }
-            const newBlob = (await res.json()) as PutBlobResult;
-            setBlob(newBlob);
-            return res.status.toString();
-        } catch (error:any) {
-            setResponse({...response,status:0,data:null,isLoading:true,isError:true,error:"profile picture upload failed",isSuccess:false});
-            setIsSubmit(state=>!state);
-            return error.message;
-        }
-    }
-
-
+    useEffect(()=>{
+        sessionStorage.removeItem('token');
+    },[window && sessionStorage.getItem('token')])
   return (
     <div className="wrap-form">
         <form action="" onSubmit={HandleSubmit} className="md:w-3/5 w-5/6 h-full flex md:space-y-4 flex-col items-center bg-white justify-center" encType="multipart/form-data">

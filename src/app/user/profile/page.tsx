@@ -20,6 +20,7 @@ export default function UserDetailInfo() {
     const pathname=usePathname();
     const [reload,setReload]=useState(false);
     const [edit,setEdit]=useState(false);
+    const [profile,setProfile]=useState<any>(undefined);
     const HandleDelete=async()=>{
         
         
@@ -96,10 +97,20 @@ export default function UserDetailInfo() {
                 }
             }
         }
+        const getProfile=async()=>{
+          try {
+            const res=await Axios.get(`profile/${response.data.ProfileId}`);
+            const imgb64=Buffer.from((res.data.image)).toString('base64');
+            setProfile((state: string)=>state=`data:${res.data.minetype};base64,${imgb64}`);
+          } catch (error) {
+            console.log(error);
+          }
+        }
         if (param) {
             getUser();
+            getProfile();
         }
-    },[param,reload,router,pathname]);
+    },[param,reload,router,response?.data?.ProfileId,profile,pathname]);
 
     if (response?.isLoading || !param) {
         return (
@@ -119,7 +130,7 @@ export default function UserDetailInfo() {
         <div className='flex-1 flex flex-col items-center justify-center'>
             <div className='flex-1 space-y-2 mt-5 flex flex-col w-5/6 h-5/6'>
                 <div className='flex-1 flex md:flex-row flex-col rounded-md shadow'>
-                    <Image className=' md:w-2/6 w-full md:rounded-l-lg rounded-t-md float-start' width={100} height={100} src={(response?.data?.Profile)?(response?.data?.Profile):profileImg} alt="profile"/>
+                    <Image className=' md:w-2/6 w-full md:rounded-l-lg rounded-t-md float-start' width={100} height={100} src={(response?.data?.ProfileId)?(profile):profileImg} alt="profile"/>
                     <div  className='flex-1 flex flex-col justify-between md:justify-center border-l'>
                         <p className='text-justify border flex-1 items-center flex justify-between px-2'><span className='w-4/5'>{response?.data?.Username}</span> </p>
                         <p className='text-justify border flex-1 items-center flex justify-between px-2'><span className='w-4/5'>{response?.data?.Email}</span></p>
