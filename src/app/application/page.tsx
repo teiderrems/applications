@@ -120,7 +120,7 @@ export default function Application() {
         }
       </div>
       <div className="shadow-md sm:rounded-lg w-full">
-        <table className="w-full md:w-11/12 overflow-x-auto overflow-y-hidden text-sm px-2 text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <table className="w-full overflow-x-auto overflow-y-hidden text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" className="px-1 py-1">
