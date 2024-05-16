@@ -105,10 +105,10 @@ export default function Application() {
 
   return (
     <div className='flex-1 flex overflow-hidden mx-2 flex-col space-y-5'>
-      <div className="flex justify-end space-x-3 h-7">
-      <div className="flex italic space-x-2 shadow hover:shadow-blue-400 rounded-md">
-        <label htmlFor="filter" className="mt-2 h-5/6">Filter :</label>
-        <select className=" capitalize mt-2 h-5/6" onChange={(e) => {
+      <div className="flex justify-end space-x-3 h-10">
+      <div className="flex italic mt-1 space-x-2 shadow hover:shadow-blue-400 rounded-md">
+        <label htmlFor="filter" className="p-1 w-1/2 border-r h-full">Filter</label>
+        <select className=" capitalize p-1 h-full" onChange={(e) => {
             setFilter(e.target.value);
             setReload(!reload);              
           }}>
@@ -119,7 +119,7 @@ export default function Application() {
           </select>
       </div>
         {
-          (!handleAdd) ? <button className="rounded-lg  text-center h-full w-7 text-2xl md:text-xl  mr-4 mb-2 hover:text-blue-400" onClick={() => setHandleAdd(!handleAdd)}><AppstoreAddOutlined className="h-5/6 w-5/6 m-2" /></button> : <AddApplication setHandleAdd={setHandleAdd} setIsAdd={setIsAdd} />
+          (!handleAdd) ? <button className="rounded-lg  text-center h-full w-10 text-2xl  hover:text-blue-400" onClick={() => setHandleAdd(!handleAdd)}><AppstoreAddOutlined className="h-full w-full " /></button> : <AddApplication setHandleAdd={setHandleAdd} setIsAdd={setIsAdd} />
         }
       </div>
       <div className="shadow-md sm:rounded-lg w-full">

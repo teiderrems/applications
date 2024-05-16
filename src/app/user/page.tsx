@@ -98,10 +98,10 @@ export default function UserList() {
   
   return (
     <div className='flex-1 flex overflow-hidden flex-col  mx-2 space-y-5'>
-      <div className="flex justify-end space-x-3 h-7">
-      <div className="flex space-x-2 italic shadow rounded-md hover:shadow-blue-400">
-        <label htmlFor="filter"  className="mt-2 h-5/6">Filter</label>
-        <select className=" capitalize rounded-md shadow-md hover:shadow-blue-400 mt-2 h-5/6" onChange={(e) => {
+      <div className="flex justify-end space-x-3 h-10">
+      <div className="flex space-x-2 mt-2 items-center italic shadow rounded-md hover:shadow-blue-400">
+        <label htmlFor="filter"  className="h-full w-1/2 border-r p-1">Filter</label>
+        <select className=" capitalize h-full p-1" onChange={(e) => {
               setFilter(e.target.value);
               setReload(!reload)
             }}>
@@ -112,7 +112,7 @@ export default function UserList() {
             </select>
       </div>
         {
-          (!handleAdd) ? <button className="rounded-lg  text-center h-full w-7 text-2xl md:text-xl mb-2 hover:text-blue-400" onClick={() => setHandleAdd(!handleAdd)}><AppstoreAddOutlined className="h-5/6 w-5/6 m-2" /></button> : <AddUser setHandleAdd={setHandleAdd} setIsAdd={setIsAdd} />
+          (!handleAdd) ? <button className="rounded-lg  text-center h-full w-10 text-2xl  hover:text-blue-400" onClick={() => setHandleAdd(!handleAdd)}><AppstoreAddOutlined className="h-full w-full " /></button> : <AddUser setHandleAdd={setHandleAdd} setIsAdd={setIsAdd} />
         }
       </div>
       <div className="shadow-md sm:rounded-lg w-full">
