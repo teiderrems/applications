@@ -13,14 +13,16 @@ export default function UserDetail({user,setShowDetail,setIsAdd,canEdit}:{canEdi
     const pathname=usePathname();
     const [reload,setReload]=useState(false);
     const router=useRouter();
-    const HandleClick=async()=>{
+    const HandleClick=async(e:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
+        e.preventDefault();
         setResponse({...response,isLoading:true,data:null,isError:false,isSuccess:false,error:"",status:0});
+        const data=new FormData(document.querySelector('form')!);
         try {
-            const res=await Axios.put("users/"+user._id,currentUser,{
-                headers:{
-                    "Authorization":window.sessionStorage?("Bearer "+window.sessionStorage.getItem("token")):''
-                }
-            });
+          const res=await Axios.put("users/"+user._id,data,{
+            headers:{
+              "Authorization":window.sessionStorage?("Bearer "+window.sessionStorage.getItem("token")):''
+            }
+          });
             if (res.status==201 || res.status==200) {
                 setShowDetail(state=>!state);
                 setResponse({...response,isLoading:false,status:res.status,data:res.data,isSuccess:true})
@@ -50,8 +52,8 @@ export default function UserDetail({user,setShowDetail,setIsAdd,canEdit}:{canEdi
 
     }
 
-    const HandleDelete=async()=>{
-        
+    const HandleDelete=async(e:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
+        e.preventDefault();
         setResponse({...response,isLoading:true,data:null,isError:false,isSuccess:false,error:"",status:0});
         try {
             const res=await Axios.delete("users/"+user._id,{
@@ -93,25 +95,35 @@ export default function UserDetail({user,setShowDetail,setIsAdd,canEdit}:{canEdi
   return (
    <div className="fixed inset-0  flex justify-center items-center flex-col">
         <div onClick={()=>setShowDetail(state=>!state)} className="absolute inset-0 bg-blue-50 z-0"></div>
-        <div className="flex flex-col w-4/6 h-4/6  md:h-5/6 md:p-5 p-4 justify-center space-y-4 items-center bg-white z-10 opacity-100 rounded-md shadow">
-            <div className="w-full h-32 md:h-32 flex md:mt-4 md:space-x-10  md:space-y-0 space-y-4 md:flex-row flex-col">
-                <input type="text" disabled={canEdit} onChange={(e)=>setCurrentUser({...currentUser,Username:e.target.value})} placeholder="Enter your Username" className="md:w-5/6 w-full flex-1 pl-1 md:h-4/6 shadow shadow-blue-200 border-2 rounded-md" id="username" value={currentUser.Username} />
-                <input type="text" value={currentUser.Role} disabled={(!canEdit)} onChange={(e)=>setCurrentUser({...currentUser,Role:e.target.value})} className="flex-1 md:h-4/6 shadow pl-1 shadow-blue-200 border-2 rounded-md"/>
+        <form className="flex flex-col md:w-3/6 w-4/6 h-5/6 px-4 md:h-5/6 justify-between space-y-3 bg-white z-10 opacity-100 rounded-md shadow" encType="multipart/form-data">
+            <h1 className=" text-justify px-4 text-gray-400 my-1">Let is updating your personal informations</h1>
+            <div className="w-full flex-1 flex space-x-4 px-4 flex-row">
+                <div className="flex-1">
+                <label htmlFor="Profile" className="text-xl">Username</label>
+                <input type="text" disabled={canEdit} onChange={(e)=>setCurrentUser({...currentUser,Username:e.target.value})} placeholder="Enter your Username" className="md:w-5/6  flex-1 pl-1 h-4/6 shadow shadow-blue-200 border-2 rounded-md" id="username" value={currentUser.Username} />
+                </div>
+                <div className="flex-1 flex flex-col">
+                    <label htmlFor="Profile" className="text-xl">Profile</label>
+                    <input type="file" name="profile" placeholder="choose your profile" className=" hover:cursor-pointer w-full p-2 h-3/4 rounded-md shadow" id="profile" />
+                </div>
             </div>
-            <div className=" w-full h-16 flex  flex-col">
+            <div className=" w-full  px-4 flex-1 flex  flex-col">
+                <label htmlFor="Profile" className="text-xl">Email</label>
                 <input name="Email" disabled={canEdit} onChange={(e)=>setCurrentUser({...currentUser,Email:e.target.value})} type="email"  className="w-full flex-1 h-5/6 px-2 md:h-4/6 shadow shadow-blue-200 border-2 rounded-md" id="email" value={currentUser.Email}></input>
             </div>
-            <div className=" w-full h-16 flex  flex-col">
+            <div className=" w-full  px-4 flex-1 flex  flex-col">
+                <label htmlFor="Profile" className="text-xl">Firstname</label>
                 <input name="Firstname" disabled={canEdit} onChange={(e)=>setCurrentUser({...currentUser,Firstname:e.target.value})}  className="w-full flex-1 h-5/6 px-2 md:h-4/6 shadow shadow-blue-200 border-2 rounded-md" id="firstname" placeholder="Enter your Firstname" value={currentUser.Firstname}></input>
             </div>
-            <div className="w-full h-16 md:h-20 flex  flex-col">
+            <div className="w-full  px-4 flex-1 flex  flex-col">
+                <label htmlFor="Profile" className="text-xl">Lastname</label>
                 <input name="Lastname" disabled={canEdit} onChange={(e)=>setCurrentUser({...currentUser,Lastname:e.target.value})} placeholder="Enter your Lastname" className="w-full flex-1 h-5/6 px-2 md:h-4/6 shadow shadow-blue-200 border-2 rounded-md" id="lastname" value={currentUser.Lastname}></input>
             </div>
-            <div className="flex w-full h-32 md:space-x-36 md:flex-row flex-col justify-between">
-                <button onClick={HandleClick} className=" bg-blue-500 md:w-1/12 flex-1 md:h-2/3  w-full text-xl hover:text-white mb-2 md:mb-0 rounded-md shadow">Save</button>
-                <button onClick={HandleDelete} className=" bg-red-400 md:w-1/12 flex-1 md:h-2/3  w-full text-xl hover:text-white rounded-md shadow" >Delete</button>
+            <div className="flex w-full  px-4 flex-1 md:space-x-36 md:flex-row flex-col justify-between">
+                <button onClick={(e)=>HandleClick(e)} type="submit" className=" bg-blue-500 md:w-1/12 flex-1 md:h-2/3  w-full text-xl hover:text-white mb-2 md:mb-0 rounded-md shadow">Save</button>
+                <button onClick={HandleDelete} type="submit" className=" bg-red-400 md:w-1/12 flex-1 md:h-2/3  w-full text-xl hover:text-white rounded-md shadow" >Delete</button>
             </div>
-        </div>
+        </form>
    </div>
   )
 }

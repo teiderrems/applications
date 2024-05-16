@@ -130,7 +130,7 @@ export default function UserDetailInfo() {
         <div className='flex-1 flex flex-col items-center justify-center'>
             <div className='flex-1 space-y-2 mt-5 flex flex-col w-5/6 h-5/6'>
                 <div className='flex-1 flex md:flex-row flex-col rounded-md shadow'>
-                    <Image className=' flex-1 w-full md:rounded-l-lg rounded-t-md float-start' width={100} height={100} src={(response?.data?.ProfileId)?(profile):profileImg} alt="profile"/>
+                    <Image className=' md:w-1/2 w-full md:rounded-l-lg rounded-t-md float-start' width={100} height={100} src={(response?.data?.ProfileId)?(profile):profileImg} alt="profile"/>
                     <div  className='flex-1 flex flex-col md:rounded-r-lg justify-between md:justify-center'>
                         <p className='text-justify border-b flex-1 items-center flex justify-between px-2'><span className='w-4/5'>{response?.data?.Username}</span> </p>
                         <p className='text-justify border-b flex-1 items-center flex justify-between px-2'><span className='w-4/5'>{response?.data?.Email}</span></p>
