@@ -9,7 +9,7 @@ import { CustomType, Props } from "../components/ApplicationDetail";
 import ApplicationItem from "../components/ApplicationItem";
 
 
-const Status = ['pending', 'postponed', 'success', 'reject'];
+const Status = ['all','pending', 'postponed', 'success', 'reject'];
 
 
 export default function Application() {
@@ -106,15 +106,18 @@ export default function Application() {
   return (
     <div className='flex-1 flex overflow-hidden mx-2 flex-col space-y-5'>
       <div className="flex justify-end space-x-3 h-7">
-      <select className=" capitalize rounded-md shadow-md hover:shadow-blue-400 mt-2 h-5/6" onChange={(e) => {
-          setFilter(e.target.value);
-          setReload(!reload);              
-        }}>
-            <option value={filter} selected>{filter}</option>
-            {Status.filter(s => s !== filter).map(s => (
-                <option key={s} value={s}>{s}</option>
-            ))}
-        </select>
+      <div className="flex space-x-2">
+        <label htmlFor="filter">Filter</label>
+        <select className=" capitalize rounded-md shadow-md hover:shadow-blue-400 mt-2 h-5/6" onChange={(e) => {
+            setFilter(e.target.value);
+            setReload(!reload);              
+          }}>
+              <option value={filter} selected>{filter}</option>
+              {Status.filter(s => s !== filter).map(s => (
+                  <option key={s} value={s}>{s}</option>
+              ))}
+          </select>
+      </div>
         {
           (!handleAdd) ? <button className="rounded-lg  text-center h-full w-7 text-2xl md:text-xl  mr-4 mb-2 hover:text-blue-400" onClick={() => setHandleAdd(!handleAdd)}><AppstoreAddOutlined className="h-5/6 w-5/6 m-2" /></button> : <AddApplication setHandleAdd={setHandleAdd} setIsAdd={setIsAdd} />
         }

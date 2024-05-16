@@ -10,7 +10,7 @@ import { AppstoreAddOutlined } from "@ant-design/icons";
 import AddUser from "../components/AddUser";
 import axios from "axios";
 
-const Role = ['admin', 'guest', 'user'];
+const Role = ['all','admin', 'guest', 'user'];
 
 export default function UserList() {
 
@@ -99,15 +99,18 @@ export default function UserList() {
   return (
     <div className='flex-1 flex overflow-hidden flex-col  mx-2 space-y-5'>
       <div className="flex justify-end space-x-3 h-7">
-      <select className=" capitalize rounded-md shadow-md hover:shadow-blue-400 mt-2 h-5/6" onChange={(e) => {
-            setFilter(e.target.value);
-            setReload(!reload)
-          }}>
-            <option value={filter} selected>{filter}</option>
-            {Role.filter(s => s !== filter).map(s => (
-              <option key={s} value={s}>{s}</option>
-            ))}
-          </select>
+      <div className="flex space-x-2">
+        <label htmlFor="filter">Filter</label>
+        <select className=" capitalize rounded-md shadow-md hover:shadow-blue-400 mt-2 h-5/6" onChange={(e) => {
+              setFilter(e.target.value);
+              setReload(!reload)
+            }}>
+              <option value={filter} selected>{filter}</option>
+              {Role.filter(s => s !== filter).map(s => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </select>
+      </div>
         {
           (!handleAdd) ? <button className="rounded-lg  text-center h-full w-7 text-2xl md:text-xl mb-2 hover:text-blue-400" onClick={() => setHandleAdd(!handleAdd)}><AppstoreAddOutlined className="h-5/6 w-5/6 m-2" /></button> : <AddUser setHandleAdd={setHandleAdd} setIsAdd={setIsAdd} />
         }
