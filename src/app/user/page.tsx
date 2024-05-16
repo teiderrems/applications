@@ -99,7 +99,7 @@ export default function UserList() {
   return (
     <div className='flex-1 flex overflow-hidden flex-col  mx-2 space-y-5'>
       <div className="flex justify-end space-x-3 h-7">
-      <div className="flex space-x-2 shadow rounded-md hover:shadow-blue-400">
+      <div className="flex space-x-2 italic shadow rounded-md hover:shadow-blue-400">
         <label htmlFor="filter"  className="mt-2 h-5/6">Filter</label>
         <select className=" capitalize rounded-md shadow-md hover:shadow-blue-400 mt-2 h-5/6" onChange={(e) => {
               setFilter(e.target.value);
