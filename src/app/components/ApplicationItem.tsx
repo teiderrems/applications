@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react'
+import React, { Dispatch, SetStateAction, use, useEffect, useState } from 'react'
 import ApplicationDetail, { Props } from './ApplicationDetail';
 import { usePathname, useRouter } from 'next/navigation';
 import Axios from '@/hooks/axios.config';
@@ -16,6 +16,10 @@ export default function ApplicationItem({ application, setIsAdd }: { application
     const [viewDetail, setViewDetail] = useState(false);
     const [showDetail, setShowDetail] = useState(false);
 
+    useEffect(()=>{
+
+    },[application,reload,pathname,token,currentApp])
+
     async function HandleDelete(a: Props): Promise<void> {
         try {
             const res = await Axios.delete(`applications/${currentApp._id}`, {
@@ -24,7 +28,7 @@ export default function ApplicationItem({ application, setIsAdd }: { application
                 }
             });
             if (res.status == 204 || res.status == 200) {
-                setReload(true);
+                setReload(state=>!state);
             }
         } catch (error: any) {
             console.log(error);
@@ -44,7 +48,7 @@ export default function ApplicationItem({ application, setIsAdd }: { application
                     if (err.response.status == 401) {
                         router.push(`/login?ReturnUrl=${pathname}`);
                     }
-                    setReload(false);
+                    setReload(state=>!state);
                 }
             }
         }
@@ -60,7 +64,7 @@ export default function ApplicationItem({ application, setIsAdd }: { application
                     }
                 });
                 if (res.status == 201 || res.status == 200) {
-                    setReload(true);
+                    setReload(state=>!state);
                 }
             } catch (error: any) {
                 if (error.response.status == 401) {
@@ -70,7 +74,7 @@ export default function ApplicationItem({ application, setIsAdd }: { application
                             setToken(res.data.token);
                             sessionStorage.setItem("token", res.data.token);
                             if (sessionStorage.getItem("token")) {
-                                setReload(true);
+                                setReload(state=>!state);
                             }
                         }
                     } catch (err: any) {
@@ -89,16 +93,16 @@ export default function ApplicationItem({ application, setIsAdd }: { application
     return (
         <tr key={application._id} className={`border-b dark:bg-gray-800 hover:cursor-pointer dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 ${application.Status == 'reject' ? 'bg-red-300' : 'bg-white'}`}>
 
-            <td scope="row" className="px-4 py-4 font-medium capitalize text-gray-900 whitespace-nowrap dark:text-white">
+            <td scope="row" className="px-1 py-1 font-medium capitalize text-gray-900 whitespace-nowrap dark:text-white">
                 {application.Title}
             </td>
-            <td className="px-4 py-4 capitalize">
+            <td className="px-1 py-1 capitalize">
                 {application.Entreprise}
             </td>
-            <td className="px-4 py-4 capitalize">
+            <td className="px-1 py-1 capitalize">
                 {application.Adresse}
             </td>
-            <td className="px-4 py-4 capitalize">
+            <td className="px-1 py-1 capitalize">
                 {
                     showDetail ? <select onChange={(e) => {
                         setCurrentApp((state: Props) => {
@@ -112,13 +116,13 @@ export default function ApplicationItem({ application, setIsAdd }: { application
                     </select> : <>{application.Status}</>
                 }
             </td>
-            <td className="px-4 py-4 capitalize">
+            <td className="px-1 py-1 capitalize">
                 {application.TypeContrat}
             </td>
-            <td className="px-4 py-4">
+            <td className="px-1 py-1">
                 {application.CreatedAt?.split('T')[0].split('-').reverse().join('/')}
             </td>
-            <td className="px-4 py-4">
+            <td className="px-1 py-1">
                 {(!showDetail) ?
                     <div className='flex space-x-2'>
                         <button className='text-blue w-1/3 text-xl' onClick={() => setShowDetail(state => !state)}><EditOutlined className="p-1 hover:rounded-md text-blue-400 hover:text-white hover:bg-blue-300 hover:shadow" /></button>

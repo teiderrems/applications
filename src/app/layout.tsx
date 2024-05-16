@@ -118,7 +118,7 @@ export default function RootLayout({
               ):(
                 <nav className="flex flex-col flex-1 py-3 space-y-6 text-justify w-full">
                     <Link href="/register" className={`px-2 text-xl ${pathname=="/register"&&'active'}`}>Regiter</Link>
-                    <Link href="/login" className={`px-2 text-2xl ${pathname=="/login"?'active':''}`}>Login</Link>
+                    {/* <Link href="/login" className={`px-2 text-2xl ${pathname=="/login"?'active':''}`}>Login</Link> */}
                 </nav>
               )
             }

@@ -97,7 +97,7 @@ export default function UserList() {
   }
   
   return (
-    <div className='flex-1 flex overflow-hidden flex-col space-y-5'>
+    <div className='flex-1 flex overflow-hidden flex-col  mx-2 space-y-5'>
       <div className="flex justify-end space-x-3 h-7">
       <select className=" capitalize rounded-md shadow-md hover:shadow-blue-400 mt-2 h-5/6" onChange={(e) => {
             setFilter(e.target.value);
@@ -109,32 +109,32 @@ export default function UserList() {
             ))}
           </select>
         {
-          (!handleAdd) ? <button className="rounded-lg  text-center h-full w-7 text-2xl md:text-xl  mr-4 mb-2 hover:text-blue-400" onClick={() => setHandleAdd(!handleAdd)}><AppstoreAddOutlined className="h-5/6 w-5/6 m-2" /></button> : <AddUser setHandleAdd={setHandleAdd} setIsAdd={setIsAdd} />
+          (!handleAdd) ? <button className="rounded-lg  text-center h-full w-7 text-2xl md:text-xl mb-2 hover:text-blue-400" onClick={() => setHandleAdd(!handleAdd)}><AppstoreAddOutlined className="h-5/6 w-5/6 m-2" /></button> : <AddUser setHandleAdd={setHandleAdd} setIsAdd={setIsAdd} />
         }
       </div>
       <div className="shadow-md sm:rounded-lg w-full">
-        <table className="w-full text-sm px-2 text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <table className="w-full md:w-11/12 text-sm px-2 text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-              <th scope="col" className="px-4 py-3">
+              <th scope="col" className="px-1 py-1">
                 Username
               </th>
-              <th scope="col" className="px-4 py-3">
+              <th scope="col" className="px-1 py-1">
                 Email
               </th>
-              <th scope="col" className="px-4 py-3">
+              <th scope="col" className="px-1 py-1">
                 Firstname
               </th>
-              <th scope="col" className="px-4 py-3">
+              <th scope="col" className="px-1 py-1">
                 Lastname
               </th>
-              <th scope="col" className="px-4 py-3">
+              <th scope="col" className="px-1 py-1">
                 Role
               </th>
-              <th scope="col" className="px-4 py-3">
+              <th scope="col" className="px-1 py-1">
                 Date Création
               </th>
-              <th scope="col" className="px-4 py-3">
+              <th scope="col" className="px-1 py-1">
                 Action
               </th>
             </tr>

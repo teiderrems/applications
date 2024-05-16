@@ -104,7 +104,7 @@ export default function Application() {
 
 
   return (
-    <div className='flex-1 flex overflow-hidden flex-col space-y-5'>
+    <div className='flex-1 flex overflow-hidden mx-2 flex-col space-y-5'>
       <div className="flex justify-end space-x-3 h-7">
       <select className=" capitalize rounded-md shadow-md hover:shadow-blue-400 mt-2 h-5/6" onChange={(e) => {
           setFilter(e.target.value);
@@ -120,28 +120,28 @@ export default function Application() {
         }
       </div>
       <div className="shadow-md sm:rounded-lg w-full">
-        <table className="w-full text-sm px-2 text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <table className="w-full md:w-11/12 overflow-x-auto overflow-y-hidden text-sm px-2 text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-              <th scope="col" className="px-4 py-3">
+              <th scope="col" className="px-1 py-1">
                 Titre
               </th>
-              <th scope="col" className="px-4 py-3">
+              <th scope="col" className="px-1 py-1">
                 Entreprise
               </th>
-              <th scope="col" className="px-4 py-3">
+              <th scope="col" className="px-1 py-1">
                 Adresse
               </th>
-              <th scope="col" className="px-4 py-3">
+              <th scope="col" className="px-1 py-1">
                 Status
               </th>
-              <th scope="col" className="px-4 py-3">
+              <th scope="col" className="px-1 py-1">
                 Type Contrat
               </th>
-              <th scope="col" className="px-4 py-3">
+              <th scope="col" className="px-1 py-1">
                 Date Création
               </th>
-              <th scope="col" className="px-4 py-3">
+              <th scope="col" className="px-1 py-1">
                 Action
               </th>
             </tr>
@@ -159,13 +159,13 @@ export default function Application() {
             <span className="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">Showing <span className="font-semibold text-gray-900 dark:text-white">1-10</span> of <span className="font-semibold text-gray-900 dark:text-white">1000</span></span>
             <ul className="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
               <li onClick={() => setUrl(prev)}>
-                <a href="#" className="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a>
+                <a href="#" className="flex items-center justify-center px-1 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a>
               </li>
               <li>
-                <a href="#" className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</a>
+                <a href="#" className="flex items-center justify-center px-1 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</a>
               </li>
               <li onClick={() => setUrl(next)}>
-                <a href="#" className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
+                <a href="#" className="flex items-center justify-center px-1 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
               </li>
             </ul>
           </nav>

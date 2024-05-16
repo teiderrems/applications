@@ -36,7 +36,7 @@ export default function UserItem({user,setIsAdd}:{user:UserType,setIsAdd:Dispatc
         }
       });
       if (res.status == 204 || res.status == 200) {
-        setReload(true);
+        setReload(state=>!state);
       }
     } catch (error: any) {
       console.log(error);
@@ -47,7 +47,7 @@ export default function UserItem({user,setIsAdd}:{user:UserType,setIsAdd:Dispatc
             setToken(res.data.token);
             sessionStorage.setItem("token", res.data.token);
             if (sessionStorage.getItem("token")) {
-              setReload(true);
+              setReload(state=>!state);
             }
           }
         } catch (err: any) {
@@ -56,7 +56,7 @@ export default function UserItem({user,setIsAdd}:{user:UserType,setIsAdd:Dispatc
           if (err.response.Role == 401) {
             router.push(`/login?ReturnUrl=${pathname}`);
           }
-          setReload(false);
+          setReload(state=>!state);
         }
       }
     }
@@ -73,7 +73,7 @@ export default function UserItem({user,setIsAdd}:{user:UserType,setIsAdd:Dispatc
           }
         });
         if (res.status == 201 || res.status == 200) {
-          setReload(true);
+          setReload(state=>!state);
         }
       } catch (error: any) {
         if (error.response.status == 401) {
@@ -83,7 +83,7 @@ export default function UserItem({user,setIsAdd}:{user:UserType,setIsAdd:Dispatc
               setToken(res.data.token);
               sessionStorage.setItem("token", res.data.token);
               if (sessionStorage.getItem("token")) {
-                setReload(true);
+                setReload(state=>!state);
               }
             }
           } catch (err: any) {
@@ -92,7 +92,7 @@ export default function UserItem({user,setIsAdd}:{user:UserType,setIsAdd:Dispatc
             if (err.response.Role == 401) {
               router.push(`/login?ReturnUrl=${pathname}`);
             }
-            setReload(false);
+            setReload(state=>!state);
           }
         }
       }
@@ -105,19 +105,19 @@ export default function UserItem({user,setIsAdd}:{user:UserType,setIsAdd:Dispatc
   return (
     <tr key={user._id} className={`border-b dark:bg-gray-800 hover:cursor-pointer dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 ${user.Role == 'reject' ? 'bg-red-300' : 'bg-white'}`}>
                   
-      <td scope="row" className="px-4 py-4 capitalize font-medium text-gray-900 whitespace-nowrap dark:text-white">
+      <td scope="row" className="px-1 py-1 capitalize text-gray-900 text-wrap dark:text-white">
         {user.Username}
       </td>
-      <td className="px-4 py-4">
+      <td className="px-1 py-1">
         {user.Email}
       </td>
-      <td className="px-4 py-4 capitalize">
+      <td className="px-1 py-1 capitalize">
         {user.Firstname}
       </td>
-      <td className="px-4 py-4 capitalize">
+      <td className="px-1 py-1 capitalize">
         {user.Lastname}
       </td>
-      <td className="px-4 py-4 capitalize">
+      <td className="px-1 py-1 capitalize">
         {
           showDetail ? <select className=" capitalize" onChange={(e) => {
             setCurrentUser((state: UserType) => {
@@ -131,10 +131,10 @@ export default function UserItem({user,setIsAdd}:{user:UserType,setIsAdd:Dispatc
           </select> : <>{user.Role}</>
         }
       </td>
-      <td className="px-4 py-4">
+      <td className="px-1 py-1">
         {user.CreatedAt?.split('T')[0].split('-').reverse().join('/')}
       </td>
-      <td className="px-4 py-4">
+      <td className="px-1 py-1">
         {(!showDetail) ?
           <div className='flex space-x-2'>
             <button className='text-blue w-1/3 text-xl' onClick={() => setShowDetail(state => !state)}><EditOutlined className="p-1 hover:rounded-md text-blue-400 hover:text-white hover:bg-blue-300 hover:shadow"/></button>
