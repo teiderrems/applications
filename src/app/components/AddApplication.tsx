@@ -20,7 +20,7 @@ export default function AddApplication({setHandleAdd,setIsAdd}:{setHandleAdd:Dis
     Description:"",
     JobDescription:"",
     Entreprise:"",
-    TypeContrat:"",
+    TypeContrat:"alternance",
     Adresse:""
   });
   const router=useRouter();
