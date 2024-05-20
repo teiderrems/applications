@@ -106,9 +106,9 @@ export default function Application() {
   return (
     <div className='flex-1 flex overflow-hidden mx-2 flex-col space-y-5'>
       <div className="flex justify-end space-x-3 h-10">
-      <div className="flex italic mt-1 space-x-2 shadow hover:shadow-blue-400 rounded-md">
-        <label htmlFor="filter" className="p-1 w-1/2 border-r h-full">Filter</label>
-        <select className=" capitalize p-1 h-full" onChange={(e) => {
+      <div className="flex italic mt-1 space-x-2">
+        
+        <select className=" capitalize p-1 h-full rounded-lg shadow hover:shadow-blue-400 hover:cursor-pointer" onChange={(e) => {
             setFilter(e.target.value);
             setReload(!reload);              
           }}>

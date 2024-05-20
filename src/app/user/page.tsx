@@ -99,9 +99,9 @@ export default function UserList() {
   return (
     <div className='flex-1 flex overflow-hidden flex-col  mx-2 space-y-5'>
       <div className="flex justify-end space-x-3 h-10">
-      <div className="flex space-x-2 mt-2 items-center italic shadow rounded-md hover:shadow-blue-400">
-        <label htmlFor="filter"  className="h-full w-1/2 border-r p-1">Filter</label>
-        <select className=" capitalize h-full p-1" onChange={(e) => {
+      <div className="flex space-x-2 mt-2 items-center italic">
+        
+        <select className=" capitalize h-full p-1  rounded-lg shadow hover:shadow-blue-400 hover:cursor-pointer" onChange={(e) => {
               setFilter(e.target.value);
               setReload(!reload)
             }}>
