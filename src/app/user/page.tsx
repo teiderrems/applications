@@ -133,7 +133,7 @@ export default function UserList() {
               <th scope="col" className="px-1 py-1">
                 Date Création
               </th>
-              <th scope="col" className="px-1 py-1">
+              <th scope="col" className="px-1 text-center py-1">
                 Action
               </th>
             </tr>

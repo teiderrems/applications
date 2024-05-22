@@ -124,7 +124,7 @@ export default function Application() {
                 Adresse
               </th>
               <th scope="col" className="px-1 py-1">
-              <select className=" uppercase h-full md:rounded-md border-0 hover:cursor-pointer" onChange={(e) => {
+              <select className=" uppercase h-full text-center border-0 hover:cursor-pointer" onChange={(e) => {
                 setFilter(e.target.value);
                 setReload(!reload);              
               }}>
