@@ -83,7 +83,7 @@ export default function Application() {
       }
     }
     findAll();
-  }, [limit, page, url,response?.isLoading, prev,filter, token, next, pathname,window&&sessionStorage.getItem('token'), router, isAdd, reload]);
+  }, [limit, page, url, response.isLoading, prev, filter, token, next, pathname, router, isAdd, reload, response?.data]);
 
   if (response?.isLoading) {
     return (
@@ -106,18 +106,6 @@ export default function Application() {
   return (
     <div className='flex-1 flex overflow-hidden mx-2 flex-col space-y-5'>
       <div className="flex justify-end space-x-3 h-10">
-      <div className="flex italic mt-1 space-x-2">
-        
-        <select className=" capitalize p-1 h-full rounded-lg shadow hover:shadow-blue-400 hover:cursor-pointer" onChange={(e) => {
-            setFilter(e.target.value);
-            setReload(!reload);              
-          }}>
-              <option value={filter} selected>{filter}</option>
-              {Status.filter(s => s !== filter).map(s => (
-                  <option key={s} value={s}>{s}</option>
-              ))}
-          </select>
-      </div>
         {
           (!handleAdd) ? <button className="rounded-lg  text-center h-full w-10 text-2xl  hover:text-blue-400" onClick={() => setHandleAdd(!handleAdd)}><AppstoreAddOutlined className="h-full w-full " /></button> : <AddApplication setHandleAdd={setHandleAdd} setIsAdd={setIsAdd} />
         }
@@ -136,7 +124,15 @@ export default function Application() {
                 Adresse
               </th>
               <th scope="col" className="px-1 py-1">
-                Status
+              <select className=" capitalize p-1 h-full rounded-lg shadow hover:shadow-blue-400 hover:cursor-pointer" onChange={(e) => {
+                setFilter(e.target.value);
+                setReload(!reload);              
+              }}>
+                  <option selected>Status</option>
+                  {Status.filter(s => s !== filter).map(s => (
+                      <option key={s} value={s}>{s}</option>
+                  ))}
+              </select>
               </th>
               <th scope="col" className="px-1 py-1">
                 Type Contrat
