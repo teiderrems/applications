@@ -120,11 +120,11 @@ export default function UserList() {
                 Lastname
               </th>
               <th scope="col" className="px-1 py-1">
-                <select className=" capitalize h-full p-1  rounded-lg shadow hover:shadow-blue-400 hover:cursor-pointer" onChange={(e) => {
+                <select className=" uppercase h-full hover:cursor-pointer" onChange={(e) => {
                   setFilter(e.target.value);
                   setReload(!reload)
                 }}>
-                <option selected>Role</option>
+                <option>Role</option>
                 {Role.filter(s => s !== filter).map(s => (
                   <option key={s} value={s}>{s}</option>
                 ))}

@@ -124,11 +124,11 @@ export default function Application() {
                 Adresse
               </th>
               <th scope="col" className="px-1 py-1">
-              <select className=" capitalize p-1 h-full rounded-lg shadow hover:shadow-blue-400 hover:cursor-pointer" onChange={(e) => {
+              <select className=" uppercase h-full md:rounded-md border-0 hover:cursor-pointer" onChange={(e) => {
                 setFilter(e.target.value);
                 setReload(!reload);              
               }}>
-                  <option selected>Status</option>
+                  <option>Status</option>
                   {Status.filter(s => s !== filter).map(s => (
                       <option key={s} value={s}>{s}</option>
                   ))}
