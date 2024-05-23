@@ -77,7 +77,7 @@ export default function UserList() {
     }
     findAll();
     
-  },[token, pathname, filter, response.isLoading, isAdd, reload, url, router, response?.data]);
+  },[token, pathname, filter, response.isLoading, isAdd, reload, url, router]);
 
 
   if (response?.isLoading) {

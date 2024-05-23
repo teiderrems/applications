@@ -83,7 +83,7 @@ export default function Application() {
       }
     }
     findAll();
-  }, [limit, page, url, response.isLoading, prev, filter, token, next, pathname, router, isAdd, reload, response?.data]);
+  }, [limit, page, url, response.isLoading, prev, filter, token, next, pathname, router, isAdd, reload]);
 
   if (response?.isLoading) {
     return (

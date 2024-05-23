@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import boutonX from '../../public/cross.svg';
 import { usePathname, useRouter } from "next/navigation";
 import  profileImg  from '../../public/defaul.jpeg';
+import logo from '../../public/logo.png';
 import Link from "next/link";
 import Image from "next/image";
 import burgerImg from '../../public/menu.svg';
@@ -89,7 +90,7 @@ export default function RootLayout({
     if (user && user.profileId) {
       getProfile();
     }
-  },[image,togel,token,router,profile,window && sessionStorage.getItem('token')]);
+  },[image, togel, token, router, profile, user]);
 
   return (
       <html lang="en">
@@ -102,7 +103,13 @@ export default function RootLayout({
         }}>
           <div id="toggled-menu"
               className={`w-full absolute top-14 bottom-0 left-0 -translate-x-full bg-gradient-to-br from-gray-50 via-slate-50 to-blue-50  ${togel?'translate-x-0 z-20 opacity-100 w-1/5':''} text-gray-800 border-b border-gray-200 flex flex-col items-center md:static min-h-full md:w-1/5 md:transform-none md:border-none`}>
-            <h1 className="md:text-2xl text-xl italic p-1 w-full h-12 border-b">Applications</h1>
+            <div  className="flex w-full justify-start">
+              <Link href={'/'} className="hover:text-white">
+                
+                <Image src={logo} alt="Application Record" className="p-2 hover:cursor-pointer " height={75} width={75} />
+              </Link>
+              
+            </div>
             <div className="flex-1 flex w-full flex-col"> 
             
             {
@@ -118,7 +125,7 @@ export default function RootLayout({
               ):(
                 <nav className="flex flex-col flex-1 py-3 space-y-6 text-justify w-full">
                     <Link href="/register" className={`px-2 text-xl ${pathname=="/register"&&'active'}`}>Regiter</Link>
-                    {/* <Link href="/login" className={`px-2 text-2xl ${pathname=="/login"?'active':''}`}>Login</Link> */}
+                    <Link href="/login" className={`px-2 text-2xl ${pathname=="/login"?'active':''}`}>Login</Link>
                 </nav>
               )
             }

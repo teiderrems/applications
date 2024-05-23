@@ -51,7 +51,7 @@ export default function Register() {
     }
     useEffect(()=>{
         sessionStorage.removeItem('token');
-    },[window && sessionStorage.getItem('token')])
+    },[])
   return (
     <div className="wrap-form">
         <form action="" onSubmit={HandleSubmit} className="md:w-3/5 w-5/6 h-full flex md:space-y-4 flex-col items-center bg-white justify-center" encType="multipart/form-data">
