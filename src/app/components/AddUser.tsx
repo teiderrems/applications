@@ -73,7 +73,7 @@ export default function AddUser({setHandleAdd,setIsAdd}:{setHandleAdd:React.Disp
   return (
     <div className="wrap-form fixed inset-0 w-full h-full  opacity-100 z-10">
         <div onClick={()=>setHandleAdd(state=>!state)} className="absolute inset-1 bg-blue-50 z-0"></div>
-        <form action="" onSubmit={HandleSubmit} className="md:w-3/5 w-5/6 h-4/5 space-y-3  z-10 flex px-2 bg-white rounded-md shadow flex-col justify-center">
+        <form action="" onSubmit={HandleSubmit} className="md:w-2/5 w-5/6 h-4/5 space-y-3  z-10 flex px-2 bg-white rounded-md shadow flex-col justify-center">
         <h1 className="text-gray-400 text-justify">Add User</h1>
             <div className=" flex md:flex-row flex-col h-16 justify-between">
                 <label htmlFor="Username" className="text-xl flex-1  md:translate-y-1">Username</label>

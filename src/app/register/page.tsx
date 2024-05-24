@@ -54,7 +54,7 @@ export default function Register() {
     },[])
   return (
     <div className="wrap-form">
-        <form action="" onSubmit={HandleSubmit} className="md:w-3/5 w-5/6 h-full flex md:space-y-4 flex-col items-center bg-white justify-center" encType="multipart/form-data">
+        <form action="" onSubmit={HandleSubmit} className="md:w-2/5 py-2 w-5/6 h-full flex md:space-y-4 flex-col items-center bg-white justify-center" encType="multipart/form-data">
         <h1 className="text-gray-400 self-start mb-2 text-justify">SignIn to continue</h1>
         {response?.isError && (<span className="text-red-400 text-center w-full block">{response?.error}</span>)}
             <div className="md:h-1/6 my-4 w-full md:my-0 flex space-x-2 flex-row">

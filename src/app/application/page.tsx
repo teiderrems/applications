@@ -1,6 +1,6 @@
 "use client"
 import { AppstoreAddOutlined } from "@ant-design/icons";
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import AddApplication from "../components/AddApplication";
 import { usePathname, useRouter } from "next/navigation";
 import Axios from "@/hooks/axios.config";
@@ -26,6 +26,8 @@ export default function Application() {
   const [next, setNext] = useState(null);
   const [prev, setPrev] = useState(null);
   const [filter,setFilter]=useState('all');
+
+  
   
 
   
@@ -35,19 +37,20 @@ export default function Application() {
       state=window && sessionStorage.getItem('token');
       return state;
     });
-    const findAll = async () => {
+    const findAll=async () => {
       try {
-
+  
         const res = await axios.get(url+`&status=${filter}`, {
           headers: {
             "Authorization": window.sessionStorage ? ("Bearer " + window.sessionStorage.getItem("token")) : ''
           }
         });
         if (res.status == 201 || res.status == 200) {
-
+  
           setResponse(state => {
             return { ...state, isLoading: false, status: res.status, data: res.data.data.applications, isSuccess: true };
           });
+          return res.data;
           setPrev(state=>{
             return state = res.data.prev;
           });
@@ -58,9 +61,10 @@ export default function Application() {
             setReload(state=>!state);
           }
         }
+        
       } catch (error: any) {
         if (error.response.status == 401) {
-
+  
           try {
             const res = await Axios.post("users/refresh_token", { refresh: sessionStorage.getItem("refresh") });
             if (res.status == 201 || res.status == 200) {
@@ -71,7 +75,7 @@ export default function Application() {
               }
             }
           } catch (err: any) {
-
+  
             sessionStorage.removeItem("token");
             sessionStorage.removeItem("refresh");
             if (err.response.status == 401) {
@@ -83,7 +87,7 @@ export default function Application() {
       }
     }
     findAll();
-  }, [limit, page, url, response.isLoading, prev, filter, token, next, pathname, router, isAdd, reload]);
+  }, [limit, page, response.isLoading, prev, filter, token, next, pathname, router, isAdd, reload]);
 
   if (response?.isLoading) {
     return (

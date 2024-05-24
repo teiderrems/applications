@@ -29,7 +29,7 @@ body {
 }
 
 .wrap-form{
-  @apply flex flex-1 flex-col md:justify-center justify-around h-full px-4 md:flex-row  items-center
+  @apply flex flex-1 flex-col md:justify-center justify-between md:h-full px-4 md:flex-row  items-center
 }
 
 .form-group{

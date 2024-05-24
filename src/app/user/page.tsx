@@ -2,7 +2,7 @@
 
 import Axios from "@/hooks/axios.config";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CustomType } from "../components/ApplicationDetail";
 import UserItem, { UserType } from "../components/UserItem";
 import { AppstoreAddOutlined } from "@ant-design/icons";
@@ -28,56 +28,59 @@ export default function UserList() {
   const [next,setNext]=useState(null);
   const [prev,setPrev]=useState(null);
   const [filter,setFilter]=useState('all');
+
+  const findAll=async()=>{
+    try {
+      const res = await axios.get(url+`&role=${filter}`, {
+        headers: {
+          "Authorization": window.sessionStorage ? ("Bearer " + window.sessionStorage.getItem("token")) : ''
+        }
+      });
+      if (res.status == 201 || res.status == 200) {
+        setResponse(state=>{
+          return { ...state, isLoading: false, status: res.status, data: res.data.data.users, isSuccess: true };
+        });
+        setPrev(res.data.prev);
+        setNext(res.data.next);
+        // if(response?.data){
+        //   setReload(true);
+        // }
+        return res.data.users;
+      }
+      } catch (error:any) {
+          setResponse(state=>{
+            return {...state,error:error.message,isLoading:false,status:error.response.status,isSuccess:true}
+          })
+          if ((error.response.status==401)&&(error.response.data.message as string).includes('jwt')) {
+            try {
+              const res=await Axios.post("users/refresh_token",{refresh:sessionStorage.getItem("refresh")});
+              if (res.status==201 || res.status==200) {
+                sessionStorage.setItem("token",res.data.token);
+                if (sessionStorage.getItem("token")) {
+                  setReload(true);
+                }
+              }
+            } catch (err:any) {
+              sessionStorage.removeItem("token");
+              sessionStorage.removeItem("refresh");
+              if (err.response.status == 401) {
+                router.push(`/login?ReturnUrl=${pathname}`);
+              }
+              setReload(false);
+            }
+          }
+          if (error.response.Role==401) {
+              router.push(`/`);
+          }
+      }
+  }
+
+  const memoryData=useMemo(async()=>await findAll(),[url])
   
   
   useEffect(()=>{
-    const findAll=async()=>{
-      try {
-        const res = await axios.get(url+`&role=${filter}`, {
-          headers: {
-            "Authorization": window.sessionStorage ? ("Bearer " + window.sessionStorage.getItem("token")) : ''
-          }
-        });
-        if (res.status == 201 || res.status == 200) {
-          setResponse(state=>{
-            return { ...state, isLoading: false, status: res.status, data: res.data.data.users, isSuccess: true };
-          });
-          setPrev(res.data.prev);
-          setNext(res.data.next);
-          if(response?.data){
-            setReload(true);
-          }
-        }
-        } catch (error:any) {
-            setResponse(state=>{
-              return {...state,error:error.message,isLoading:false,status:error.response.status,isSuccess:true}
-            })
-            if ((error.response.status==401)&&(error.response.data.message as string).includes('jwt')) {
-              try {
-                const res=await Axios.post("users/refresh_token",{refresh:sessionStorage.getItem("refresh")});
-                if (res.status==201 || res.status==200) {
-                  sessionStorage.setItem("token",res.data.token);
-                  if (sessionStorage.getItem("token")) {
-                    setReload(true);
-                  }
-                }
-              } catch (err:any) {
-                sessionStorage.removeItem("token");
-                sessionStorage.removeItem("refresh");
-                if (err.response.status == 401) {
-                  router.push(`/login?ReturnUrl=${pathname}`);
-                }
-                setReload(false);
-              }
-            }
-            if (error.response.Role==401) {
-                router.push(`/`);
-            }
-        }
-    }
-    findAll();
     
-  },[token, pathname, filter, response.isLoading, isAdd, reload, url, router]);
+  },[token, pathname, filter, response.isLoading, isAdd, reload, url, router, response?.isSuccess,memoryData]);
 
 
   if (response?.isLoading) {

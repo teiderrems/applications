@@ -90,7 +90,7 @@ export default function RootLayout({
     if (user && user.profileId) {
       getProfile();
     }
-  },[image, togel, token, router, profile, user]);
+  },[image, togel, token, router, profile]);
 
   return (
       <html lang="en">
@@ -104,9 +104,9 @@ export default function RootLayout({
           <div id="toggled-menu"
               className={`w-full absolute top-14 bottom-0 left-0 -translate-x-full bg-gradient-to-br from-gray-50 via-slate-50 to-blue-50  ${togel?'translate-x-0 z-20 opacity-100 w-1/5':''} text-gray-800 border-b border-gray-200 flex flex-col items-center md:static min-h-full md:w-1/5 md:transform-none md:border-none`}>
             <div  className="flex w-full justify-start">
-              <Link href={'/'} className="hover:text-white">
+              <Link href={'/'} className="hover:text-white flex-1">
                 
-                <Image src={logo} alt="Application Record" className="p-2 hover:cursor-pointer " height={75} width={75} />
+                <Image src={logo} alt="Application Record" className="p-2 hover:cursor-pointer w-1/2 rounded-2xl h-14 " />
               </Link>
               
             </div>

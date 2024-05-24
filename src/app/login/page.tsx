@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { CustomType } from "../components/ApplicationDetail";
 import { EyeInvisibleOutlined, EyeOutlined, FacebookOutlined, GoogleOutlined, LoadingOutlined, TwitterOutlined } from "@ant-design/icons";
-import { Spin } from "antd";
+import { Divider, Spin } from "antd";
 
 function Login() {
   const [user, setUser] = useState<{
@@ -55,7 +55,7 @@ function Login() {
 
   return (
     <div className="wrap-form">
-      <form action="" onSubmit={HandleSubmit} className="md:w-1/2 w-5/6 flex-1 md:h-full flex items-center md:space-y-3 flex-col bg-white justify-center">
+      <form action="" onSubmit={HandleSubmit} className="md:w-3/5 md:ml-5 w-5/6 md:h-full flex items-center md:space-y-3 flex-col bg-white justify-center">
         <h1 className="text-gray-400 self-start mb-4 text-justify">Login to continue</h1>
         {response?.isError && (<span className="text-red-400 text-center w-full block">Something wrong username or password isn&rsquo;t valid please try again</span>)}
         <div className="flex w-full flex-col h-1/5 space-y-1">
@@ -79,10 +79,10 @@ function Login() {
           <Link href="/register" className="text-blue-400 md:self-center hover:underline">You do not have acount <strong>SignUp</strong></Link>
         </div>
       </form>
-      <div className="md:flex-1 md:w-1/2 md:h-2/5 h-1/6 w-full flex md:flex-col flex-row md:justify-center justify-around items-center space-y-2">
-        <Link href="#" className="md:w-3/5 w-16 h-16 items-center justify-center md:flex md:h-1/3 rounded-lg bg-blue-500 hover:text-white"><GoogleOutlined className="flex-1 md:pt-0 pt-2 md:pr-0 pl-3 text-center text-5xl" /><span className="flex-1 pr-3 pb-3 md:visible invisible text-5xl">Google</span></Link>
-        <Link href="#" className="md:w-3/5 w-16 h-16  items-center justify-center md:flex md:h-1/3 rounded-lg bg-blue-500 hover:text-white"><FacebookOutlined className="flex-1 md:pt-0 pt-2 md:pr-0 text-center pl-3 text-5xl" /><span className="flex-1 pr-3 pb-3 md:visible  invisible text-5xl">Facebook</span></Link>
-        <Link href="#" className="md:w-3/5 w-16 h-16 items-center justify-center md:flex md:h-1/3 rounded-lg bg-blue-500 hover:text-white"><TwitterOutlined className="flex-1 md:pt-0 pt-2 md:pr-0 pl-3 text-center text-5xl" /><span className="flex-1 pr-3 pb-3 md:visible  invisible text-5xl">Twitter</span></Link>
+      <div className="md:flex-1 md:w-1/4 md:h-2/5 h-1/6 w-full flex  justify-center  items-center space-x-2">
+        <Link href="#" className="md:w-1/4 w-16 h-20 items-center justify-center md:flex md:h-1/3 "><GoogleOutlined className=" text-6xl rounded-lg bg-blue-500 hover:text-white" /></Link>
+        <Link href="#" className="md:w-1/4 w-16 h-20  items-center justify-center md:flex md:h-1/3 "><FacebookOutlined className=" text-6xl rounded-lg bg-blue-500 hover:text-white" /></Link>
+        <Link href="#" className="md:w-1/4 w-16 h-20 items-center justify-center md:flex md:h-1/3 "><TwitterOutlined className=" text-6xl rounded-lg bg-blue-500 hover:text-white" /></Link>
       </div>
     </div>
   )
