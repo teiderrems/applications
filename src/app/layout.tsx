@@ -90,7 +90,7 @@ export default function RootLayout({
     if (user && user.profileId) {
       getProfile();
     }
-  },[image, togel, token, router, profile]);
+  },[image, togel, token, router, profile, user]);
 
   return (
       <html lang="en">

@@ -50,7 +50,6 @@ export default function Application() {
           setResponse(state => {
             return { ...state, isLoading: false, status: res.status, data: res.data.data.applications, isSuccess: true };
           });
-          return res.data;
           setPrev(state=>{
             return state = res.data.prev;
           });
@@ -87,7 +86,7 @@ export default function Application() {
       }
     }
     findAll();
-  }, [limit, page, response.isLoading, prev, filter, token, next, pathname, router, isAdd, reload]);
+  }, [limit, page, response.isLoading, prev,url, filter, token, next, pathname, router, isAdd, reload]);
 
   if (response?.isLoading) {
     return (
