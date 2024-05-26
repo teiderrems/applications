@@ -1,5 +1,5 @@
 "use client"
-import { AppstoreAddOutlined } from "@ant-design/icons";
+/*import { AppstoreAddOutlined } from "@ant-design/icons";
 import { useCallback, useEffect, useMemo, useState } from "react"
 import AddApplication from "../components/AddApplication";
 import { usePathname, useRouter } from "next/navigation";
@@ -175,4 +175,247 @@ export default function Application() {
       </div>
     </div>
   )
-}
+}*/
+
+
+import React, { useEffect, useState } from 'react';
+import { Button, Table } from 'antd';
+import type { TableColumnsType } from 'antd';
+import { CustomType, Props } from '../components/ApplicationDetail';
+import Axios from '@/hooks/axios.config';
+import axios from 'axios';
+import { usePathname, useRouter } from 'next/navigation';
+import { DeleteOutlined, EditOutlined, LeftCircleFilled, ReadOutlined, RightCircleFilled } from '@ant-design/icons';
+import ApplicationItem from '../components/ApplicationItem';
+
+
+  
+
+  
+
+  
+
+
+const Application: React.FC = () => {
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const [token, setToken] = useState<any>();
+  const [response, setResponse] = useState<CustomType>({ isLoading: false, status: 0, data: undefined, error: undefined, isSuccess: false });
+  const [isAdd, setIsAdd] = useState(false);
+  const [reload, setReload] = useState(false);
+  const [next, setNext] = useState(null);
+  const [prev, setPrev] = useState(null);
+  const [filter,setFilter]=useState('all');
+
+  const [handleAdd, setHandleAdd] = useState(false);
+  const [page, setPage] = useState(0);
+  const [limit, setLimit] = useState(12);
+  const [url, setUrl] = useState<any>(`${Axios.defaults.baseURL}` + `applications?page=${page}&limit=${limit}`);
+  const router = useRouter();
+  const pathname = usePathname();
+  const [currentApp, setCurrentApp] = useState<any>({});
+  const [viewDetail, setViewDetail] = useState(false);
+  const [showDetail, setShowDetail] = useState(false);
+  const [total,setTotal]=useState(10);
+
+  const columns: TableColumnsType<Props> = [
+    {
+      title: 'Title',
+      dataIndex: 'Title',
+    },
+    {
+      title: 'Entreprise',
+      dataIndex: 'Entreprise',
+    },
+    {
+      title: 'Adresse',
+      dataIndex: 'Adresse',
+    },
+    {
+      title: 'Status',
+      dataIndex: 'Status',
+    },
+    {
+      title: 'TypeContrat',
+      dataIndex: 'TypeContrat',
+    },
+    {
+      title: 'CreatedAt',
+      dataIndex: 'CreatedAt',
+      render:(value)=>(value as string).split('T')[0].split('-').reverse().join('/')
+    },
+    
+  ];
+
+    async function HandleDelete(a: Props): Promise<void> {
+        try {
+            const res = await Axios.delete(`applications/${currentApp._id}`, {
+                headers: {
+                    "Authorization": window.sessionStorage ? ("Bearer " + window.sessionStorage.getItem("token")) : ''
+                }
+            });
+            if (res.status == 204 || res.status == 200) {
+                setReload(state=>!state);
+            }
+        } catch (error: any) {
+            console.log(error);
+            if (error.response.status == 401) {
+                try {
+                    const res = await Axios.post("users/refresh_token", { refresh: sessionStorage.getItem("refresh") });
+                    if (res.status == 201 || res.status == 200) {
+                        setToken(res.data.token);
+                        sessionStorage.setItem("token", res.data.token);
+                        if (sessionStorage.getItem("token")) {
+                            setReload(true);
+                        }
+                    }
+                } catch (err: any) {
+                    sessionStorage.removeItem("token");
+                    sessionStorage.removeItem("refresh");
+                    if (err.response.status == 401) {
+                        router.push(`/login?ReturnUrl=${pathname}`);
+                    }
+                    setReload(state=>!state);
+                }
+            }
+        }
+    }
+
+    const SaveChange = async (a: Props) => {
+        setShowDetail(state => !state);
+        if (currentApp && a.Status !== currentApp.Status) {
+            try {
+                const res = await Axios.put(`applications/${currentApp._id}`, currentApp, {
+                    headers: {
+                        "Authorization": window.sessionStorage ? ("Bearer " + window.sessionStorage.getItem("token")) : ''
+                    }
+                });
+                if (res.status == 201 || res.status == 200) {
+                    setReload(state=>!state);
+                }
+            } catch (error: any) {
+                if (error.response.status == 401) {
+                    try {
+                        const res = await Axios.post("users/refresh_token", { refresh: sessionStorage.getItem("refresh") });
+                        if (res.status == 201 || res.status == 200) {
+                            setToken(res.data.token);
+                            sessionStorage.setItem("token", res.data.token);
+                            if (sessionStorage.getItem("token")) {
+                                setReload(state=>!state);
+                            }
+                        }
+                    } catch (err: any) {
+                        sessionStorage.removeItem("token");
+                        sessionStorage.removeItem("refresh");
+                        if (err.response.status == 401) {
+                            router.push(`/login?ReturnUrl=${pathname}`);
+                        }
+                        setReload(false);
+                    }
+                }
+            }
+        }
+    }
+  useEffect(() => {
+    setToken((state:any)=>{
+      state=window && sessionStorage.getItem('token');
+      return state;
+    });
+    const findAll=async () => {
+      try {
+  
+        const res = await axios.get(url+`&status=${filter}`, {
+          headers: {
+            "Authorization": window.sessionStorage ? ("Bearer " + window.sessionStorage.getItem("token")) : ''
+          }
+        });
+        if (res.status == 201 || res.status == 200) {
+          setTotal(state=>state=res.data.data.count);
+          setResponse(state => {
+            return { ...state, isLoading: false, status: res.status, data: res.data.data.applications, isSuccess: true };
+          });
+          setPrev(state=>{
+            return state = res.data.prev;
+          });
+          setNext(state=>{
+            return state=res.data.next;
+          });
+          if (response?.data) {
+            setReload(state=>!state);
+          }
+        }
+        
+      } catch (error: any) {
+        if (error.response.status == 401) {
+  
+          try {
+            const res = await Axios.post("users/refresh_token", { refresh: sessionStorage.getItem("refresh") });
+            if (res.status == 201 || res.status == 200) {
+              setToken((state: any)=>state=res.data.token);
+              sessionStorage.setItem("token", res.data.token);
+              if (sessionStorage.getItem("token")) {
+                setReload(state=>!state);
+              }
+            }
+          } catch (err: any) {
+  
+            sessionStorage.removeItem("token");
+            sessionStorage.removeItem("refresh");
+            if (err.response.status == 401) {
+              router.push(`/login?ReturnUrl=${pathname}`);
+            }
+            setReload(false);
+          }
+        }
+      }
+    }
+    findAll();
+  }, [limit, page, response.isLoading, prev,url, filter, token, next, pathname, router, isAdd, reload]);
+
+
+  const start = () => {
+    setLoading(true);
+    // ajax request after empty completing
+    setTimeout(() => {
+      setSelectedRowKeys([]);
+      setLoading(false);
+    }, 1000);
+  };
+
+  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  };
+  const hasSelected = selectedRowKeys.length > 0;
+
+  return (
+    <div>
+      <div style={{ marginBottom: 16 }}>
+        <Button type="primary" onClick={start} disabled={!hasSelected} loading={loading}>
+          Reload
+        </Button>
+        <span style={{ marginLeft: 8 }}>
+          {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
+        </span>
+      </div>
+      <Table className=' cursor-pointer' rowSelection={rowSelection} onRow={(record,index)=>{
+        return{
+          onClick:(e)=>{
+            router.push('/application/'+record._id);
+          }
+        }
+      }} columns={columns} dataSource={response?.data} pagination={{
+        onChange:()=>console.log('hello'),
+        total:total
+      }}/>
+    </div>
+  );
+};
+
+export default Application;

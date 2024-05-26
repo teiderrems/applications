@@ -54,35 +54,35 @@ function Login() {
   },[query,isSubmit]);
 
   return (
-    <div className="wrap-form">
-      <form action="" onSubmit={HandleSubmit} className="md:w-3/5 md:ml-5 w-5/6 md:h-full flex items-center md:space-y-3 flex-col bg-white justify-center">
-        <h1 className="text-gray-400 self-start mb-4 text-justify">Login to continue</h1>
+    <div className=" min-h-screen flex flex-col space-y-12 md:space-y-0 md:flex-row">
+      <form action="" onSubmit={HandleSubmit} className=" h-3/5 md:w-4/6  space-y-8 m-4 flex flex-col justify-center items-center md:h-full">
+        <h1 className="text-gray-400 w-5/6 h-16 mb-4 text-justify">Login to continue</h1>
         {response?.isError && (<span className="text-red-400 text-center w-full block">Something wrong username or password isn&rsquo;t valid please try again</span>)}
-        <div className="flex w-full flex-col h-1/5 space-y-1">
+        <div className="flex w-5/6 flex-col space-y-4">
           <label htmlFor="Username" className="text-xl">Username</label>
-          <input type="text"  id="Username" required onChange={(e) => { setUser({ ...user, Username: e.target.value }) }} className="form-input px-2" />
+          <input type="text"  id="Username" required onChange={(e) => { setUser({ ...user, Username: e.target.value }) }} className="px-2 w-full h-14 shadow rounded-md" />
         </div>
-        <div className="flex w-full flex-col h-1/5 space-y-2">
+        <div className="flex w-5/6 flex-col space-y-4">
           <label htmlFor="Password" className="text-xl">Password</label>
-          <div className="flex w-full shadow  form-input">
-            <input type={show?"text":"password"} id="Password" required min={8} pattern="[a-zA-Z0-9;?,@]{8,15}" onChange={(e)=>{setUser({...user,Password:e.target.value})}} className="flex-1 pl-2 rounded-s-md" />
-            {show?(<button onClick={()=>setShow(!show)} className="w-1/12 h-full border-l"><EyeOutlined/></button>): (<button onClick={()=>setShow(!show)}  className="w-1/12 h-full  border-l"><EyeInvisibleOutlined /></button>)}
+          <div className="flex w-full rounded-md h-14 shadow ">
+            <input type={show?"text":"password"} id="Password" required min={8} pattern="[a-zA-Z0-9;?,@]{8,15}" onChange={(e)=>{setUser({...user,Password:e.target.value})}} className="flex-1 pl-2" />
+            {show?(<button onClick={()=>setShow(!show)} className="w-1/12 h-full"><EyeOutlined/></button>): (<button onClick={()=>setShow(!show)}  className="w-1/12 h-full"><EyeInvisibleOutlined /></button>)}
           </div>
         </div>
         {
           user.Password!=""&&(!user.Password.match("[a-zA-Z0-9;?,@]{8,15}"))&&<span className="text-red-400 text-wrap">Password must contain at least 8 characters with a mixture of uppercase, lowercase, numbers</span>
         }
-        <div className="flex w-full flex-col md:flex-row  justify-around md:justify-between h-1/6">
+        <div className="flex flex-col md:flex-row w-5/6 justify-between h-28 md:h-20">
           {
               isSubmit?<Spin  className='md:text-center' indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />:<button className="btn-submit" type="submit">Submit</button>
           }
           <Link href="/register" className="text-blue-400 md:self-center hover:underline">You do not have acount <strong>SignUp</strong></Link>
         </div>
       </form>
-      <div className="md:flex-1 md:w-1/4 md:h-2/5 h-1/6 w-full flex  justify-center  items-center space-x-2">
-        <Link href="#" className="md:w-1/4 w-16 h-20 items-center justify-center md:flex md:h-1/3 "><GoogleOutlined className=" text-6xl rounded-lg bg-blue-500 hover:text-white" /></Link>
-        <Link href="#" className="md:w-1/4 w-16 h-20  items-center justify-center md:flex md:h-1/3 "><FacebookOutlined className=" text-6xl rounded-lg bg-blue-500 hover:text-white" /></Link>
-        <Link href="#" className="md:w-1/4 w-16 h-20 items-center justify-center md:flex md:h-1/3 "><TwitterOutlined className=" text-6xl rounded-lg bg-blue-500 hover:text-white" /></Link>
+      <div className=" md:max-h-svh items-center md:justify-center h-1/6 md:flex-col mx-auto justify-between flex self-center space-x-16 md:space-x-0">
+        <Link href="#" className="md:w-1/4 w-16 h-10 md:mb-6 md:h-12  items-center justify-center md:flex"><GoogleOutlined className=" text-6xl rounded-lg bg-blue-500 hover:text-white" /></Link>
+        <Link href="#" className="md:w-1/4 w-16 h-10 md:mb-6 md:h-12  items-center justify-center md:flex"><FacebookOutlined className=" text-6xl rounded-lg bg-blue-500 hover:text-white" /></Link>
+        <Link href="#" className="md:w-1/4 w-16 h-10 md:h-12 items-center justify-center md:flex"><TwitterOutlined className=" text-6xl rounded-lg bg-blue-500 hover:text-white" /></Link>
       </div>
     </div>
   )
