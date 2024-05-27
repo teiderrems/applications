@@ -181,12 +181,10 @@ export default function Application() {
 import React, { useEffect, useState } from 'react';
 import { Button, Table } from 'antd';
 import type { TableColumnsType } from 'antd';
-import { CustomType, Props } from '../components/ApplicationDetail';
+import ApplicationDetail, { CustomType, Props } from '../components/ApplicationDetail';
 import Axios from '@/hooks/axios.config';
 import axios from 'axios';
 import { usePathname, useRouter } from 'next/navigation';
-import { DeleteOutlined, EditOutlined, LeftCircleFilled, ReadOutlined, RightCircleFilled } from '@ant-design/icons';
-import ApplicationItem from '../components/ApplicationItem';
 
 
   
@@ -407,13 +405,16 @@ const Application: React.FC = () => {
       <Table className=' cursor-pointer' rowSelection={rowSelection} onRow={(record,index)=>{
         return{
           onClick:(e)=>{
-            router.push('/application/'+record._id);
+            setCurrentApp((state:Props)=>state=record);
+            setShowDetail(state=>!state);
           }
         }
       }} columns={columns} dataSource={response?.data} pagination={{
         onChange:()=>console.log('hello'),
         total:total
-      }}/>
+      }}/>{
+        showDetail && currentApp && <ApplicationDetail setApplication={setCurrentApp} application={currentApp} setShowDetail={setShowDetail}/>
+      }
     </div>
   );
 };
