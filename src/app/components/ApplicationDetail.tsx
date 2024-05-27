@@ -108,8 +108,8 @@ export default function ApplicationDetail({application,setShowDetail,setApplicat
 
   return (
    <div className="absolute inset-0 flex justify-center items-center flex-col">
-        <div  onClick={()=>setShowDetail(state=>!state)} className="absolute inset-0 opacity-50 bg-gray-100 z-1"></div>
-        <div className="flex flex-col flex-1 space-y-3 z-30 w-10/12 my-10 bg-white opacity-100 md:rounded ">
+        <div  onClick={()=>setShowDetail(state=>!state)} className="absolute inset-0  bg-gray-700 opacity-75 z-1"></div>
+        <div className="flex flex-col flex-1 space-y-3 z-30 w-9/12 my-10 bg-white opacity-100 md:rounded ">
             <h1 className="mx-2 py-2  font-bold">{application?.Title}</h1>
             <ul className="flex mx-2 md:mx-0 border-b-2 italic md:flex-row flex-col justify-between md:items-center">
                 <li className="md:pl-2">{application?.Entreprise}</li>
@@ -127,13 +127,13 @@ export default function ApplicationDetail({application,setShowDetail,setApplicat
                     </select> : <>{application?.Status}</>
                 }</li>
                 <li className="md:pr-2">{application?.CreatedAt?.split('T')[0].split('-').reverse().join('/')}</li>
-                <li>{(!edit) ?
+                <li className="md:mr-2">{(!edit) ?
                     <div className='flex justify-between'>
-                        <button className='text-blue w-1/3 text-xl' onClick={() => setEdit(state => !state)}><EditOutlined className="p-1 hover:rounded-md text-blue-400 hover:text-white hover:bg-blue-300 hover:shadow" /></button>
-                        <button className='w-1/3 text-cyan-300 text-xl' onClick={() => HandleDelete(application)}><DeleteOutlined className="p-1 hover:shadow hover:rounded-md hover:bg-red-300 hover:text-white" /></button>
+                        <button className=' w-1/3 text-xl' onClick={() => setEdit(state => !state)}><EditOutlined className="p-1  hover:text-blue-300" /></button>
+                        <button className='w-1/3  text-xl' onClick={() => HandleDelete(application)}><DeleteOutlined className="p-1 hover:text-red-300" /></button>
                     </div>
                     : <button onClick={() => SaveChange(application)}
-                        className="font-medium text-blue-600 dark:text-blue-500 hover:underline">SaveChange</button>
+                        className="font-medium   hover:underline">SaveChange</button>
                 }</li>
             </ul>
             <div className=" flex-1 flex md:flex-row flex-col">

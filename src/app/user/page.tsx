@@ -107,7 +107,7 @@ export default function UserList() {
     }
     findAll();
     
-  },[token, pathname, filter, response.isLoading, isAdd, reload, url, router, response?.isSuccess]);
+  },[token, pathname, filter, response.isLoading,window&&localStorage.getItem('token'), isAdd, reload, url, router, response?.isSuccess]);
 
 
   if (response?.isLoading) {

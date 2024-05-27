@@ -6,7 +6,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { CustomType } from "../components/ApplicationDetail";
 import { EyeInvisibleOutlined, EyeOutlined, FacebookOutlined, GoogleOutlined, LoadingOutlined, TwitterOutlined } from "@ant-design/icons";
-import { Divider, Spin } from "antd";
+import { Divider, Spin, message } from "antd";
+// import Notify from "../components/Notify";
 
 function Login() {
   const [user, setUser] = useState<{
@@ -22,7 +23,31 @@ function Login() {
   const router=useRouter();
   const [response,setResponse]=useState<CustomType>();
   const [isSubmit,setIsSubmit]=useState(false);
+  // const [iSsuccess,setSuccess]=useState(false);
 
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const success = () => {
+    messageApi.open({
+      type: 'success',
+      content: `Welcome ${user.Username}`,
+      duration:2000
+    });
+  };
+
+  const error = () => {
+    messageApi.open({
+      type: 'error',
+      content: `login failed try again`,
+    });
+  };
+
+  const warning = () => {
+    messageApi.open({
+      type: 'warning',
+      content: 'This is a warning message',
+    });
+  };
 
   const HandleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
@@ -31,7 +56,9 @@ function Login() {
         try {
             const res=await Axios.post("users/auth",{Username:user.Username,Password:user.Password});
             if (res.status==201 || res.status==200) {
-              localStorage.setItem("token",res.data.token);
+              success();
+              setTimeout(()=>{localStorage.setItem("token",res.data.token);
+              localStorage.setItem('userId',JSON.parse(atob(res.data.token.split('.')[1]))._id);
               localStorage.setItem("refresh",res.data.refresh);
               if (query.get("ReturnUrl")!=null) {
                 router.push(query.get("ReturnUrl") as string);
@@ -39,13 +66,15 @@ function Login() {
               else{
                 const user=JSON.parse(atob(localStorage.getItem("token")!.split('.')[1]));
                 localStorage.setItem('userId',user?._id);
+                setIsSubmit(state=>!state)
                 router.push('/application');
               }
-              setResponse({...response,isSuccess:true,isLoading:false,data:res.data});
+              setResponse({...response,isSuccess:true,isLoading:false,data:res.data});},2000)
           }
-        } catch (error:any) {
+        } catch (er:any) {
+            error()
             setIsSubmit(state=>!state);
-            setResponse({...response,error:error.message,isError:true,isLoading:false});
+            setResponse({...response,error:er.message,isError:true,isLoading:false});
         }
   }
   const [show,setShow]=useState(false);
@@ -55,6 +84,7 @@ function Login() {
 
   return (
     <div className=" min-h-screen flex flex-col space-y-12 md:space-y-0 md:flex-row">
+      {contextHolder}
       <form action="" onSubmit={HandleSubmit} className=" h-3/5 md:w-4/6  space-y-8 m-4 flex flex-col justify-center items-center md:h-full">
         <h1 className="text-gray-400 w-5/6 h-16 mb-4 text-justify">Login to continue</h1>
         {response?.isError && (<span className="text-red-400 text-center w-full block">Something wrong username or password isn&rsquo;t valid please try again</span>)}

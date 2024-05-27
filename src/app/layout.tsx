@@ -89,7 +89,7 @@ export default function RootLayout({
     if (user && user.profileId) {
       getProfile();
     }
-  },[image, togel, token, router, profile]);
+  },[image, togel, token, router, profile,window&&localStorage.getItem('token')]);
 
   return (
       <html lang="en">
@@ -101,7 +101,7 @@ export default function RootLayout({
           }
         }}>
           <div id="toggled-menu"
-              className={`w-4/5 absolute top-14 bottom-0 left-0 -translate-x-full bg-gradient-to-br from-gray-50 via-slate-50 to-blue-50  ${togel?'translate-x-0 z-20 opacity-100 w-1/5':''} text-gray-800 border-b border-gray-200 flex flex-col items-center md:static min-h-full md:w-1/5 md:transform-none md:border-none`}>
+              className={`w-4/5 absolute top-14 bottom-0 left-0 -translate-x-full bg-gradient-to-br from-gray-50 via-slate-50 to-blue-50  ${togel?'translate-x-0 z-20 opacity-100 w-1/5':''} text-gray-800 border-b border-gray-200 flex flex-col items-center md:static min-h-full md:w-1/6 md:transform-none md:border-none`}>
             <div  className="flex w-full justify-start">
               <Link href={'/'} className="hover:text-white flex-1">
                 
@@ -114,17 +114,17 @@ export default function RootLayout({
             {
               user?(
               <nav className="flex flex-col flex-1 py-3 space-y-6 text-justify w-full">
-                  <Link href="/" className={`px-2 capitalize text-xl ${pathname=="/"?'active':''}`}><HomeOutlined /> Home</Link>
-                  <Link href="/application" className={`px-2 text-xl ${pathname=="/application"&&'active'}`}><UnorderedListOutlined /> Application</Link>
-                  <Link href="/user/profile" className={`px-2 text-xl ${pathname=="/user/profile"&&'active'}`}><EditOutlined /> Profile</Link>
+                  <Link href="/" className={`px-2 capitalize text-lg ${pathname=="/"?'active':''}`}><HomeOutlined /> Home</Link>
+                  <Link href="/application" className={`px-2 text-lg ${pathname=="/application"&&'active'}`}><UnorderedListOutlined /> Application</Link>
+                  <Link href="/user/profile" className={`px-2 text-lg ${pathname=="/user/profile"&&'active'}`}><EditOutlined /> Profile</Link>
                   {
-                    user?.role=='admin'&&<Link href="/user" className={`px-2 capitalize text-xl ${pathname=="/user"?'active':''}`}><UnorderedListOutlined /> Users</Link>
+                    user?.role=='admin'&&<Link href="/user" className={`px-2 capitalize text-lg ${pathname=="/user"?'active':''}`}><UnorderedListOutlined /> Users</Link>
                   }
               </nav>
               ):(
                 <nav className="flex flex-col flex-1 py-3 space-y-6 text-justify w-full">
-                    <Link href="/register" className={`px-2 text-xl ${pathname=="/register"&&'active'}`}>Regiter</Link>
-                    <Link href="/login" className={`px-2 text-2xl ${pathname=="/login"?'active':''}`}>Login</Link>
+                    <Link href="/register" className={`px-2 text-lg ${pathname=="/register"&&'active'}`}>Regiter</Link>
+                    <Link href="/login" className={`px-2 text-lg ${pathname=="/login"?'active':''}`}>Login</Link>
                 </nav>
               )
             }
@@ -156,7 +156,7 @@ export default function RootLayout({
                   </button>:<Link href="/about" className="about">About</Link>
                 }
             </div>
-            <div className="flex-1">
+            <div className="flex-1 text-md">
               {children}
             </div>
           </div>

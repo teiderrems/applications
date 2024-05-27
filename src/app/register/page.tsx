@@ -7,7 +7,7 @@ import {  useEffect, useRef, useState } from "react"
 import { CustomType } from "../components/ApplicationDetail";
 import { EyeInvisibleOutlined, EyeOutlined, LoadingOutlined } from "@ant-design/icons";
 import { PutBlobResult } from "@vercel/blob";
-import { Spin } from "antd";
+import { Spin, message } from "antd";
 
 export default function Register() {
 
@@ -41,16 +41,40 @@ export default function Register() {
         try {
             const res=await Axios.post("users",new FormData(document.querySelector('form')!));
             if (res.status==201 || res.status==200) {
+                success();
                 setResponse({...response,isSuccess:true,isLoading:false,data:res.data});
                 router.push('/check_email');
             }
-        } catch (error:any) {
+        } catch (err:any) {
+            error();
             setIsSubmit(state=>!state);
             setResponse({...response,error:"register failed please try again",isError:true,isLoading:false});
         }
     }
     useEffect(()=>{
     },[])
+    const [messageApi, contextHolder] = message.useMessage();
+    const success = () => {
+        messageApi.open({
+          type: 'success',
+          content: `Welcome ${user.Username}`,
+          duration:2000
+        });
+      };
+    
+      const error = () => {
+        messageApi.open({
+          type: 'error',
+          content: `login failed try again`,
+        });
+      };
+    
+      const warning = () => {
+        messageApi.open({
+          type: 'warning',
+          content: 'This is a warning message',
+        });
+      };
   return (
     <div className="min-h-screen flex flex-col mt-4 justify-center  items-center">
         <form action="" onSubmit={HandleSubmit} className="md:w-3/6 w-4/6 md:space-y-3 space-y-10 h-5/6 justify-center items-center flex flex-col" encType="multipart/form-data">
@@ -94,7 +118,7 @@ export default function Register() {
                 {
                     isSubmit?<Spin  className='md:text-center' indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />:<button className="btn-submit" type="submit">Submit</button>
                 }
-                <Link href="/login" className="text-blue-400 md:self-center self-start hover:underline">You have acount <strong>SignIn</strong></Link>
+                <Link href="/login" className="text-blue-400  font-bold md:self-end md:h-12 self-start hover:underline">You have acount <strong>SignIn</strong></Link>
             </div>
         </form>
     </div>

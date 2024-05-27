@@ -301,7 +301,7 @@ const Application: React.FC = () => {
       }
     }
     findAll();
-  }, [limit, page, response.isLoading, prev,url, filter, token, next, pathname, router, isAdd, reload]);
+  }, [limit, page, response.isLoading,window&&localStorage.getItem('token'), prev,url, filter, token, next, pathname, router, isAdd, reload]);
 
 
   const start = () => {

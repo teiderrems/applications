@@ -72,7 +72,7 @@ export default function AddApplication({setHandleAdd,setIsAdd}:{setHandleAdd:Dis
   
   return (
     <div className='wrap-form fixed inset-0 w-full h-full  opacity-100 z-10'>
-        <div onClick={()=>setHandleAdd(state=>!state)} className="absolute inset-0 bg-blue-50 z-0"></div>
+        <div onClick={()=>setHandleAdd(state=>!state)} className="absolute  inset-0 bg-gray-700 opacity-75 z-0"></div>
         <form onSubmit={HandleSubmit} className='form-app z-10'>
              <div className='w-full mb-2 md:mb-0 justify-around md:justify-between md:h-12 h-44 px-2 flex md:flex-row space-y-1 flex-col'>
                 <div className='flex justify-between md:w-5/6 h-1/2 md:h-full w-full md:flex-row flex-col'>

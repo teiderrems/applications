@@ -72,7 +72,7 @@ export default function AddUser({setHandleAdd,setIsAdd}:{setHandleAdd:React.Disp
 
   return (
     <div className="wrap-form fixed inset-0 w-full h-full  opacity-100 z-10">
-        <div onClick={()=>setHandleAdd(state=>!state)} className="absolute inset-1 bg-blue-50 z-0"></div>
+        <div onClick={()=>setHandleAdd(state=>!state)} className="absolute inset-0 bg-gray-700 opacity-75 z-0"></div>
         <form action="" onSubmit={HandleSubmit} className="md:w-2/5 w-5/6 h-4/5 space-y-3  z-10 flex px-2 bg-white rounded-md shadow flex-col justify-center">
         <h1 className="text-gray-400 text-justify">Add User</h1>
             <div className=" flex md:flex-row flex-col h-16 justify-between">
@@ -89,11 +89,11 @@ export default function AddUser({setHandleAdd,setIsAdd}:{setHandleAdd:React.Disp
                     </div>
                 </div>
             </div>
-            <div className="form-group">
+            <div className="flex flex-col">
                 <label htmlFor="Email" className="text-xl">Email</label>
                 <input type="email" id="Email" placeholder="example@gmail.com" required onChange={(e)=>{setUser({...user,Email:e.target.value})}} className="form-input" />
             </div>
-            <div className="form-group">
+            <div className="flex flex-col">
                 <label htmlFor="Password" className="text-xl">Password</label>
                 <div className="flex w-full shadow  form-input">
                     <input type={show?"text":"password"} id="Password" required min={8} pattern="[a-zA-Z0-9;?,@]{8,15}" onChange={(e)=>{setUser({...user,Password:e.target.value})}} className="flex-1 pl-2 rounded-s-md" />
@@ -103,8 +103,8 @@ export default function AddUser({setHandleAdd,setIsAdd}:{setHandleAdd:React.Disp
             {
                 user.Password!=""&&(!user.Password.match("[a-zA-Z0-9;?,@]{8,15}"))&&<p className="text-red-400 text-wrap">Password must contain at least 8 characters with a mixture of uppercase, lowercase, numbers</p>
             }
-            <div className="form-group">
-                <label htmlFor="ConfirmPw" className="text-xl">ConfirmPw</label>
+            <div className="flex flex-col">
+                <label htmlFor="ConfirmPw" className="text-xl w-full">Confirm Password</label>
                 <div className="flex w-full shadow form-input">
                     <input type={showC?"text":"password"} id="ConfirmPw" required onChange={(e)=>{setUser({...user,ConfirmPassword:e.target.value})}} className="flex-1 pl-2 rounded-s-md" />
                     {showC?(<button onClick={()=>setShowC(!showC)} className="w-1/12 h-full border-l"><EyeOutlined/></button>): (<button onClick={()=>setShowC(!showC)}  className="w-1/12  border-l"><EyeInvisibleOutlined /></button>)}

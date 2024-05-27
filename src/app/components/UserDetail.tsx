@@ -94,7 +94,7 @@ export default function UserDetail({user,setShowDetail,setIsAdd,canEdit}:{canEdi
     },[currentUser,response,reload,canEdit]);
   return (
    <div className="fixed inset-0  flex justify-center items-center flex-col">
-        <div onClick={()=>setShowDetail(state=>!state)} className="absolute inset-0 bg-blue-50 z-0"></div>
+        <div onClick={()=>setShowDetail(state=>!state)} className="absolute inset-0 bg-gray-700 opacity-75 z-0"></div>
         <form className="flex flex-col md:w-3/6 w-4/6 h-5/6 px-4 md:h-5/6 justify-between space-y-3 bg-white z-10 opacity-100 rounded-md shadow" encType="multipart/form-data">
             <h1 className=" text-justify px-4 text-gray-400 my-1">Let is updating your personal informations</h1>
             <div className="w-full flex-1 flex space-x-4 px-4 flex-row">

@@ -8,6 +8,7 @@ import  profileImg  from '../../../../public/defaul.jpeg';
 import Image from 'next/image';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import UserDetail from '@/app/components/UserDetail';
+import { Avatar } from 'antd';
 
 
 
@@ -22,8 +23,6 @@ export default function UserDetailInfo() {
     const [edit,setEdit]=useState(false);
     const [profile,setProfile]=useState<any>(undefined);
     const HandleDelete=async()=>{
-        
-        
         try {
             const res=await Axios.delete("users/"+param,{
                 headers:{
@@ -62,6 +61,7 @@ export default function UserDetailInfo() {
     useEffect(()=>{
         setParam(window&& (localStorage.getItem('userId') as string)&&(localStorage.getItem('userId') as string));
         setToken(window&& (localStorage.getItem('token') as string)&&(localStorage.getItem('token') as string));
+        console.log(localStorage.getItem('userId'));
         const getUser=async()=>{
             try {
                 const res=await Axios.get(`users/${param}`,{
@@ -70,6 +70,7 @@ export default function UserDetailInfo() {
                     }
                 });
                 if (res.status == 201 || res.status == 200) {
+                    
                     if (!res.data.user) {
                         router.push('/register');
                     }
@@ -127,22 +128,30 @@ export default function UserDetailInfo() {
         </div>)
     }
     return (
-        <div className='flex-1 flex flex-col items-center justify-center'>
-            <div className='flex-1 space-y-2 mt-5 flex flex-col w-5/6 h-5/6'>
-                <div className='flex-1 flex md:flex-row flex-col rounded-md shadow'>
-                    <Image className=' md:w-1/2 w-full md:rounded-l-lg rounded-t-md float-start' width={100} height={100} src={(response?.data?.ProfileId)?(profile):profileImg} alt="profile"/>
-                    <div  className='flex-1 flex flex-col md:rounded-r-lg justify-between md:justify-center'>
-                        <p className='text-justify border-b flex-1 items-center flex justify-between px-2'><span className='w-4/5'>{response?.data?.Username}</span> </p>
-                        <p className='text-justify border-b flex-1 items-center flex justify-between px-2'><span className='w-4/5'>{response?.data?.Email}</span></p>
-                        <p className='text-justify border-b flex-1 items-center flex justify-between px-2'><span className='w-4/5'>{response?.data?.Firstname}</span> </p>
-                        <p className='text-justify border-b flex-1 items-center flex justify-between px-2'><span className='w-4/5'>{response?.data?.Lastname}</span> </p>
-                        <p className='text-justify border-b flex-1 items-center flex justify-between px-2'><span className='w-3/5'>{response?.data?.CreatedAt.split('T')[0].split('-').reverse().join('/')}</span></p>
+        <div className='flex-1 flex flex-col mx-5 md:flex-row items-center justify-center'>
+            <div className='flex-1 space-y-2 mt-5 flex flex-col w-5/6 h-4/6'>
+                <div className='flex-1 flex flex-col'>
+                
+                    <Avatar className='h-64 w-64 m-2 self-start' draggable={false} size={'large'} src={(response?.data?.ProfileId)?(profile):profileImg} />
+                    <div className='flex md:justify-start justify-between space-x-2 h-7'>
+                        <button className='rounded-md   h-5/6 w-2/12 md:w-1/12 text-black' onClick={()=>setEdit(!edit)}><EditOutlined /></button>
+                        <button className='rounded-md h-5/6 w-2/12 md:w-1/12 text-black' onClick={HandleDelete}><DeleteOutlined /></button>
+                    </div>
+                      {/*icon={<Image className=' md:w-1/2 w-full md:rounded-l-lg rounded-t-md float-start' width={100} height={100} src={(response?.data?.ProfileId)?(profile):profileImg} alt="profile"/>} */}
+                    <div  className='w-2/3 flex flex-col md:rounded-r-lg justify-between md:justify-center'>
+                        <p className='text-justify border-b h-7 items-center flex justify-between px-2'><span className='w-4/5'>{response?.data?.Username}</span> </p>
+                        <p className='text-justify border-b h-7 items-center flex justify-between px-2'><span className='w-4/5'>{response?.data?.Email}</span></p>
+                        <p className='text-justify border-b h-7 items-center flex justify-between px-2'><span className='w-4/5'>{response?.data?.Firstname}</span> </p>
+                        <p className='text-justify border-b h-7 items-center flex justify-between px-2'><span className='w-4/5'>{response?.data?.Lastname}</span> </p>
+                        <p className='text-justify border-b h-7 items-center flex justify-between px-2'><span className='w-3/5'>{response?.data?.CreatedAt.split('T')[0].split('-').reverse().join('/')}</span></p>
                     </div>
                 </div>   
-                <div className='flex md:justify-end justify-between space-x-2 h-1/12 w-full'>
-                    <button className='rounded-md bg-blue-400 md:my-2 my-4  h-5/6 w-2/12 md:w-1/12 text-white' onClick={()=>setEdit(!edit)}><EditOutlined /></button>
-                    <button className='rounded-md bg-red-400 md:my-2 my-4  h-5/6 w-2/12 md:w-1/12 text-white' onClick={HandleDelete}><DeleteOutlined /></button>
-                </div>
+            </div>
+            <div className='flex-1 md:w-1/2 md:my-4'>
+                <h1>About You</h1>
+                <p>bo cumque recusandae expedita eos eius aliquid! Inventore iure nam deserunt commodi eos aperiam ullam autem molestiae, esse atque numquam illo laborum ex! Minima, laboriosam quam?
+                Temporibus sed eaque numquam maxime fugit eos quaerat velit alias sit. Iusto quaerat rem, iure laboriosam libero quas aperiam incidunt, qui eos a adipisci nobis voluptate. Ad nulla sit nisi!
+                Sunt tenetur nihil molestiae quia o cupiditate eveniet atque molestias mollitia ut aliquid at dolores cum repellat incidunt error doloribus repudiandae, provident perferendis assumenda.</p>
             </div>
             {
                 edit&&<UserDetail canEdit={false} user={response?.data} setShowDetail={setEdit} setIsAdd={setReload}/>
