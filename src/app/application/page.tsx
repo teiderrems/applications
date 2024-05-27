@@ -185,6 +185,8 @@ import ApplicationDetail, { CustomType, Props } from '../components/ApplicationD
 import Axios from '@/hooks/axios.config';
 import axios from 'axios';
 import { usePathname, useRouter } from 'next/navigation';
+import { PlusOutlined } from '@ant-design/icons';
+import AddApplication from '../components/AddApplication';
 
 
   
@@ -206,16 +208,15 @@ const Application: React.FC = () => {
   const [prev, setPrev] = useState(null);
   const [filter,setFilter]=useState('all');
 
-  const [handleAdd, setHandleAdd] = useState(false);
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(12);
   const [url, setUrl] = useState<any>(`${Axios.defaults.baseURL}` + `applications?page=${page}&limit=${limit}`);
   const router = useRouter();
   const pathname = usePathname();
   const [currentApp, setCurrentApp] = useState<any>({});
-  const [viewDetail, setViewDetail] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
   const [total,setTotal]=useState(10);
+  const [handleAdd,setHandleAdd]=useState(false);
 
   const columns: TableColumnsType<Props> = [
     {
@@ -246,75 +247,6 @@ const Application: React.FC = () => {
     
   ];
 
-    async function HandleDelete(a: Props): Promise<void> {
-        try {
-            const res = await Axios.delete(`applications/${currentApp._id}`, {
-                headers: {
-                    "Authorization": window.sessionStorage ? ("Bearer " + window.sessionStorage.getItem("token")) : ''
-                }
-            });
-            if (res.status == 204 || res.status == 200) {
-                setReload(state=>!state);
-            }
-        } catch (error: any) {
-            console.log(error);
-            if (error.response.status == 401) {
-                try {
-                    const res = await Axios.post("users/refresh_token", { refresh: sessionStorage.getItem("refresh") });
-                    if (res.status == 201 || res.status == 200) {
-                        setToken(res.data.token);
-                        sessionStorage.setItem("token", res.data.token);
-                        if (sessionStorage.getItem("token")) {
-                            setReload(true);
-                        }
-                    }
-                } catch (err: any) {
-                    sessionStorage.removeItem("token");
-                    sessionStorage.removeItem("refresh");
-                    if (err.response.status == 401) {
-                        router.push(`/login?ReturnUrl=${pathname}`);
-                    }
-                    setReload(state=>!state);
-                }
-            }
-        }
-    }
-
-    const SaveChange = async (a: Props) => {
-        setShowDetail(state => !state);
-        if (currentApp && a.Status !== currentApp.Status) {
-            try {
-                const res = await Axios.put(`applications/${currentApp._id}`, currentApp, {
-                    headers: {
-                        "Authorization": window.sessionStorage ? ("Bearer " + window.sessionStorage.getItem("token")) : ''
-                    }
-                });
-                if (res.status == 201 || res.status == 200) {
-                    setReload(state=>!state);
-                }
-            } catch (error: any) {
-                if (error.response.status == 401) {
-                    try {
-                        const res = await Axios.post("users/refresh_token", { refresh: sessionStorage.getItem("refresh") });
-                        if (res.status == 201 || res.status == 200) {
-                            setToken(res.data.token);
-                            sessionStorage.setItem("token", res.data.token);
-                            if (sessionStorage.getItem("token")) {
-                                setReload(state=>!state);
-                            }
-                        }
-                    } catch (err: any) {
-                        sessionStorage.removeItem("token");
-                        sessionStorage.removeItem("refresh");
-                        if (err.response.status == 401) {
-                            router.push(`/login?ReturnUrl=${pathname}`);
-                        }
-                        setReload(false);
-                    }
-                }
-            }
-        }
-    }
   useEffect(() => {
     setToken((state:any)=>{
       state=window && sessionStorage.getItem('token');
@@ -393,15 +325,11 @@ const Application: React.FC = () => {
   const hasSelected = selectedRowKeys.length > 0;
 
   return (
-    <div>
-      <div style={{ marginBottom: 16 }}>
-        <Button type="primary" onClick={start} disabled={!hasSelected} loading={loading}>
-          Reload
-        </Button>
-        <span style={{ marginLeft: 8 }}>
-          {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
-        </span>
+    <div className='mx-2 flex flex-col min-h-full'>
+      <div className='h-10 bg-slate-50 mt-2 flex items-center rounded-t-md justify-end'>
+        <button onClick={() => setHandleAdd(!handleAdd)} className='mx-2 rounded-full hover:bg-blue-500 hover:text-white text-2xl w-8 h-8'><PlusOutlined /></button>
       </div>
+      
       <Table className=' cursor-pointer' rowSelection={rowSelection} onRow={(record,index)=>{
         return{
           onClick:(e)=>{
@@ -414,6 +342,9 @@ const Application: React.FC = () => {
         total:total
       }}/>{
         showDetail && currentApp && <ApplicationDetail setApplication={setCurrentApp} application={currentApp} setShowDetail={setShowDetail}/>
+      }
+      {
+        handleAdd &&<AddApplication setIsAdd={setIsAdd} setHandleAdd={setHandleAdd}/> 
       }
     </div>
   );

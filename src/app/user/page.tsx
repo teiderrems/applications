@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { CustomType } from "../components/ApplicationDetail";
 import UserItem, { UserType } from "../components/UserItem";
-import { AppstoreAddOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 
 import AddUser from "../components/AddUser";
 import axios from "axios";
@@ -99,7 +99,7 @@ export default function UserList() {
     <div className='flex-1 flex overflow-hidden flex-col  mx-2 space-y-5'>
       <div className="flex justify-end space-x-3 h-10">
         {
-          (!handleAdd) ? <button className="rounded-lg  text-center h-full w-10 text-2xl  hover:text-blue-400" onClick={() => setHandleAdd(!handleAdd)}><AppstoreAddOutlined className="h-full w-full " /></button> : <AddUser setHandleAdd={setHandleAdd} setIsAdd={setIsAdd} />
+          (!handleAdd) ? <button onClick={() => setHandleAdd(!handleAdd)} className='mx-2 rounded-full hover:bg-blue-500 hover:text-white text-2xl w-8 h-8'><PlusOutlined /></button> : <AddUser setHandleAdd={setHandleAdd} setIsAdd={setIsAdd} />
         }
       </div>
       <div className="shadow-md sm:rounded-lg w-full">
