@@ -109,7 +109,7 @@ export default function ApplicationDetail({application,setShowDetail,setApplicat
   return (
    <div className="absolute inset-0 flex justify-center items-center flex-col">
         <div  onClick={()=>setShowDetail(state=>!state)} className="absolute inset-0 opacity-50 bg-gray-100 z-1"></div>
-        <div className="flex flex-col flex-1 space-y-3 z-30 w-8/12 my-10 bg-white opacity-100 md:rounded ">
+        <div className="flex flex-col flex-1 space-y-3 z-30 w-10/12 my-10 bg-white opacity-100 md:rounded ">
             <h1 className="mx-2 py-2  font-bold">{application?.Title}</h1>
             <ul className="flex mx-2 md:mx-0 border-b-2 italic md:flex-row flex-col justify-between md:items-center">
                 <li className="md:pl-2">{application?.Entreprise}</li>
