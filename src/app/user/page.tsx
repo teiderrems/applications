@@ -96,8 +96,8 @@ export default function UserList() {
   }
   
   return (
-    <div className='flex-1 flex overflow-hidden flex-col  mx-2 space-y-5'>
-      <div className="flex justify-end space-x-3 h-10">
+    <div className='flex-1 flex overflow-hidden flex-col  mx-2'>
+      <div className="h-10 bg-slate-50 mt-2 flex items-center rounded-t-md justify-end">
         {
           (!handleAdd) ? <button onClick={() => setHandleAdd(!handleAdd)} className='mx-2 rounded-full hover:bg-blue-500 hover:text-white text-2xl w-8 h-8'><PlusOutlined /></button> : <AddUser setHandleAdd={setHandleAdd} setIsAdd={setIsAdd} />
         }
