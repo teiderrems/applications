@@ -50,48 +50,47 @@ export default function Register() {
         }
     }
     useEffect(()=>{
-        sessionStorage.removeItem('token');
     },[])
   return (
-    <div className="wrap-form">
-        <form action="" onSubmit={HandleSubmit} className="md:w-2/5 py-2 w-5/6 h-full flex md:space-y-4 flex-col items-center bg-white justify-center" encType="multipart/form-data">
+    <div className="min-h-screen flex flex-col mt-4 justify-center  items-center">
+        <form action="" onSubmit={HandleSubmit} className="md:w-3/6 w-4/6 md:space-y-3 space-y-10 h-5/6 justify-center items-center flex flex-col" encType="multipart/form-data">
         <h1 className="text-gray-400 self-start mb-2 text-justify">SignIn to continue</h1>
         {response?.isError && (<span className="text-red-400 text-center w-full block">{response?.error}</span>)}
-            <div className="md:h-1/6 my-4 w-full md:my-0 flex space-x-2 flex-row">
-                <div className="flex-1 w-3/5 flex flex-col">
+            <div className="h-20 w-full md:my-0 flex space-x-2 flex-row">
+                <div className=" w-3/5 md:space-y-2 space-y-4 flex flex-col">
                     <label htmlFor="Username" className="text-xl">Username</label>
-                    <input type="text" name="Username" id="Username" placeholder="enter your username" required onChange={(e)=>{setUser({...user,Username:e.target.value})}} className=" h-3/4 rounded-md px-2 shadow" />
+                    <input type="text" name="Username" id="Username" placeholder="enter your username" required onChange={(e)=>{setUser({...user,Username:e.target.value})}} className=" h-14 rounded-md px-2 shadow" />
                 </div>
-                <div className="flex-1 flex flex-col">
+                <div className="flex md:space-y-2 space-y-4 h-full w-2/5 flex-col">
                     <label htmlFor="Profile" className="text-xl">Profile</label>
-                    <input type="file" ref={inputFileRef} name="profile" placeholder="choose your profile" className=" hover:cursor-pointer w-full p-2 h-3/4 rounded-md shadow" id="profile" />
+                    <input type="file" ref={inputFileRef} name="profile" placeholder="choose your profile" className=" h-14 text-center p-1 hover:cursor-pointer rounded-md shadow" id="profile" />
                 </div>
             </div>
-            <div className="h-1/6 flex w-full flex-col">
+            <div className="h-20 flex md:space-y-2 space-y-4 w-full flex-col">
                 <label htmlFor="Email" className="text-xl">Email</label>
-                <input type="email" name="Email" id="Email" placeholder="example@gmail.com" required onChange={(e)=>{setUser({...user,Email:e.target.value})}} className="form-input px-2" />
+                <input type="email" name="Email" id="Email" placeholder="example@gmail.com" required onChange={(e)=>{setUser({...user,Email:e.target.value})}} className=" h-14 px-2 shadow rounded-md" />
             </div>
-            <div className="h-1/6 w-full flex flex-col">
+            <div className="h-20 w-full md:space-y-2 space-y-4 flex flex-col">
                 <label htmlFor="Password" className="text-xl">Password</label>
-                <div className="flex w-full shadow  form-input">
-                    <input type={show?"text":"password"} id="Password" name="Password" required min={8} pattern="[a-zA-Z0-9;?,@]{8,15}" onChange={(e)=>{setUser({...user,Password:e.target.value})}} className="flex-1 pl-2 rounded-s-md" />
-                    {show?(<button onClick={()=>setShow(!show)} className="w-1/12 h-full border-l"><EyeOutlined/></button>): (<button onClick={()=>setShow(!show)}  className="w-1/12 h-full  border-l"><EyeInvisibleOutlined /></button>)}
+                <div className="flex w-full h-14 shadow rounded-md ">
+                    <input type={show?"text":"password"} id="Password" name="Password" required min={8} pattern="[a-zA-Z0-9;?,@]{8,15}" onChange={(e)=>{setUser({...user,Password:e.target.value})}} className=" pl-2 flex-1" />
+                    {show?(<button onClick={()=>setShow(!show)} className="w-1/12 h-full"><EyeOutlined/></button>): (<button onClick={()=>setShow(!show)}  className="w-1/12 h-full "><EyeInvisibleOutlined /></button>)}
                 </div>
             </div>
             {
-                user.Password!=""&&(!user.Password.match("[a-zA-Z0-9;?,@]{8,15}"))&&<p className="text-red-400 text-wrap">Password must contain at least 8 characters with a mixture of uppercase, lowercase, numbers</p>
+                user.Password!=""&&(!user.Password.match("[a-zA-Z0-9;?,@]{8,15}"))&&<p className="text-red-400 w-4/6 text-wrap">Password must contain at least 8 characters with a mixture of uppercase, lowercase, numbers</p>
             }
-            <div className="h-1/6 w-full flex flex-col">
+            <div className="h-20 w-full md:space-y-2 space-y-4 flex flex-col">
                 <label htmlFor="ConfirmPassword" className="text-xl">ConfirmPassword</label>
-                <div className="flex w-full shadow  form-input">
-                    <input type={showC?"text":"password"} id="ConfirmPassword" required onChange={(e)=>{setUser({...user,ConfirmPassword:e.target.value})}} className="flex-1 pl-2 rounded-s-md" />
-                    {showC?(<button onClick={()=>setShowC(!showC)} className="w-1/12 h-full border-l"><EyeOutlined/></button>): (<button onClick={()=>setShowC(!showC)}  className="w-1/12 h-full  border-l"><EyeInvisibleOutlined /></button>)}
+                <div className="flex w-full h-14 shadow rounded-md ">
+                    <input type={showC?"text":"password"} id="ConfirmPassword" required onChange={(e)=>{setUser({...user,ConfirmPassword:e.target.value})}} className="flex-1 pl-2" />
+                    {showC?(<button onClick={()=>setShowC(!showC)} className="w-1/12 h-full"><EyeOutlined/></button>): (<button onClick={()=>setShowC(!showC)}  className="w-1/12 h-full"><EyeInvisibleOutlined /></button>)}
                 </div>
             </div>
             {
                 user.Password!=""&&user.ConfirmPassword!=""&&user.ConfirmPassword!=user.Password&&<span className="text-red-400">ConfirmPassword must be equal to Password</span>
             }
-            <div className="w-full md:justify-between justify-around items-center flex h-1/6 md:flex-row flex-col">
+            <div className="w-full md:justify-between justify-around items-center flex h-20 md:flex-row flex-col">
                 {
                     isSubmit?<Spin  className='md:text-center' indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />:<button className="btn-submit" type="submit">Submit</button>
                 }

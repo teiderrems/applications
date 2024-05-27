@@ -20,7 +20,7 @@ export default function UserDetail({user,setShowDetail,setIsAdd,canEdit}:{canEdi
         try {
           const res=await Axios.put("users/"+user._id,data,{
             headers:{
-              "Authorization":window.sessionStorage?("Bearer "+window.sessionStorage.getItem("token")):''
+              "Authorization":window.localStorage?("Bearer "+window.localStorage.getItem("token")):''
             }
           });
             if (res.status==201 || res.status==200) {
@@ -31,17 +31,17 @@ export default function UserDetail({user,setShowDetail,setIsAdd,canEdit}:{canEdi
         } catch (error:any) {
             if (error.response.status==401) {
                 try {
-                  const res=await Axios.post("users/refresh_token",{refresh:sessionStorage.getItem("refresh")});
+                  const res=await Axios.post("users/refresh_token",{refresh:localStorage.getItem("refresh")});
                   if (res.status==201 || res.status==200) {
-                    sessionStorage.setItem("token",res.data.token);
-                    sessionStorage.setItem("refresh",res.data.refresh);
-                    if (sessionStorage.getItem("token")) {
+                    localStorage.setItem("token",res.data.token);
+                    localStorage.setItem("refresh",res.data.refresh);
+                    if (localStorage.getItem("token")) {
                       setReload(true);
                     }
                   }
                 } catch (err:any) {
-                  sessionStorage.removeItem("token");
-                  sessionStorage.removeItem("refresh");
+                  localStorage.removeItem("token");
+                  localStorage.removeItem("refresh");
                   if (err.response.status == 401) {
                     router.push(`/login?ReturnUrl=${pathname}`);
                   }
@@ -58,7 +58,7 @@ export default function UserDetail({user,setShowDetail,setIsAdd,canEdit}:{canEdi
         try {
             const res=await Axios.delete("users/"+user._id,{
                 headers:{
-                    "Authorization":window.sessionStorage?("Bearer "+window.sessionStorage.getItem("token")):''
+                    "Authorization":window.localStorage?("Bearer "+window.localStorage.getItem("token")):''
                 }
             });
             if (res.status==204) {
@@ -70,17 +70,17 @@ export default function UserDetail({user,setShowDetail,setIsAdd,canEdit}:{canEdi
         } catch (error:any) {
             if (error.response.status==401) {
                 try {
-                  const res=await Axios.post("users/refresh_token",{refresh:sessionStorage.getItem("refresh")});
+                  const res=await Axios.post("users/refresh_token",{refresh:localStorage.getItem("refresh")});
                   if (res.status==201 || res.status==200) {
-                    sessionStorage.setItem("token",res.data.token);
-                    sessionStorage.setItem("refresh",res.data.refresh);
-                    if (sessionStorage.getItem("token")) {
+                    localStorage.setItem("token",res.data.token);
+                    localStorage.setItem("refresh",res.data.refresh);
+                    if (localStorage.getItem("token")) {
                       setReload(true);
                     }
                   }
                 } catch (err:any) {
-                  sessionStorage.removeItem("token");
-                  sessionStorage.removeItem("refresh");
+                  localStorage.removeItem("token");
+                  localStorage.removeItem("refresh");
                   if (err.response.status == 401) {
                     router.push(`/login?ReturnUrl=${pathname}`);
                   }

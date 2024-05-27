@@ -27,29 +27,29 @@ export default function UserDetailInfo() {
         try {
             const res=await Axios.delete("users/"+param,{
                 headers:{
-                    "Authorization":window.sessionStorage?("Bearer "+window.sessionStorage.getItem("token")):''
+                    "Authorization":window.localStorage?("Bearer "+window.localStorage.getItem("token")):''
                 }
             });
             if (res.status==204) {
-                sessionStorage.removeItem('token');
-                sessionStorage.removeItem('refresh');
-                sessionStorage.removeItem('userId');
+                localStorage.removeItem('token');
+                localStorage.removeItem('refresh');
+                localStorage.removeItem('userId');
                 router.push('/register');
             }
         } catch (error:any) {
             if (error.response.status==401) {
                 try {
-                  const res=await Axios.post("users/refresh_token",{refresh:sessionStorage.getItem("refresh")});
+                  const res=await Axios.post("users/refresh_token",{refresh:localStorage.getItem("refresh")});
                   if (res.status==201 || res.status==200) {
-                    sessionStorage.setItem("token",res.data.token);
-                    sessionStorage.setItem("refresh",res.data.refresh);
-                    if (sessionStorage.getItem("token")) {
+                    localStorage.setItem("token",res.data.token);
+                    localStorage.setItem("refresh",res.data.refresh);
+                    if (localStorage.getItem("token")) {
                       setReload(true);
                     }
                   }
                 } catch (err:any) {
-                  sessionStorage.removeItem("token");
-                  sessionStorage.removeItem("refresh");
+                  localStorage.removeItem("token");
+                  localStorage.removeItem("refresh");
                   if (err.response.status == 401) {
                     router.push(`/login?ReturnUrl=${pathname}`);
                   }
@@ -60,13 +60,13 @@ export default function UserDetailInfo() {
     }
 
     useEffect(()=>{
-        setParam(window&& (sessionStorage.getItem('userId') as string)&&(sessionStorage.getItem('userId') as string));
-        setToken(window&& (sessionStorage.getItem('token') as string)&&(sessionStorage.getItem('token') as string));
+        setParam(window&& (localStorage.getItem('userId') as string)&&(localStorage.getItem('userId') as string));
+        setToken(window&& (localStorage.getItem('token') as string)&&(localStorage.getItem('token') as string));
         const getUser=async()=>{
             try {
                 const res=await Axios.get(`users/${param}`,{
                     headers: {
-                        "Authorization": window.sessionStorage ? ("Bearer " + window.sessionStorage.getItem("token")) : ''
+                        "Authorization": window.localStorage ? ("Bearer " + window.localStorage.getItem("token")) : ''
                     }
                 });
                 if (res.status == 201 || res.status == 200) {
@@ -81,15 +81,15 @@ export default function UserDetailInfo() {
             } catch (error: any) {
                 if (error.response.status == 401) {
                 try {
-                    const res=await Axios.post("users/refresh_token",{refresh:sessionStorage.getItem("refresh")});
+                    const res=await Axios.post("users/refresh_token",{refresh:localStorage.getItem("refresh")});
                     if (res.status==201 || res.status==200) {
                         
                         setToken(res.data.token);
-                        sessionStorage.setItem("token",res.data.token);
+                        localStorage.setItem("token",res.data.token);
                     }
                 } catch (err:any) {
-                    sessionStorage.removeItem("token");
-                    sessionStorage.removeItem("refresh");
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("refresh");
                     if (err.response.status == 401) {
                     router.push(`/login?ReturnUrl=${pathname}`);
                     }

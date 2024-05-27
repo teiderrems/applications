@@ -9,6 +9,7 @@ import { PlusOutlined } from "@ant-design/icons";
 
 import AddUser from "../components/AddUser";
 import axios from "axios";
+import { Table, TableColumnsType } from "antd";
 
 const Role = ['all','admin', 'guest', 'user'];
 
@@ -28,7 +29,36 @@ export default function UserList() {
   const [next,setNext]=useState(null);
   const [prev,setPrev]=useState(null);
   const [filter,setFilter]=useState('all');
+  const [total,setTotal]=useState(10);
 
+  const columns: TableColumnsType<UserType> = [
+    {
+      title: 'Username',
+      dataIndex: 'Username',
+    },
+    {
+      title: 'Email',
+      dataIndex: 'Email',
+    },
+    {
+      title: 'Firstname',
+      dataIndex: 'Firstname',
+    },
+    {
+      title: 'Lastname',
+      dataIndex: 'Lastname',
+    },
+    {
+      title: 'Role',
+      dataIndex: 'Role',
+    },
+    {
+      title: 'CreatedAt',
+      dataIndex: 'CreatedAt',
+      render:(value)=>(value as string).split('T')[0].split('-').reverse().join('/')
+    },
+    
+  ];
   
   
   useEffect(()=>{
@@ -36,10 +66,11 @@ export default function UserList() {
       try {
         const res = await axios.get(url+`&role=${filter}`, {
           headers: {
-            "Authorization": window.sessionStorage ? ("Bearer " + window.sessionStorage.getItem("token")) : ''
+            "Authorization": window.localStorage ? ("Bearer " + window.localStorage.getItem("token")) : ''
           }
         });
         if (res.status == 201 || res.status == 200) {
+          setTotal(state=>state=res.data.data.count);
           setResponse(state=>{
             return { ...state, isLoading: false, status: res.status, data: res.data.data.users, isSuccess: true };
           });
@@ -53,16 +84,16 @@ export default function UserList() {
             })
             if ((error.response.status==401)&&(error.response.data.message as string).includes('jwt')) {
               try {
-                const res=await Axios.post("users/refresh_token",{refresh:sessionStorage.getItem("refresh")});
+                const res=await Axios.post("users/refresh_token",{refresh:localStorage.getItem("refresh")});
                 if (res.status==201 || res.status==200) {
-                  sessionStorage.setItem("token",res.data.token);
-                  if (sessionStorage.getItem("token")) {
+                  localStorage.setItem("token",res.data.token);
+                  if (localStorage.getItem("token")) {
                     setReload(true);
                   }
                 }
               } catch (err:any) {
-                sessionStorage.removeItem("token");
-                sessionStorage.removeItem("refresh");
+                localStorage.removeItem("token");
+                localStorage.removeItem("refresh");
                 if (err.response.status == 401) {
                   router.push(`/login?ReturnUrl=${pathname}`);
                 }
@@ -94,6 +125,8 @@ export default function UserList() {
         </div>
     )
   }
+
+
   
   return (
     <div className='flex-1 flex overflow-hidden flex-col  mx-2'>
@@ -102,66 +135,16 @@ export default function UserList() {
           (!handleAdd) ? <button onClick={() => setHandleAdd(!handleAdd)} className='mx-2 rounded-full hover:bg-blue-500 hover:text-white text-2xl w-8 h-8'><PlusOutlined /></button> : <AddUser setHandleAdd={setHandleAdd} setIsAdd={setIsAdd} />
         }
       </div>
-      <div className="shadow-md sm:rounded-lg w-full">
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-              <th scope="col" className="px-1 py-1">
-                Username
-              </th>
-              <th scope="col" className="px-1 py-1">
-                Email
-              </th>
-              <th scope="col" className="px-1 py-1">
-                Firstname
-              </th>
-              <th scope="col" className="px-1 py-1">
-                Lastname
-              </th>
-              <th scope="col" className="px-1 py-1">
-                <select className=" uppercase h-full hover:cursor-pointer" onChange={(e) => {
-                  setFilter(e.target.value);
-                  setReload(!reload)
-                }}>
-                <option>Role</option>
-                {Role.filter(s => s !== filter).map(s => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
-              </select>
-              </th>
-              <th scope="col" className="px-1 py-1">
-                Date Création
-              </th>
-              <th scope="col" className="px-1 text-center py-1">
-                Action
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              response.data?.map((u: UserType) => (
-                  <UserItem key={u._id} user={u} setIsAdd={setIsAdd}/>
-                ))
-            }
-          </tbody>
-        </table>
-        {
-          next && <nav className="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
-            <span className="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">Showing <span className="font-semibold text-gray-900 dark:text-white">1-10</span> of <span className="font-semibold text-gray-900 dark:text-white">1000</span></span>
-            <ul className="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
-              <li onClick={() => setUrl(prev)}>
-                <a href="#" className="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a>
-              </li>
-              <li>
-                <a href="#" className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</a>
-              </li>
-              <li onClick={() => setUrl(next)}>
-                <a href="#" className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
-              </li>
-            </ul>
-          </nav>
+      <Table className=' cursor-pointer' onRow={(record,index)=>{
+        return{
+          onClick:(e)=>{
+            console.log(record)
+          }
         }
-      </div>
+      }} columns={columns} dataSource={response?.data} pagination={{
+        onChange:()=>console.log('hello'),
+        total:total
+      }}/>
     </div>
 
 )

@@ -31,14 +31,14 @@ function Login() {
         try {
             const res=await Axios.post("users/auth",{Username:user.Username,Password:user.Password});
             if (res.status==201 || res.status==200) {
-              sessionStorage.setItem("token",res.data.token);
-              sessionStorage.setItem("refresh",res.data.refresh);
+              localStorage.setItem("token",res.data.token);
+              localStorage.setItem("refresh",res.data.refresh);
               if (query.get("ReturnUrl")!=null) {
                 router.push(query.get("ReturnUrl") as string);
               }
               else{
-                const user=JSON.parse(atob(sessionStorage.getItem("token")!.split('.')[1]));
-                sessionStorage.setItem('userId',user?._id);
+                const user=JSON.parse(atob(localStorage.getItem("token")!.split('.')[1]));
+                localStorage.setItem('userId',user?._id);
                 router.push('/application');
               }
               setResponse({...response,isSuccess:true,isLoading:false,data:res.data});
@@ -50,7 +50,7 @@ function Login() {
   }
   const [show,setShow]=useState(false);
   useEffect(()=>{
-    sessionStorage.removeItem('token');
+    localStorage.removeItem('token');
   },[query,isSubmit]);
 
   return (
@@ -70,7 +70,7 @@ function Login() {
           </div>
         </div>
         {
-          user.Password!=""&&(!user.Password.match("[a-zA-Z0-9;?,@]{8,15}"))&&<span className="text-red-400 text-wrap">Password must contain at least 8 characters with a mixture of uppercase, lowercase, numbers</span>
+          user.Password!=""&&(!user.Password.match("[a-zA-Z0-9;?,@]{8,15}"))&&<span className="text-red-400 w-5/6 text-wrap">Password must contain at least 8 characters with a mixture of uppercase, lowercase, numbers</span>
         }
         <div className="flex flex-col md:flex-row w-5/6 justify-between h-28 md:h-20">
           {
@@ -80,9 +80,9 @@ function Login() {
         </div>
       </form>
       <div className=" md:max-h-svh items-center md:justify-center h-1/6 md:flex-col mx-auto justify-between flex self-center space-x-16 md:space-x-0">
-        <Link href="#" className="md:w-1/4 w-16 h-10 md:mb-6 md:h-12  items-center justify-center md:flex"><GoogleOutlined className=" text-6xl rounded-lg bg-blue-500 hover:text-white" /></Link>
-        <Link href="#" className="md:w-1/4 w-16 h-10 md:mb-6 md:h-12  items-center justify-center md:flex"><FacebookOutlined className=" text-6xl rounded-lg bg-blue-500 hover:text-white" /></Link>
-        <Link href="#" className="md:w-1/4 w-16 h-10 md:h-12 items-center justify-center md:flex"><TwitterOutlined className=" text-6xl rounded-lg bg-blue-500 hover:text-white" /></Link>
+        <Link href="#" className="md:w-1/4 w-16 h-10 md:mb-6 md:h-12  md:justify-between md:space-x-4 hover:text-blue-500 items-center justify-center md:flex"><GoogleOutlined className=" text-2xl rounded-lg" /><span className="text-2xl md:visible invisible text-gray-300">Google</span></Link>
+        <Link href="#" className="md:w-1/4 w-16 h-10 md:mb-6 md:h-12  md:justify-between md:space-x-4 hover:text-blue-500 items-center justify-center md:flex"><FacebookOutlined className=" text-2xl rounded-lg" /><span className="text-2xl md:visible invisible text-gray-300">Facebook</span></Link>
+        <Link href="#" className="md:w-1/4 w-16 h-10 md:h-12 items-center md:justify-between md:space-x-4 hover:text-blue-500 justify-center md:flex"><TwitterOutlined className=" text-2xl rounded-lg" /><span className="text-2xl md:visible invisible text-gray-300">Twitter</span></Link>
       </div>
     </div>
   )

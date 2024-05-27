@@ -39,8 +39,9 @@ export default function RootLayout({
   const router=useRouter();
     
     const LogOut=()=>{
-      sessionStorage.removeItem("token");
-      sessionStorage.removeItem("refresh");
+      localStorage.removeItem("token");
+      localStorage.removeItem("refresh");
+      localStorage.removeItem("userId");
       setToken('');
       setUser(undefined);
       router.push(`/login?ReturnUrl=${pathname}`);
@@ -71,12 +72,10 @@ export default function RootLayout({
  
   const pathname=usePathname();
   useEffect(()=>{
-    if (!(sessionStorage.getItem("token"))) {
-      router.push('/login');
-    }
-    setToken((state:any)=>state=(!!sessionStorage.getItem("token"))&&sessionStorage.getItem("token"));
-    if (window.sessionStorage&&(sessionStorage.getItem("token"))) {
-      setUser((state: any)=>state=JSON.parse(atob(sessionStorage.getItem("token")!.split('.')[1])));
+    
+    setToken((state:any)=>state=(!!localStorage.getItem("token"))&&localStorage.getItem("token"));
+    if (window.localStorage&&(localStorage.getItem("token"))) {
+      setUser((state: any)=>state=JSON.parse(atob(localStorage.getItem("token")!.split('.')[1])));
     }
     const getProfile=async()=>{
       try {
@@ -102,7 +101,7 @@ export default function RootLayout({
           }
         }}>
           <div id="toggled-menu"
-              className={`w-full absolute top-14 bottom-0 left-0 -translate-x-full bg-gradient-to-br from-gray-50 via-slate-50 to-blue-50  ${togel?'translate-x-0 z-20 opacity-100 w-1/5':''} text-gray-800 border-b border-gray-200 flex flex-col items-center md:static min-h-full md:w-1/5 md:transform-none md:border-none`}>
+              className={`w-4/5 absolute top-14 bottom-0 left-0 -translate-x-full bg-gradient-to-br from-gray-50 via-slate-50 to-blue-50  ${togel?'translate-x-0 z-20 opacity-100 w-1/5':''} text-gray-800 border-b border-gray-200 flex flex-col items-center md:static min-h-full md:w-1/5 md:transform-none md:border-none`}>
             <div  className="flex w-full justify-start">
               <Link href={'/'} className="hover:text-white flex-1">
                 

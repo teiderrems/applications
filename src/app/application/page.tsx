@@ -34,7 +34,7 @@ export default function Application() {
 
   useEffect(() => {
     setToken((state:any)=>{
-      state=window && sessionStorage.getItem('token');
+      state=window && localStorage.getItem('token');
       return state;
     });
     const findAll=async () => {
@@ -42,7 +42,7 @@ export default function Application() {
   
         const res = await axios.get(url+`&status=${filter}`, {
           headers: {
-            "Authorization": window.sessionStorage ? ("Bearer " + window.sessionStorage.getItem("token")) : ''
+            "Authorization": window.localStorage ? ("Bearer " + window.localStorage.getItem("token")) : ''
           }
         });
         if (res.status == 201 || res.status == 200) {
@@ -65,18 +65,18 @@ export default function Application() {
         if (error.response.status == 401) {
   
           try {
-            const res = await Axios.post("users/refresh_token", { refresh: sessionStorage.getItem("refresh") });
+            const res = await Axios.post("users/refresh_token", { refresh: localStorage.getItem("refresh") });
             if (res.status == 201 || res.status == 200) {
               setToken((state: any)=>state=res.data.token);
-              sessionStorage.setItem("token", res.data.token);
-              if (sessionStorage.getItem("token")) {
+              localStorage.setItem("token", res.data.token);
+              if (localStorage.getItem("token")) {
                 setReload(state=>!state);
               }
             }
           } catch (err: any) {
   
-            sessionStorage.removeItem("token");
-            sessionStorage.removeItem("refresh");
+            localStorage.removeItem("token");
+            localStorage.removeItem("refresh");
             if (err.response.status == 401) {
               router.push(`/login?ReturnUrl=${pathname}`);
             }
@@ -249,7 +249,7 @@ const Application: React.FC = () => {
 
   useEffect(() => {
     setToken((state:any)=>{
-      state=window && sessionStorage.getItem('token');
+      state=window && localStorage.getItem('token');
       return state;
     });
     const findAll=async () => {
@@ -257,7 +257,7 @@ const Application: React.FC = () => {
   
         const res = await axios.get(url+`&status=${filter}`, {
           headers: {
-            "Authorization": window.sessionStorage ? ("Bearer " + window.sessionStorage.getItem("token")) : ''
+            "Authorization": window.localStorage ? ("Bearer " + window.localStorage.getItem("token")) : ''
           }
         });
         if (res.status == 201 || res.status == 200) {
@@ -280,18 +280,18 @@ const Application: React.FC = () => {
         if (error.response.status == 401) {
   
           try {
-            const res = await Axios.post("users/refresh_token", { refresh: sessionStorage.getItem("refresh") });
+            const res = await Axios.post("users/refresh_token", { refresh: localStorage.getItem("refresh") });
             if (res.status == 201 || res.status == 200) {
               setToken((state: any)=>state=res.data.token);
-              sessionStorage.setItem("token", res.data.token);
-              if (sessionStorage.getItem("token")) {
+              localStorage.setItem("token", res.data.token);
+              if (localStorage.getItem("token")) {
                 setReload(state=>!state);
               }
             }
           } catch (err: any) {
   
-            sessionStorage.removeItem("token");
-            sessionStorage.removeItem("refresh");
+            localStorage.removeItem("token");
+            localStorage.removeItem("refresh");
             if (err.response.status == 401) {
               router.push(`/login?ReturnUrl=${pathname}`);
             }
@@ -313,16 +313,7 @@ const Application: React.FC = () => {
     }, 1000);
   };
 
-  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
-    setSelectedRowKeys(newSelectedRowKeys);
-  };
 
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-  };
-  const hasSelected = selectedRowKeys.length > 0;
 
   return (
     <div className='mx-2 flex flex-col min-h-full'>
@@ -330,7 +321,7 @@ const Application: React.FC = () => {
         <button onClick={() => setHandleAdd(!handleAdd)} className='mx-2 rounded-full hover:bg-blue-500 hover:text-white text-2xl w-8 h-8'><PlusOutlined /></button>
       </div>
       
-      <Table className=' cursor-pointer' rowSelection={rowSelection} onRow={(record,index)=>{
+      <Table className=' cursor-pointer' onRow={(record,index)=>{
         return{
           onClick:(e)=>{
             setCurrentApp((state:Props)=>state=record);
