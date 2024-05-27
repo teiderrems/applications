@@ -11,6 +11,7 @@ import logo from '../../public/icon.png';
 import Link from "next/link";
 import Image from "next/image";
 import burgerImg from '../../public/menu.svg';
+import  Head  from "next/head";
 import { EditOutlined, HomeOutlined, LogoutOutlined, ProfileOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import { Avatar, Dropdown, MenuProps, Space } from "antd";
 import Axios from "@/hooks/axios.config";
@@ -92,7 +93,7 @@ export default function RootLayout({
 
   return (
       <html lang="en">
-        <head><title>Home Page</title></head>
+        <Head><title>Home Page</title></Head>
         <body className="flex min-h-screen " onClick={()=>{
           if (togel) {
             setTogel(false);
