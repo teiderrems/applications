@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import {  useEffect, useRef, useState } from "react"
 import { CustomType } from "../components/ApplicationDetail";
 import { EyeInvisibleOutlined, EyeOutlined, LoadingOutlined } from "@ant-design/icons";
-import { PutBlobResult } from "@vercel/blob";
 import { Spin, message } from "antd";
 
 export default function Register() {
@@ -24,20 +23,16 @@ export default function Register() {
         ConfirmPassword:""
     });
     const router=useRouter();
-    
-    const userInfo=useRef();
     const [response,setResponse]=useState<CustomType>();
     const [show,setShow]=useState(false);
     const [showC,setShowC]=useState(false);
     const inputFileRef = useRef<HTMLInputElement>(null);
-    const [blob, setBlob] = useState<PutBlobResult | null>(null);
     const [isSubmit,setIsSubmit]=useState(false);
 
     const HandleSubmit=async(e: React.FormEvent)=>{
         e.preventDefault();
         setIsSubmit(!isSubmit);
         setResponse({...response,status:0,data:null,isLoading:true,isError:false,error:"",isSuccess:false});
-        // const result= await uploadProfile();
         try {
             const res=await Axios.post("users",new FormData(document.querySelector('form')!));
             if (res.status==201 || res.status==200) {
@@ -68,15 +63,10 @@ export default function Register() {
           content: `login failed try again`,
         });
       };
-    
-      const warning = () => {
-        messageApi.open({
-          type: 'warning',
-          content: 'This is a warning message',
-        });
-      };
+
   return (
     <div className="min-h-screen flex flex-col mt-4 justify-center  items-center">
+        {contextHolder}
         <form action="" onSubmit={HandleSubmit} className="md:w-3/6 w-4/6 md:space-y-3 space-y-10 h-5/6 justify-center items-center flex flex-col" encType="multipart/form-data">
         <h1 className="text-gray-400 self-start mb-2 text-justify">SignIn to continue</h1>
         {response?.isError && (<span className="text-red-400 text-center w-full block">{response?.error}</span>)}

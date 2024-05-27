@@ -120,8 +120,8 @@ export default function UserDetail({user,setShowDetail,setIsAdd,canEdit}:{canEdi
                 <input name="Lastname" disabled={canEdit} onChange={(e)=>setCurrentUser({...currentUser,Lastname:e.target.value})} placeholder="Enter your Lastname" className="w-full flex-1 h-5/6 px-2 md:h-4/6 shadow shadow-blue-200 border-2 rounded-md" id="lastname" value={currentUser.Lastname}></input>
             </div>
             <div className="flex w-full  px-4 flex-1 md:space-x-36 md:flex-row flex-col justify-between">
-                <button onClick={(e)=>HandleClick(e)} type="submit" className=" bg-blue-500 md:w-1/12 flex-1 md:h-2/3  w-full text-xl hover:text-white mb-2 md:mb-0 rounded-md shadow">Save</button>
-                <button onClick={HandleDelete} type="submit" className=" bg-red-400 md:w-1/12 flex-1 md:h-2/3  w-full text-xl hover:text-white rounded-md shadow" >Delete</button>
+                <button onClick={(e)=>HandleClick(e)} type="submit" className=" bg-blue-500 md:w-1/12 flex-1 md:h-2/3  w-full text-xl hover:text-white mb-2 md:mb-0 rounded-full shadow">Save</button>
+                <button onClick={HandleDelete} type="submit" className=" bg-red-400 md:w-1/12 flex-1 md:h-2/3  w-full text-xl hover:text-white rounded-full shadow" >Delete</button>
             </div>
         </form>
    </div>

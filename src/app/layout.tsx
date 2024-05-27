@@ -7,11 +7,10 @@ import { useEffect, useState } from "react";
 import boutonX from '../../public/cross.svg';
 import { usePathname, useRouter } from "next/navigation";
 import  profileImg  from '../../public/defaul.jpeg';
-import logo from '../../public/logo.png';
+import logo from '../../public/icon.png';
 import Link from "next/link";
 import Image from "next/image";
 import burgerImg from '../../public/menu.svg';
-import  Head  from "next/head";
 import { EditOutlined, HomeOutlined, LogoutOutlined, ProfileOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import { Avatar, Dropdown, MenuProps, Space } from "antd";
 import Axios from "@/hooks/axios.config";
@@ -89,11 +88,11 @@ export default function RootLayout({
     if (user && user.profileId) {
       getProfile();
     }
-  },[image, togel, token, router, profile,window&&localStorage.getItem('token')]);
+  },[image, togel, token, router, profile]);
 
   return (
       <html lang="en">
-        <Head><title>Home Page</title></Head>
+        <head><title>Home Page</title></head>
         <body className="flex min-h-screen " onClick={()=>{
           if (togel) {
             setTogel(false);

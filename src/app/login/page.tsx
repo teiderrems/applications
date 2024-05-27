@@ -23,7 +23,6 @@ function Login() {
   const router=useRouter();
   const [response,setResponse]=useState<CustomType>();
   const [isSubmit,setIsSubmit]=useState(false);
-  // const [iSsuccess,setSuccess]=useState(false);
 
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -83,10 +82,10 @@ function Login() {
   },[query,isSubmit]);
 
   return (
-    <div className=" min-h-screen flex flex-col space-y-12 md:space-y-0 md:flex-row">
+    <div className=" h-full flex flex-col space-y-12 md:space-y-0 md:flex-row">
       {contextHolder}
-      <form action="" onSubmit={HandleSubmit} className=" h-3/5 md:w-4/6  space-y-8 m-4 flex flex-col justify-center items-center md:h-full">
-        <h1 className="text-gray-400 w-5/6 h-16 mb-4 text-justify">Login to continue</h1>
+      <form action="" onSubmit={HandleSubmit} className=" h-3/5 md:w-4/6  space-y-8 mx-4 flex flex-col justify-center items-center md:h-full">
+        <h1 className="text-gray-400 w-5/6 h-4 text-justify">Login to continue</h1>
         {response?.isError && (<span className="text-red-400 text-center w-full block">Something wrong username or password isn&rsquo;t valid please try again</span>)}
         <div className="flex w-5/6 flex-col space-y-4">
           <label htmlFor="Username" className="text-xl">Username</label>
@@ -109,10 +108,10 @@ function Login() {
           <Link href="/register" className="text-blue-400 md:self-center hover:underline">You do not have acount <strong>SignUp</strong></Link>
         </div>
       </form>
-      <div className=" md:max-h-svh items-center md:justify-center h-1/6 md:flex-col mx-auto justify-between flex self-center space-x-16 md:space-x-0">
-        <Link href="#" className="md:w-1/4 w-16 h-10 md:mb-6 md:h-12  md:justify-between md:space-x-4 hover:text-blue-500 items-center justify-center md:flex"><GoogleOutlined className=" text-2xl rounded-lg" /><span className="text-2xl md:visible invisible text-gray-300">Google</span></Link>
-        <Link href="#" className="md:w-1/4 w-16 h-10 md:mb-6 md:h-12  md:justify-between md:space-x-4 hover:text-blue-500 items-center justify-center md:flex"><FacebookOutlined className=" text-2xl rounded-lg" /><span className="text-2xl md:visible invisible text-gray-300">Facebook</span></Link>
-        <Link href="#" className="md:w-1/4 w-16 h-10 md:h-12 items-center md:justify-between md:space-x-4 hover:text-blue-500 justify-center md:flex"><TwitterOutlined className=" text-2xl rounded-lg" /><span className="text-2xl md:visible invisible text-gray-300">Twitter</span></Link>
+      <div className=" items-center w-5/6 md: md:w-1/2 justify-center md:mt-10 md:flex-col mx-auto flex self-center space-x-4 md:space-x-0">
+        <Link href="#" className=" px-2 md:w-56  h-12 md:mb-6 rounded-full  shadow md:justify-between md:space-x-4 hover:bg-blue-500 hover:text-while items-center justify-center flex"><GoogleOutlined className=" text-xl " /><span className="text-xl  ">Google</span></Link>
+        <Link href="#" className=" px-2 md:w-56 h-12 md:mb-6  rounded-full shadow  md:justify-between md:space-x-4 hover:bg-blue-500 hover:text-while items-center justify-center flex"><FacebookOutlined className=" text-xl " /><span className="text-xl ">Facebook</span></Link>
+        <Link href="#" className=" px-2 md:w-56  h-12 rounded-full shadow items-center md:justify-between md:space-x-4 hover:bg-blue-500 hover:text-while justify-center flex"><TwitterOutlined className=" text-xl " /><span className="text-xl">Twitter</span></Link>
       </div>
     </div>
   )
