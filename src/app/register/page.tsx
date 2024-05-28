@@ -65,7 +65,7 @@ export default function Register() {
       };
 
   return (
-    <div className="min-h-screen flex flex-col mt-4 justify-center  items-center">
+    <div className="min-h-screen flex flex-col mt-2 text-sm justify-center  items-center">
         {contextHolder}
         <form action="" onSubmit={HandleSubmit} className="md:w-3/6 w-4/6 md:space-y-3 space-y-10 h-5/6 justify-center items-center flex flex-col" encType="multipart/form-data">
         <h1 className="text-gray-400 self-start mb-2 text-justify">SignIn to continue</h1>

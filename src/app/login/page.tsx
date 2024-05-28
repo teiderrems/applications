@@ -82,7 +82,7 @@ function Login() {
   },[query,isSubmit]);
 
   return (
-    <div className=" h-full flex flex-col space-y-12 md:space-y-0 md:flex-row">
+    <div className=" h-full flex flex-col text-sm space-y-12 md:space-y-0 md:flex-row">
       {contextHolder}
       <form action="" onSubmit={HandleSubmit} className=" h-3/5 md:w-4/6  space-y-8 mx-4 flex flex-col justify-center items-center md:h-full">
         <h1 className="text-gray-400 w-5/6 h-4 text-justify">Login to continue</h1>

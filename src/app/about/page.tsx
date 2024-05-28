@@ -19,7 +19,7 @@ export default function About() {
   const [text,setText]=useState<{key:string,content:string}>(Text[1]);
   return (
     <div className='flex flex-col items-center flex-1 h-full w-full text-pretty bg-white'>
-        <p className=' p-4 text-justify'>
+        <p className=' p-4 text-justify text-sm'>
           {text.content}
         </p>
     </div>
