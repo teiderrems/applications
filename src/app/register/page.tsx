@@ -37,8 +37,8 @@ export default function Register() {
             const res=await Axios.post("users",new FormData(document.querySelector('form')!));
             if (res.status==201 || res.status==200) {
                 success();
-                setResponse({...response,isSuccess:true,isLoading:false,data:res.data});
-                router.push('/check_email');
+                //setResponse({...response,isSuccess:true,isLoading:false,data:res.data});
+                router.push('/login');
             }
         } catch (err:any) {
             error();
