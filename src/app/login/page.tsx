@@ -34,17 +34,17 @@ function Login() {
     });
   };
 
-  const error = () => {
+  const error = (message:any) => {
     messageApi.open({
       type: 'error',
-      content: `login failed try again`,
+      content: message??`login failed try again`,
     });
   };
 
   const warning = () => {
     messageApi.open({
       type: 'warning',
-      content: 'This is a warning message',
+      content:'Something wrong username or password isn\'t valid please try again',
     });
   };
 
@@ -71,7 +71,12 @@ function Login() {
               setResponse({...response,isSuccess:true,isLoading:false,data:res.data});},2000)
           }
         } catch (er:any) {
-            error()
+            if (er.response.status==401) {
+              warning();
+            }
+            else{
+              error(er.message);
+            }
             setIsSubmit(state=>!state);
             setResponse({...response,error:er.message,isError:true,isLoading:false});
         }
@@ -86,7 +91,6 @@ function Login() {
       {contextHolder}
       <form action="" onSubmit={HandleSubmit} className=" h-3/5 md:w-4/6  space-y-8 mx-4 flex flex-col justify-center items-center md:h-full">
         <h1 className="text-gray-400 w-5/6 h-4 text-justify">Login to continue</h1>
-        {response?.isError && (<span className="text-red-400 text-center w-full block">Something wrong username or password isn&rsquo;t valid please try again</span>)}
         <div className="flex w-5/6 flex-col space-y-4">
           <label htmlFor="Username" className="text-xl">Username</label>
           <input type="text"  id="Username" required onChange={(e) => { setUser({ ...user, Username: e.target.value }) }} className="px-2 w-full h-14 shadow rounded-md" />
