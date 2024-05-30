@@ -35,7 +35,7 @@ export default function AddApplication({setHandleAdd,setIsAdd}:{setHandleAdd:Dis
       console.log(application);
       const res=await Axios.post("applications",application,{
         headers:{
-            "Authorization":window.sessionStorage?("Bearer "+window.sessionStorage.getItem("token")):''
+            "Authorization":window.localStorage?("Bearer "+window.localStorage.getItem("token")):''
         }
       });
       router.refresh();
@@ -44,19 +44,19 @@ export default function AddApplication({setHandleAdd,setIsAdd}:{setHandleAdd:Dis
     } catch (error:any) {
       if (error.response.status==401) {
         try {
-          const res=await Axios.post("users/refresh_token",{refresh:sessionStorage.getItem("refresh")});
+          const res=await Axios.post("users/refresh_token",{refresh:localStorage.getItem("refresh")});
           if (res.status==201 || res.status==200) {
             setToken(res.data.token);
-            sessionStorage.setItem("token",res.data.token);
-            sessionStorage.setItem("refresh",res.data.refresh);
-            if (sessionStorage.getItem("token")) {
+            localStorage.setItem("token",res.data.token);
+            localStorage.setItem("refresh",res.data.refresh);
+            if (localStorage.getItem("token")) {
               setReload(true);
 
             }
           }
         } catch (err:any) {
-          sessionStorage.removeItem("token");
-          sessionStorage.removeItem("refresh");
+          localStorage.removeItem("token");
+          localStorage.removeItem("refresh");
           if (err.response.status == 401) {
             router.push(`/login?ReturnUrl=${pathname}`);
           }

@@ -32,7 +32,7 @@ export default function UserItem({user,setIsAdd}:{user:UserType,setIsAdd:Dispatc
     try {
       const res = await Axios.delete(`users/${a._id}`,{
         headers: {
-          "Authorization": window.sessionStorage ? ("Bearer " + window.sessionStorage.getItem("token")) : ''
+          "Authorization": window.localStorage ? ("Bearer " + window.localStorage.getItem("token")) : ''
         }
       });
       if (res.status == 204 || res.status == 200) {
@@ -42,17 +42,17 @@ export default function UserItem({user,setIsAdd}:{user:UserType,setIsAdd:Dispatc
       console.log(error);
       if (error.response.status == 401) {
         try {
-          const res = await Axios.post("users/refresh_token", { refresh: sessionStorage.getItem("refresh") });
+          const res = await Axios.post("users/refresh_token", { refresh: localStorage.getItem("refresh") });
           if (res.status == 201 || res.status == 200) {
             setToken(res.data.token);
-            sessionStorage.setItem("token", res.data.token);
-            if (sessionStorage.getItem("token")) {
+            localStorage.setItem("token", res.data.token);
+            if (localStorage.getItem("token")) {
               setReload(state=>!state);
             }
           }
         } catch (err: any) {
-          sessionStorage.removeItem("token");
-          sessionStorage.removeItem("refresh");
+          localStorage.removeItem("token");
+          localStorage.removeItem("refresh");
           if (err.response.Role == 401) {
             router.push(`/login?ReturnUrl=${pathname}`);
           }
@@ -69,7 +69,7 @@ export default function UserItem({user,setIsAdd}:{user:UserType,setIsAdd:Dispatc
       try {
         const res = await Axios.put(`users/${currentUser._id}`, currentUser, {
           headers: {
-            "Authorization": window.sessionStorage ? ("Bearer " + window.sessionStorage.getItem("token")) : ''
+            "Authorization": window.localStorage ? ("Bearer " + window.localStorage.getItem("token")) : ''
           }
         });
         if (res.status == 201 || res.status == 200) {
@@ -78,17 +78,17 @@ export default function UserItem({user,setIsAdd}:{user:UserType,setIsAdd:Dispatc
       } catch (error: any) {
         if (error.response.status == 401) {
           try {
-            const res = await Axios.post("users/refresh_token", { refresh: sessionStorage.getItem("refresh") });
+            const res = await Axios.post("users/refresh_token", { refresh: localStorage.getItem("refresh") });
             if (res.status == 201 || res.status == 200) {
               setToken(res.data.token);
-              sessionStorage.setItem("token", res.data.token);
-              if (sessionStorage.getItem("token")) {
+              localStorage.setItem("token", res.data.token);
+              if (localStorage.getItem("token")) {
                 setReload(state=>!state);
               }
             }
           } catch (err: any) {
-            sessionStorage.removeItem("token");
-            sessionStorage.removeItem("refresh");
+            localStorage.removeItem("token");
+            localStorage.removeItem("refresh");
             if (err.response.Role == 401) {
               router.push(`/login?ReturnUrl=${pathname}`);
             }

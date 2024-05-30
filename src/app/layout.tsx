@@ -101,7 +101,7 @@ export default function RootLayout({
           }
         }}>
           <div id="toggled-menu"
-              className={`w-4/5 absolute top-14 bottom-0 left-0 -translate-x-full bg-gradient-to-br from-gray-50 via-slate-50 to-blue-50  ${togel?'translate-x-0 z-20 opacity-100 w-1/5':''} text-gray-800 border-b border-gray-200 flex flex-col items-center md:static min-h-full md:w-1/6 md:transform-none md:border-none`}>
+              className={`w-4/5 absolute top-0 min-h-screen left-0 -translate-x-full bg-gradient-to-br from-gray-50 via-slate-50 to-blue-50  ${togel?'translate-x-0 z-20 opacity-100 w-1/5':''} text-gray-800 border-b border-gray-200 flex flex-col items-center md:static min-h-full md:w-1/6 md:transform-none md:border-none`}>
             <div  className="flex w-full justify-start">
               <Link href={'/'} className="hover:text-white flex-1">
                 

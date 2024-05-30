@@ -75,18 +75,18 @@ export default function AddUser({
       if (error.response.status == 401) {
         try {
           const res = await Axios.post("users/refresh_token", {
-            refresh: sessionStorage.getItem("refresh"),
+            refresh: localStorage.getItem("refresh"),
           });
           if (res.status == 201 || res.status == 200) {
-            sessionStorage.setItem("token", res.data.token);
-            sessionStorage.setItem("refresh", res.data.refresh);
-            if (sessionStorage.getItem("token")) {
+            localStorage.setItem("token", res.data.token);
+            localStorage.setItem("refresh", res.data.refresh);
+            if (localStorage.getItem("token")) {
               setReload(true);
             }
           }
         } catch (err: any) {
-          sessionStorage.removeItem("token");
-          sessionStorage.removeItem("refresh");
+          localStorage.removeItem("token");
+          localStorage.removeItem("refresh");
           if (err.response.status == 401) {
             router.push(`/login?ReturnUrl=${pathname}`);
           }

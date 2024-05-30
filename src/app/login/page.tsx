@@ -7,6 +7,7 @@ import { Suspense, useEffect, useState } from "react";
 import { CustomType } from "../components/ApplicationDetail";
 import { EyeInvisibleOutlined, EyeOutlined, FacebookOutlined, GoogleOutlined, LoadingOutlined, TwitterOutlined } from "@ant-design/icons";
 import { Divider, Spin, message } from "antd";
+import axios from "axios";
 // import Notify from "../components/Notify";
 
 function Login() {
@@ -68,7 +69,7 @@ function Login() {
                 setIsSubmit(state=>!state)
                 router.push('/application');
               }
-              setResponse({...response,isSuccess:true,isLoading:false,data:res.data});},2000)
+              setResponse({...response,isSuccess:true,isLoading:false,data:res.data});},1000)
           }
         } catch (er:any) {
             if (er.response.status==401) {
@@ -85,6 +86,16 @@ function Login() {
   useEffect(()=>{
     localStorage.removeItem('token');
   },[query,isSubmit]);
+
+
+  const loginFacebook=async()=>{
+    try {
+      const res=await axios.get('http://localhost:5000/auth/facebook');
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <div className=" h-full flex flex-col text-sm space-y-12 md:space-y-0 md:flex-row">
@@ -113,7 +124,7 @@ function Login() {
         </div>
       </form>
       <div className=" items-center w-5/6 md: md:w-1/2 justify-center md:mt-10 md:flex-col mx-auto flex self-center space-x-4 md:space-x-0">
-        <Link href="#" className=" px-2 md:w-56  h-12 md:mb-6 rounded-full  shadow md:justify-between md:space-x-4 hover:bg-blue-500 hover:text-while items-center justify-center flex"><GoogleOutlined className=" text-xl " /><span className="text-xl  ">Google</span></Link>
+        <Link href="#" onClick={loginFacebook} className=" px-2 md:w-56  h-12 md:mb-6 rounded-full  shadow md:justify-between md:space-x-4 hover:bg-blue-500 hover:text-while items-center justify-center flex"><GoogleOutlined className=" text-xl " /><span className="text-xl  ">Google</span></Link>
         <Link href="#" className=" px-2 md:w-56 h-12 md:mb-6  rounded-full shadow  md:justify-between md:space-x-4 hover:bg-blue-500 hover:text-while items-center justify-center flex"><FacebookOutlined className=" text-xl " /><span className="text-xl ">Facebook</span></Link>
         <Link href="#" className=" px-2 md:w-56  h-12 rounded-full shadow items-center md:justify-between md:space-x-4 hover:bg-blue-500 hover:text-while justify-center flex"><TwitterOutlined className=" text-xl " /><span className="text-xl">Twitter</span></Link>
       </div>
