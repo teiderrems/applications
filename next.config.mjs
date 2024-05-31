@@ -1,9 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    // output: 'export',
-    api: {
-        bodyParser: false,
-    },
     staticPageGenerationTimeout:1000,
     images: { 
         remotePatterns:[

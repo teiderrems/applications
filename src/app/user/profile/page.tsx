@@ -45,7 +45,7 @@ export default function UserDetailInfo() {
 
   const HandleClick = async () => {
     setSubmit(true);
-    setIsEditable(true);
+    setIsEditable(state=>!state);
     setResponse({
       ...response,
       isLoading: true,
@@ -247,7 +247,7 @@ export default function UserDetailInfo() {
   }
   return (
     <div className="flex-1 flex flex-col items-center justify-center">
-      <div className="flex-1 space-y-[20px] h-[700px] my-4 flex flex-col">
+      <div className="flex-1 space-y-[20px] h-[700px] justify-center items-center mx-2 md:mx-0 my-4 flex flex-col">
         <div className=" w-[598px] flex flex-row space-x-2">
           <Avatar
             className="h-[90px] w-[90px] self-start"
@@ -319,11 +319,11 @@ export default function UserDetailInfo() {
           >
             Delete
           </Button>
-          {(!isEditable)?(!submit) ? (
+          {(!isEditable)? (
             <Button icon={<EditOutlined />} onClick={()=>setIsEditable(state=>!state)} className=" mr-2">
               Edit
             </Button>
-          ):<Spin  className='md:text-center' indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} /> : (
+          ): (
             <Button
               icon={<SaveOutlined />}
               className=" mr-2"
