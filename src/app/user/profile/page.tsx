@@ -6,7 +6,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import profileImg from "../../../../public/defaul.jpeg";
 import { DeleteOutlined, EditOutlined, LoadingOutlined, SaveOutlined } from "@ant-design/icons";
-import UserDetail from "@/app/components/UserDetail";
 import { Avatar, Button, Spin, message } from "antd";
 
 export default function UserDetailInfo() {
@@ -247,11 +246,8 @@ export default function UserDetailInfo() {
   }
   return (
     <div className="flex-1 flex flex-col items-center justify-center">
-<<<<<<< HEAD
       <div className="flex-1 space-y-[20px] h-[700px] justify-center items-center mx-2 md:mx-0 my-4 flex flex-col">
-=======
       <div className="flex-1 space-y-[40px] h-5/6 md:mt-16 flex flex-col">
->>>>>>> aa1f145 (update)
         <div className=" w-[598px] flex flex-row space-x-2">
           <Avatar
             className="h-[90px] w-[90px] self-start"
@@ -323,20 +319,12 @@ export default function UserDetailInfo() {
           >
             Delete
           </Button>
-<<<<<<< HEAD
-          {(!isEditable)? (
-=======
           {(!isEditable) ? (
->>>>>>> aa1f145 (update)
             <Button icon={<EditOutlined />} onClick={()=>setIsEditable(state=>!state)} className=" mr-2">
               Edit
             </Button>
           ): (
-<<<<<<< HEAD
-            <Button
-=======
             <Button htmlType="button"
->>>>>>> aa1f145 (update)
               icon={<SaveOutlined />}
               className=" mr-2"
               onClick={HandleClick}
@@ -347,5 +335,6 @@ export default function UserDetailInfo() {
         </div>
       </div>
     </div>
-  );
+    </div>
+  )
 }
