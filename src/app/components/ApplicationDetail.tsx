@@ -41,9 +41,10 @@ export default function ApplicationDetail({application,setShowDetail,setApplicat
     
     async function HandleDelete(a: Props): Promise<void> {
         try {
+            console.log((!!localStorage.getItem("token")));
             const res = await Axios.delete(`applications/${application._id}`, {
                 headers: {
-                    "Authorization": window.localStorage ? ("Bearer " + window.localStorage.getItem("token")) : ''
+                    "Authorization": (!!localStorage.getItem("token")) ? ("Bearer " + localStorage.getItem("token")) : ''
                 }
             });
             if (res.status == 204 || res.status == 200) {
@@ -51,6 +52,7 @@ export default function ApplicationDetail({application,setShowDetail,setApplicat
                 setReload(state=>!state);
             }
         } catch (err: any) {
+            console.log(err);
             if (err.response.status == 401) {
                 error();
                 try {
@@ -78,12 +80,13 @@ export default function ApplicationDetail({application,setShowDetail,setApplicat
         try {
             const res = await Axios.put(`applications/${application._id}`, application, {
                 headers: {
-                    "Authorization": window.localStorage ? ("Bearer " + window.localStorage.getItem("token")) : ''
+                    "Authorization": (!!localStorage.getItem("token"))? ("Bearer " + localStorage.getItem("token")) : ''
                 }
             });
             if (res.status == 201 || res.status == 200) {
                 success();
-                setReload(state=>!state);
+                router.refresh();
+                // setReload(state=>!state);
                 setTimeout(()=>setShowDetail(state => !state),500);
             }
         } catch (err: any) {

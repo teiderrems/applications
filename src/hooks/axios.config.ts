@@ -4,5 +4,4 @@ import axios from "axios";
 const Axios=axios.create({
     baseURL:'https://applications-backend.vercel.app/api/',
 });
-
 export default Axios;

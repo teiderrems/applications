@@ -13,7 +13,7 @@ import Image from "next/image";
 import burgerImg from '../../public/menu.svg';
 import  Head  from "next/head";
 import { EditOutlined, HomeOutlined, LogoutOutlined, ProfileOutlined, UnorderedListOutlined } from "@ant-design/icons";
-import { Avatar, Dropdown, MenuProps, Space } from "antd";
+import { Avatar, Button, Dropdown, MenuProps, Space } from "antd";
 import Axios from "@/hooks/axios.config";
 
 
@@ -153,7 +153,7 @@ export default function RootLayout({
                       </a>
                     </Dropdown>
 
-                  </button>:<Link href="/about" className="about">About</Link>
+                  </button>:<Button  className="m-2"><Link href="/about">About</Link></Button>
                 }
             </div>
             <div className="flex-1 text-md">

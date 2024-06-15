@@ -122,7 +122,7 @@ const Application: React.FC = () => {
       }
     }
     findAll();
-  }, [limit, page, response.isLoading, prev,url, filter, token, next, pathname, router, isAdd, reload]);
+  }, [limit, page, response.isLoading, prev, url, filter, token, next, pathname, router, isAdd, reload, response?.data]);
 
 
   const start = () => {
@@ -139,7 +139,7 @@ const Application: React.FC = () => {
   return (
     <div className='mx-2 flex flex-col min-h-full'>
       <div className='h-10 bg-slate-50 mt-2 flex items-center rounded-t-md justify-end'>
-        <button onClick={() => setHandleAdd(!handleAdd)} className='mx-2 rounded-full hover:bg-blue-500 hover:text-white text-2xl w-8 h-8'><PlusOutlined /></button>
+        <Button icon={<PlusOutlined />} onClick={() => setHandleAdd(!handleAdd)} className='mx-2 rounded-full hover:bg-blue-500 hover:text-white text-2xl w-8 h-8'/>
       </div>
       
       <Table className=' cursor-pointer' onRow={(record,index)=>{
