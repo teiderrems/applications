@@ -24,7 +24,7 @@ export default function UserDetailInfo() {
   const [submit, setSubmit] = useState(false);
   const [userEdit, setUserEdit] = useState<any>();
   const [isEditable, setIsEditable] = useState(false);
-  const [profile, setProfile] = useState<any>(undefined);
+  const [profile, setProfile] = useState<any>("");
 
   const [messageApi, contextHolder] = message.useMessage();
     const success = (message:string='profile updated successfully') => {
@@ -151,6 +151,9 @@ export default function UserDetailInfo() {
   };
 
   useEffect(() => {
+    if (!(!!localStorage.getItem("token"))) {
+      router.push(`/login?ReturnUrl=${pathname}`);
+    }
     setParam(
       window &&
         (localStorage.getItem("userId") as string) &&
@@ -245,16 +248,19 @@ export default function UserDetailInfo() {
     );
   }
   return (
-    <div className="flex-1 flex flex-col items-center justify-center">
-      <div className="flex-1 space-y-[20px] h-[700px] justify-center items-center mx-2 md:mx-0 my-4 flex flex-col">
-      <div className="flex-1 space-y-[40px] h-5/6 md:mt-16 flex flex-col">
+    <div className="flex-1 flex flex-col items-center">
+      <div className="flex-1 space-y-5 h-5/6 justify-center items-center mx-2 md:mx-0 my-4 flex flex-col">
+      <div className="flex-1 space-y-10 h-5/6 flex flex-col">
         <div className=" w-[598px] flex flex-row space-x-2">
-          <Avatar
-            className="h-[90px] w-[90px] self-start"
+          {(profile as string).includes('base64')?<Avatar
+            className="h-24 w-24 self-start"
             draggable={false}
             size={"large"}
             src={userEdit?.ProfileId ? profile : profileImg}
-          />
+          />:<Avatar
+          className="h-24 w-24 self-start bg-slate-400 shadow"
+          size={"large"}
+        />}
           <div className=" flex flex-col space-y-2 mt-4">
             <span className=" font-bold">{userEdit?.Username}</span>
             <span className="">{userEdit?.Email}</span>
@@ -310,7 +316,7 @@ export default function UserDetailInfo() {
           facilis corporis voluptatem vel rem ullam dicta, repudiandae eius eos
           minima eaque quam consequatur provident eveniet!
         </p>
-        <div className="flex w-[598px] space-x-10">
+        <div className="flex w-full justify-between">
           <Button
             icon={<DeleteOutlined />}
             onClick={HandleDelete}

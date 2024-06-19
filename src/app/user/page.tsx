@@ -62,6 +62,9 @@ export default function UserList() {
   
   
   useEffect(()=>{
+    if (!(!!localStorage.getItem("token"))) {
+      router.push(`/login?ReturnUrl=${pathname}`);
+    }
     const findAll=async()=>{
       try {
         const res = await axios.get(url+`&role=${filter}`, {

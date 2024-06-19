@@ -69,6 +69,9 @@ const Application: React.FC = () => {
   ];
 
   useEffect(() => {
+    if (!(!!localStorage.getItem("token"))) {
+      router.push(`/login?ReturnUrl=${pathname}`);
+    }
     setToken((state:any)=>{
       state=window && localStorage.getItem('token');
       return state;

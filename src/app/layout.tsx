@@ -162,17 +162,21 @@
 //   );
 // }
 import "./globals.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
+  HomeOutlined,
   LoginOutlined,
+  LogoutOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   ReadOutlined,
-  SolutionOutlined
+  SolutionOutlined,
+  UnorderedListOutlined,
+  UserOutlined
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
 import { ItemType, MenuItemType } from "antd/es/menu/hooks/useItems";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const { Header, Sider, Content } = Layout;
 
@@ -186,28 +190,180 @@ const AppLayout = ({
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
+  const logItems:ItemType<MenuItemType>[]=[
+    {
+      key: "1",
+      icon: <HomeOutlined />,
+      label: "Home",
+      onClick: () => {
+        router.push("/");
+        setSelected("1");
+      },
+      disabled:false
+    },
+    {
+      key: "4",
+      icon: <UnorderedListOutlined />,
+      label: "Applications",
+      onClick: () => {
+        router.push("/application");
+        setSelected("4");
+      },
+    },
+    {
+      key: "5",
+      icon: <UnorderedListOutlined />,
+      label: "Users",
+      onClick: () => {
+        router.push("/user");
+        setSelected("5");
+      },
+      disabled:localStorage.getItem("token")&&JSON.parse(atob((localStorage.getItem("token")?.split('.')[1] as string))).role!=='admin'?true:false
+    },
+    {
+      key: "6",
+      icon: <UserOutlined />,
+      label: "Profile",
+      onClick: () => {
+        router.push("/user/profile");
+        setSelected("6");
+      },
+    },
+    {
+      key: "7",
+      icon: <LogoutOutlined />,
+      label: "LogOut",
+      onClick: () => {
+        setItems([
+          {
+            key: "1",
+            icon: <HomeOutlined />,
+            label: "Home",
+            onClick: () => {
+              router.push("/");
+              setSelected("1");
+            },
+            disabled:false
+          },
+          {
+            key: "2",
+            icon: <LoginOutlined />,
+            label: "Login",
+            onClick: () => {
+              router.replace("/login");
+              setSelected("2");
+            },
+          },
+          {
+            key: "3",
+            icon: <SolutionOutlined />,
+            label: "Register",
+            onClick: () => {
+              router.replace("/register")
+              setSelected("3");
+            },
+          },
+          {
+            key: "7",
+            icon: <ReadOutlined />,
+            label: "About",
+            onClick: () => {
+              router.push("/about");
+              setSelected("7");
+            },
+          },
+        ]);
+        localStorage.clear();
+        setSelected("7");
+      },
+    },
+    {
+      key: "8",
+      icon: <ReadOutlined />,
+      label: "About",
+      onClick: () => {
+        router.push("/about");
+        setSelected("8");
+      },
+    },
+  ];
+
   const router = useRouter();
   const [selected,setSelected]=useState("1");
   const [items, setItems] = useState<ItemType<MenuItemType>[]>([
     {
       key: "1",
-      icon: <LoginOutlined />,
-      label: "Login",
-      onClick: () => router.replace("/login"),
+      icon: <HomeOutlined />,
+      label: "Home",
+      onClick: () => {
+        router.push("/");
+        setSelected("1");
+      },
+      disabled:false
     },
     {
       key: "2",
-      icon: <SolutionOutlined />,
-      label: "Register",
-      onClick: () => router.replace("/register"),
+      icon: <LoginOutlined />,
+      label: "Login",
+      onClick: () => {
+        router.replace("/login");
+        setSelected("2");
+      },
     },
     {
       key: "3",
+      icon: <SolutionOutlined />,
+      label: "Register",
+      onClick: () => {
+        router.replace("/register")
+        setSelected("3");
+      },
+    },
+    {
+      key: "7",
       icon: <ReadOutlined />,
       label: "About",
-      onClick: () => router.push("/about"),
+      onClick: () => {
+        router.push("/about");
+        setSelected("7");
+      },
     },
   ]);
+
+  const pathname=usePathname();
+
+  useEffect(()=>{
+    if (localStorage.getItem("token")) {
+      setItems(logItems);
+    }
+    switch (pathname) {
+      case "/register":
+        setSelected("3");
+        break;
+      case "/login":
+        setSelected("2");
+        break;
+      case "/":
+        setSelected("1");
+        break;
+      case "/application":
+        setSelected("4");
+        break;
+      case "/user":
+        setSelected("5");
+        break;
+      case "/profile":
+        setSelected("6");
+        break;
+      case "/about":
+        setSelected("8");
+        break;
+      default:
+        setSelected("4");
+        break;
+    }
+
+  },[selected,pathname,router]);
 
   return (
     <html>
@@ -216,7 +372,7 @@ const AppLayout = ({
       </head>
       <body className="h-screen">
         <Layout
-          className="min-h-screen static"
+          className="min-h-screen static bg-white"
         >
           <Sider trigger={null} collapsible collapsed={collapsed}>
             <div className="demo-logo-vertical" />
@@ -244,13 +400,11 @@ const AppLayout = ({
               />
             </Header>
             <Content
-              className="flex-1 max-h-screen"
+              className="flex-1"
               style={{
                 margin: "24px 16px",
                 padding: 24,
-                // minHeight: 280,
-                // background: colorBgContainer,
-                // borderRadius: borderRadiusLG,
+                backgroundColor:"white"
               }}
             >
               {children}

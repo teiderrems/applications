@@ -49,10 +49,16 @@ export default function Register() {
       error: "",
       isSuccess: false,
     });
+    const formData=new FormData();
+    formData.append("Username",user.Username);
+    formData.append("Email",user.Email);
+    formData.append("Password",user.Password);
+    formData.append("profile",user.Profile.originFileObj as File,user.Profile.originFileObj.name);
+    console.log(user.Profile.originFileObj);
     try {
       const res = await Axios.post(
         "users",
-        new FormData(document.querySelector("form")!)
+        formData
       );
       if (res.status == 201 || res.status == 200) {
         success();
@@ -100,9 +106,9 @@ export default function Register() {
     >
       {contextHolder}
       <Card title="SignIn to continue">
-        <Form
+        <form
           action=""
-          onFinish={HandleSubmit}
+          onSubmit={HandleSubmit}
           className="w-full space-y-1 h-5/6 justify-center items-center flex flex-col"
           encType="multipart/form-data"
         >
@@ -145,13 +151,13 @@ export default function Register() {
               onChange={(e) => setUser({ ...user, Password: e.target.value })}
               required
             />
-            {user.Password.length!==0 && user.Password.length<=8 && (
+            {user.Password.length!==0 && user.Password.length<8 && (
               <span className="text-red-400 text-[12px] text-justify w-full">
                 Please your Password must be contain least 8 characters 
               </span>
             )}
           </div>
-          <div>
+          <div className="flex flex-col space-y-1 w-full">
             <label htmlFor="ConfirmPassword">ConfirmPassword</label>
             <Input.Password
               onChange={(e) =>
@@ -193,7 +199,7 @@ export default function Register() {
               You have acount <strong>SignIn</strong>
             </Link>
           </div>
-        </Form>
+        </form>
       </Card>
     </div>
   );
