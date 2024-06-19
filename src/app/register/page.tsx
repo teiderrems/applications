@@ -54,7 +54,6 @@ export default function Register() {
     formData.append("Email",user.Email);
     formData.append("Password",user.Password);
     formData.append("profile",user.Profile.originFileObj as File,user.Profile.originFileObj.name);
-    console.log(user.Profile.originFileObj);
     try {
       const res = await Axios.post(
         "users",

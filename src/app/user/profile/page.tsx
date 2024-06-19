@@ -151,7 +151,7 @@ export default function UserDetailInfo() {
   };
 
   useEffect(() => {
-    if (!(!!localStorage.getItem("token"))) {
+    if (window.localStorage&&!(!!localStorage.getItem("token"))) {
       router.push(`/login?ReturnUrl=${pathname}`);
     }
     setParam(
@@ -160,7 +160,7 @@ export default function UserDetailInfo() {
         (localStorage.getItem("userId") as string)
     );
     setToken(
-      window &&
+      window.localStorage&&
         (localStorage.getItem("token") as string) &&
         (localStorage.getItem("token") as string)
     );
@@ -192,15 +192,14 @@ export default function UserDetailInfo() {
         if (error.response.status == 401) {
           try {
             const res = await Axios.post("users/refresh_token", {
-              refresh: localStorage.getItem("refresh"),
+              refresh: window.localStorage&&window.localStorage.getItem("refresh"),
             });
             if (res.status == 201 || res.status == 200) {
               setToken(res.data.token);
-              localStorage.setItem("token", res.data.token);
+              window.localStorage&&localStorage.setItem("token", res.data.token);
             }
           } catch (err: any) {
-            localStorage.removeItem("token");
-            localStorage.removeItem("refresh");
+            localStorage.clear();
             if (err.response.status == 401) {
               router.push(`/login?ReturnUrl=${pathname}`);
             }

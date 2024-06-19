@@ -50,18 +50,18 @@ function Login() {
       if (res.status == 201 || res.status == 200) {
         success();
         setTimeout(() => {
-          localStorage.setItem("token", res.data.token);
-          localStorage.setItem(
+          window.localStorage&&localStorage.setItem("token", res.data.token);
+          window.localStorage&&localStorage.setItem(
             "userId",
             JSON.parse(atob(res.data.token.split(".")[1]))._id
           );
-          localStorage.setItem("refresh", res.data.refresh);
+          window.localStorage&&localStorage.setItem("refresh", res.data.refresh);
           if (query.get("ReturnUrl") != null) {
             router.push(query.get("ReturnUrl") as string);
           } else {
-            const user = JSON.parse(
+            const user =window.localStorage? JSON.parse(
               atob(localStorage.getItem("token")!.split(".")[1])
-            );
+            ):null;
             localStorage.setItem("userId", user?._id);
             setIsSubmit((state) => !state);
             router.push("/application");
