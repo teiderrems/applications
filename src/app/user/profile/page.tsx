@@ -5,8 +5,8 @@ import Axios from "@/hooks/axios.config";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import profileImg from "../../../../public/defaul.jpeg";
-import { DeleteOutlined, EditOutlined, LoadingOutlined, SaveOutlined } from "@ant-design/icons";
-import { Avatar, Button, Spin, message } from "antd";
+import { DeleteOutlined, EditOutlined, ExclamationCircleFilled, LoadingOutlined, SaveOutlined } from "@ant-design/icons";
+import { Avatar, Button, Modal, Spin, message } from "antd";
 
 export default function UserDetailInfo() {
   const [param, setParam] = useState<string | undefined>(undefined);
@@ -17,6 +17,7 @@ export default function UserDetailInfo() {
     error: undefined,
     isSuccess: false,
   });
+  const { confirm } = Modal;
   const router = useRouter();
   const [token, setToken] = useState<string>();
   const pathname = usePathname();
@@ -39,6 +40,23 @@ export default function UserDetailInfo() {
         messageApi.open({
           type: 'error',
           content: `something wrong try again`,
+        });
+      };
+
+      const showDeleteConfirm = () => {
+        confirm({
+          title: 'Delete account!',
+          icon: <ExclamationCircleFilled />,
+          content: 'Are you sure to want to delete your account?',
+          okText: 'Yes',
+          okType: 'danger',
+          cancelText: 'No',
+          onOk:async()=>{
+            await HandleDelete();
+          },
+          onCancel() {
+            console.log('Cancel');
+          },
         });
       };
 
@@ -251,7 +269,7 @@ export default function UserDetailInfo() {
     <div className="flex-1 flex flex-col items-center">
       <div className="flex-1 space-y-5 h-5/6 justify-center items-center mx-2 md:mx-0 my-4 flex flex-col">
       <div className="flex-1 space-y-10 h-5/6 flex flex-col">
-        <div className=" w-[598px] flex flex-row space-x-2">
+        <div className=" w-full flex flex-row space-x-2">
           {(profile as string).includes('base64')?<Avatar
             className="h-24 w-24 self-start"
             draggable={false}
@@ -266,7 +284,7 @@ export default function UserDetailInfo() {
             <span className="">{userEdit?.Email}</span>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-[40px] w-[598px]">
+        <div className="grid grid-cols-2 gap-5 w-[598px]">
           <input
             type="text"
             disabled={!isEditable}
@@ -319,7 +337,7 @@ export default function UserDetailInfo() {
         <div className="flex w-full justify-between">
           <Button
             icon={<DeleteOutlined />}
-            onClick={HandleDelete}
+            onClick={showDeleteConfirm}
             className=" ml-2"
             danger
           >

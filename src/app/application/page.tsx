@@ -37,7 +37,9 @@ const Application: React.FC = () => {
   const [currentApp, setCurrentApp] = useState<any>({});
   const [showDetail, setShowDetail] = useState(false);
   const [total,setTotal]=useState(10);
-  const [handleAdd,setHandleAdd]=useState(false);
+  const [handleDetail,setHandleDetail]=useState(false);
+  
+  const [open,setOpen] =useState(false);
 
   const columns: TableColumnsType<Props> = [
     {
@@ -69,9 +71,11 @@ const Application: React.FC = () => {
   ];
 
   useEffect(() => {
-    if (!(!!localStorage.getItem("token"))) {
-      router.push(`/login?ReturnUrl=${pathname}`);
-    }
+    setTimeout(()=>{
+      if (!(!!localStorage.getItem("token"))) {
+        router.push(`/login?ReturnUrl=${pathname}`);
+      }
+    },1000);
     setToken((state:any)=>{
       state=window && localStorage.getItem('token');
       return state;
@@ -142,24 +146,24 @@ const Application: React.FC = () => {
   return (
     <div className='mx-2 flex flex-col min-h-full'>
       <div className='h-10 bg-slate-50 mt-2 flex items-center rounded-t-md justify-end'>
-        <Button icon={<PlusOutlined />} onClick={() => setHandleAdd(!handleAdd)} className='mx-2 rounded-full hover:bg-blue-500 hover:text-white text-2xl w-8 h-8'/>
+        <Button icon={<PlusOutlined />} onClick={() => setOpen(!open)} className='mx-2 rounded-full hover:bg-blue-500 hover:text-white text-2xl w-8 h-8'/>
       </div>
       
       <Table className=' cursor-pointer' onRow={(record,index)=>{
         return{
           onClick:(e)=>{
             setCurrentApp((state:Props)=>state=record);
-            setShowDetail(state=>!state);
+            setHandleDetail(state=>!state);
           }
         }
       }} columns={columns} dataSource={response?.data} pagination={{
         onChange:()=>console.log('hello'),
         total:total
       }}/>{
-        showDetail && currentApp && <ApplicationDetail setApplication={setCurrentApp} application={currentApp} setShowDetail={setShowDetail}/>
+        handleDetail && currentApp && <ApplicationDetail setApplication={setCurrentApp} application={currentApp} setOpen={setHandleDetail} open={handleDetail}/>
       }
       {
-        handleAdd &&<AddApplication setIsAdd={setIsAdd} setHandleAdd={setHandleAdd}/> 
+        open &&<AddApplication setOpen={setOpen} open={open}/> 
       }
     </div>
   );

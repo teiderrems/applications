@@ -29,9 +29,7 @@ const AddUser = ({
     ConfirmPassword: "",
     Profile: undefined,
     Role: "user",
-  });
-
-  const [isSubmit, setIsSubmit] = useState(false);
+  })
   const router = useRouter();
   const HandleSubmit = async () => {
     const formData = new FormData();
@@ -52,7 +50,6 @@ const AddUser = ({
       }
     } catch (err: any) {
       error();
-      setIsSubmit((state) => !state);
     }
   };
   useEffect(() => {}, []);
@@ -90,13 +87,13 @@ const AddUser = ({
     <>
       {contextHolder}
       <Modal
-        title="Title"
+        title="Add User"
         open={open}
         onOk={handleOk}
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
       >
-        <Card title="Add User">
+        <Card>
           <form
             className="w-full space-y-1 h-5/6 justify-center items-center flex flex-col"
             encType="multipart/form-data"

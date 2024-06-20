@@ -10,13 +10,13 @@ import {
   ReadOutlined,
   SolutionOutlined,
   UnorderedListOutlined,
-  UserOutlined
+  UserOutlined,
 } from "@ant-design/icons";
 import { Avatar, Button, Layout, Menu, theme } from "antd";
 import { ItemType, MenuItemType } from "antd/es/menu/hooks/useItems";
 import { usePathname, useRouter } from "next/navigation";
 import logo from "../../public/icon.png";
-import Image  from "next/image";
+import Image from "next/image";
 import Link from "next/link";
 import Axios from "@/hooks/axios.config";
 
@@ -29,16 +29,16 @@ const AppLayout = ({
 }>) => {
   const [collapsed, setCollapsed] = useState(false);
   const {
-    token: { colorBgContainer},
+    token: { colorBgContainer },
   } = theme.useToken();
 
-  const isAuthencatedAndIsAdmin=()=>{
-    if (localStorage.getItem('user')) {
-      console.log(JSON.parse(localStorage.getItem('user') as string));
+  const isAuthencatedAndIsAdmin = () => {
+    if (localStorage.getItem("user")) {
+      console.log(JSON.parse(localStorage.getItem("user") as string));
     }
   };
-  const [user,setUser]=useState<any>();
-  const logItems:ItemType<MenuItemType>[]=[
+  const [user, setUser] = useState<any>();
+  const logItems: ItemType<MenuItemType>[] = [
     {
       key: "1",
       icon: <HomeOutlined />,
@@ -65,7 +65,7 @@ const AppLayout = ({
         router.push("/user");
         setSelected("5");
       },
-      disabled:(user && user.role=="admin")?false:true
+      disabled: user && user.role == "admin" ? false : true,
     },
     {
       key: "6",
@@ -90,7 +90,7 @@ const AppLayout = ({
               router.push("/");
               setSelected("1");
             },
-            disabled:false
+            disabled: false,
           },
           {
             key: "2",
@@ -106,7 +106,7 @@ const AppLayout = ({
             icon: <SolutionOutlined />,
             label: "Register",
             onClick: () => {
-              router.replace("/register")
+              router.replace("/register");
               setSelected("3");
             },
           },
@@ -138,8 +138,8 @@ const AppLayout = ({
   ];
 
   const router = useRouter();
-  const [selected,setSelected]=useState("1");
-  
+  const [selected, setSelected] = useState("1");
+
   const [items, setItems] = useState<ItemType<MenuItemType>[]>([
     {
       key: "1",
@@ -149,7 +149,7 @@ const AppLayout = ({
         router.push("/");
         setSelected("1");
       },
-      disabled:false
+      disabled: false,
     },
     {
       key: "2",
@@ -165,7 +165,7 @@ const AppLayout = ({
       icon: <SolutionOutlined />,
       label: "Register",
       onClick: () => {
-        router.replace("/register")
+        router.replace("/register");
         setSelected("3");
       },
     },
@@ -180,11 +180,12 @@ const AppLayout = ({
     },
   ]);
 
-  const pathname=usePathname();
-  const isAuthencated=()=>window.localStorage&&!!(localStorage.getItem("token"));
-  
+  const pathname = usePathname();
+  const isAuthencated = () =>
+    window.localStorage && !!localStorage.getItem("token");
+
   const [profile, setProfile] = useState<any>("");
-  useEffect(()=>{
+  useEffect(() => {
     if (isAuthencated()) {
       setUser(JSON.parse(localStorage.getItem("user")!));
       setItems(logItems);
@@ -221,18 +222,17 @@ const AppLayout = ({
         const res = await Axios.get(`profile/${user.profileId}`);
         const imgb64 = Buffer.from(res.data.image).toString("base64");
         setProfile(
-          (state: string) =>(state = `data:${res.data.minetype};base64,${imgb64}`)
+          (state: string) =>
+            (state = `data:${res.data.minetype};base64,${imgb64}`)
         );
       } catch (error) {
         console.log(error);
       }
     };
-    console.log(profile);
     if (user) {
       getProfile();
     }
-
-  },[selected,pathname,router,profile]);
+  }, [selected, pathname, router, profile]);
 
   return (
     <html>
@@ -240,24 +240,31 @@ const AppLayout = ({
         <title>Applications Histories</title>
       </head>
       <body className="h-screen">
-        <Layout
-          className="min-h-screen static bg-white"
-        >
+        <Layout className="min-h-screen static bg-white">
           <Sider trigger={null} collapsible collapsed={collapsed}>
-            <Link href="/"><Image src={logo} alt="logo" className="h-12 w-4/6 cursor-pointer"/></Link>
-            
+            <Link href="/">
+              <Image
+                src={logo}
+                alt="logo"
+                className="h-12 w-4/6 cursor-pointer"
+              />
+            </Link>
+
             <Menu
               theme="light"
               mode="inline"
               selectedKeys={[selected]}
               style={{
-                height:"100%",
+                height: "100%",
               }}
               items={items}
             />
           </Sider>
           <Layout className="min-h-screen w-full">
-            <Header style={{ padding: 0, background: colorBgContainer }} className="flex justify-between items-center">
+            <Header
+              style={{ padding: 0, background: colorBgContainer }}
+              className="flex justify-between items-center"
+            >
               <Button
                 type="text"
                 icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
@@ -268,14 +275,30 @@ const AppLayout = ({
                   height: 64,
                 }}
               />
-              {profile && user?<Link href="/user/profile"><Avatar className="mr-2 cursor-pointer" icon={<Image src={profile} width={100} height={64} alt="profile"/>}/></Link>:<Avatar className="mr-2"/>}
+              {profile && user ? (
+                <Link href="/user/profile">
+                  <Avatar
+                    className="mr-2 cursor-pointer"
+                    icon={
+                      <Image
+                        src={profile}
+                        width={100}
+                        height={64}
+                        alt="profile"
+                      />
+                    }
+                  />
+                </Link>
+              ) : (
+                <Avatar className="mr-2" />
+              )}
             </Header>
             <Content
               className="flex-1"
               style={{
                 margin: "24px 16px",
                 padding: 24,
-                backgroundColor:"white"
+                backgroundColor: "white",
               }}
             >
               {children}

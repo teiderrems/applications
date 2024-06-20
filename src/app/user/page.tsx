@@ -4,14 +4,22 @@ import Axios from "@/hooks/axios.config";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { CustomType } from "../components/ApplicationDetail";
-import UserItem, { UserType } from "../components/UserItem";
 import { PlusOutlined } from "@ant-design/icons";
 
 import AddUser from "../components/AddUser";
 import axios from "axios";
 import { Table, TableColumnsType } from "antd";
-
-const Role = ['all','admin', 'guest', 'user'];
+export type UserType={
+  ProfileId: string;
+  Username?:string;
+  Firstname?:string;
+  Lastname?:string;
+  Profile:string;
+  Role?:string;
+  CreatedAt:string;
+  _id:string;
+  Email:string;
+}
 
 export default function UserList() {
 
@@ -22,7 +30,6 @@ export default function UserList() {
   const [response,setResponse]=useState<CustomType>({ isLoading: false, status: 0, data: undefined,error:undefined, isSuccess: false });
   const [page,setPage]=useState(0);
   const [limit,setLimit]=useState(12);
-  const [handleAdd,setHandleAdd]=useState(false);
   const [isAdd,setIsAdd]=useState(false);
   const [reload,setReload]=useState(false);
   const [url,setUrl]=useState<any>(`${Axios.defaults.baseURL}`+`users?page=${page}&limit=${limit}`);

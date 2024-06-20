@@ -1,178 +1,227 @@
-"use client"
+const Status = ["pending", "postponed", "success", "reject"];
+export interface Props {
+  _id?: string;
+  Title?: string;
+  Description?: string;
+  JobDescription?: string;
+  Entreprise?: string;
+  Adresse?: string;
+  TypeContrat?: string;
+  Status?: string;
+  Action?: string;
+  CreatedAt?: string;
+  UpdatedAt?: string;
+}
 
+export type CustomType = {
+  data?: any;
+  isError?: boolean;
+  isSuccess?: boolean;
+  status?: number;
+  isLoading?: boolean;
+  error?: string;
+};
+
+import React, { SetStateAction, useState } from "react";
+import { Badge, Card, Modal, Select, message } from "antd";
+import { DeleteOutlined, EditOutlined, ExclamationCircleFilled, SaveOutlined } from "@ant-design/icons";
 import Axios from "@/hooks/axios.config";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { message } from "antd";
 import { usePathname, useRouter } from "next/navigation";
-import  { SetStateAction, useEffect, useState } from "react";
-const Status = ['pending', 'postponed', 'success', 'reject'];
-export interface Props{
-    _id?:string;
-    Title?:string;
-    Description?:string;
-    JobDescription?:string;
-    Entreprise?:string;
-    Adresse?:string;
-    TypeContrat?:string;
-    Status?:string;
-    Action?:string
-    CreatedAt?:string;
-    UpdatedAt?:string;
-}
 
-export type CustomType={
-    data?:any,
-    isError?:boolean;
-    isSuccess?:boolean;
-    status?:number;
-    isLoading?:boolean;
-    error?:string;
-}
+const ApplicationDetail = ({
+  application,
+  setOpen,
+  open,
+  setApplication,
+}: {
+  application: Props;
+  setOpen: React.Dispatch<SetStateAction<boolean>>;
+  open: boolean;
+  setApplication: React.Dispatch<SetStateAction<Props>>;
+}) => {
+  const [edit, setEdit] = useState(false);
+  const { confirm } = Modal;
+  const router = useRouter();
+  const pathname = usePathname();
 
-export default function ApplicationDetail({application,setShowDetail,setApplication}:{application:Props,setShowDetail:React.Dispatch<SetStateAction<boolean>>,setApplication:React.Dispatch<SetStateAction<Props>>}) {
-    const [edit,setEdit]=useState(false);
-    const router = useRouter();
-    const pathname = usePathname();
-    const [reload, setReload] = useState(false);
-    const [token, setToken] = useState<string>();
-    useEffect(()=>{
-    },[application,setShowDetail]);
+  const [messageApi, contextHolder] = message.useMessage();
 
-    
-    async function HandleDelete(a: Props): Promise<void> {
-        try {
-            console.log((!!localStorage.getItem("token")));
-            const res = await Axios.delete(`applications/${application._id}`, {
-                headers: {
-                    "Authorization": (!!localStorage.getItem("token")) ? ("Bearer " + localStorage.getItem("token")) : ''
-                }
-            });
-            if (res.status == 204 || res.status == 200) {
-                success('deleted');
-                setReload(state=>!state);
-            }
-        } catch (err: any) {
-            console.log(err);
-            if (err.response.status == 401) {
-                error();
-                try {
-                    const res = await Axios.post("users/refresh_token", { refresh: localStorage.getItem("refresh") });
-                    if (res.status == 201 || res.status == 200) {
-                        setToken(res.data.token);
-                        localStorage.setItem("token", res.data.token);
-                        if (localStorage.getItem("token")) {
-                            setReload(true);
-                        }
-                    }
-                } catch (err: any) {
-                    localStorage.removeItem("token");
-                    localStorage.removeItem("refresh");
-                    if (err.response.status == 401) {
-                        router.push(`/login?ReturnUrl=${pathname}`);
-                    }
-                    setReload(state=>!state);
-                }
-            }
-        }
-    }
-
-    const SaveChange = async (a: Props) => {
-        try {
-            const res = await Axios.put(`applications/${application._id}`, application, {
-                headers: {
-                    "Authorization": (!!localStorage.getItem("token"))? ("Bearer " + localStorage.getItem("token")) : ''
-                }
-            });
-            if (res.status == 201 || res.status == 200) {
-                success();
-                router.refresh();
-                // setReload(state=>!state);
-                setTimeout(()=>setShowDetail(state => !state),500);
-            }
-        } catch (err: any) {
-            if (err.response.status == 401) {
-                error();
-                try {
-                    const res = await Axios.post("users/refresh_token", { refresh: localStorage.getItem("refresh") });
-                    if (res.status == 201 || res.status == 200) {
-                        setToken(res.data.token);
-                        localStorage.setItem("token", res.data.token);
-                        if (localStorage.getItem("token")) {
-                            setReload(state=>!state);
-                        }
-                    }
-                } catch (err: any) {
-                    localStorage.removeItem("token");
-                    localStorage.removeItem("refresh");
-                    if (err.response.status == 401) {
-                        error('unauthorized');
-                        setTimeout(()=>router.push(`/login?ReturnUrl=${pathname}`),1000)
-                    }
-                    setReload(false);
-                }
-            }
-        }
-    }
-
-    const [messageApi, contextHolder] = message.useMessage();
-
-  const success = (message:string='updated') => {
+  const success = (message: string = "updated") => {
     messageApi.open({
-      type: 'success',
+      type: "success",
       content: `Application with title ${application.Title} has ${message}`,
-      duration:500
+      duration: 0,
     });
   };
 
-  const error = (message:any='unauthorized') => {
+  const error = (message: any = "unauthorized") => {
     messageApi.open({
-      type: 'error',
+      type: "error",
       content: message,
     });
   };
 
+  const showDeleteConfirm = () => {
+    confirm({
+      title: 'Delete application!',
+      icon: <ExclamationCircleFilled />,
+      content: 'Are you sure to want to delete this item?',
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk:async()=>{
+        await HandleDelete();
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
+  };
+
+  async function HandleDelete(): Promise<void> {
+    try {
+      const res = await Axios.delete(`applications/${application._id}`, {
+        headers: {
+          Authorization: (!!localStorage.getItem("token"))
+            ? "Bearer " + localStorage.getItem("token")
+            : "",
+        },
+      });
+      if (res.status == 204 || res.status == 200) {
+        success("deleted");
+      }
+    } catch (err: any) {
+      if (err.response.status == 401) {
+        error();
+        try {
+          const res = await Axios.post("users/refresh_token", {
+            refresh: localStorage.getItem("refresh"),
+          });
+          if (res.status == 201 || res.status == 200) {
+            localStorage.setItem("token", res.data.token);
+          }
+        } catch (err: any) {
+          localStorage.clear();
+          if (err.response.status == 401) {
+            router.push(`/login?ReturnUrl=${pathname}`);
+          }
+        }
+      }
+    }
+  }
+
+  const SaveChange = async () => {
+    setEdit(!edit);
+    try {
+      const res = await Axios.put(
+        `applications/${application._id}`,
+        application,
+        {
+          headers: {
+            Authorization: !!localStorage.getItem("token")
+              ? "Bearer " + localStorage.getItem("token")
+              : "",
+          },
+        }
+      );
+      if (res.status == 201 || res.status == 200) {
+        success();
+        router.refresh();
+      }
+    } catch (err: any) {
+      if (err.response.status == 401) {
+        error();
+        try {
+          const res = await Axios.post("users/refresh_token", {
+            refresh: localStorage.getItem("refresh"),
+          });
+          if (res.status == 201 || res.status == 200) {
+            localStorage.setItem("token", res.data.token);
+          }
+        } catch (err: any) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("refresh");
+          if (err.response.status == 401) {
+            error("unauthorized");
+            setTimeout(() => router.push(`/login?ReturnUrl=${pathname}`), 1000);
+          }
+        }
+      }
+    }
+  };
+
   return (
-   <div className="absolute inset-0 flex justify-center items-center flex-col">
-    {contextHolder}
-        <div  onClick={()=>setShowDetail(state=>!state)} className="absolute inset-0  bg-gray-700 opacity-75 z-1"></div>
-        <div className="flex flex-col flex-1 space-y-3 z-30 w-9/12 my-10 bg-white opacity-100 md:rounded ">
-            <h1 className={`mx-2 py-2  font-bold  ${application.Status=='reject'?' line-through':''}`}>{application?.Title}</h1>
-            <ul className="flex mx-2 md:mx-0 border-b-2 italic md:flex-row flex-col justify-between md:items-center">
-                <li className="md:pl-2">{application?.Entreprise}</li>
-                <li className="">{application?.Adresse}</li>
-                <li className="">{
-                    edit ? <select onChange={(e) => {
-                        setApplication((state: Props) => {
-                            return { ...application, Status: (e.target.value != application.Status) ? e.target.value : application?.Status }
-                        });
-                    }}>
-                        <option value={application?.Status} selected>{application?.Status}</option>
-                        {Status.filter(s => s !== application?.Status).map(s => (
-                            <option key={s} value={s}>{s}</option>
-                        ))}
-                    </select> : <>{application?.Status}</>
-                }</li>
-                <li className="md:pr-2">{application?.CreatedAt?.split('T')[0].split('-').reverse().join('/')}</li>
-                <li className="md:mr-2">{(!edit) ?
-                    <div className='flex justify-between'>
-                        <button className=' w-1/3 text-xl' onClick={() => setEdit(state => !state)}><EditOutlined className="p-1  hover:text-blue-300" /></button>
-                        <button className='w-1/3  text-xl' onClick={() => HandleDelete(application)}><DeleteOutlined className="p-1 hover:text-red-300" /></button>
-                    </div>
-                    : <button onClick={() => SaveChange(application)}
-                        className="font-medium   hover:underline">SaveChange</button>
-                }</li>
-            </ul>
-            <div className=" flex-1 flex md:flex-row flex-col">
-                <article className=" flex-1 px-2 flex flex-col space-y-2">
-                    <h2 className="text-xl">Fiche de Poste</h2>
-                    <p className={`flex-1 text-wrap ${application.Status=='reject'?' line-through':''}`}>{application?.JobDescription}</p>
-                </article>
-                <article className="flex flex-1  px-2 flex-col space-y-2">
-                    <h2 className="text-xl md:border-l">Description du Poste</h2>
-                    <p className={`flex-1 text-wrap ${application.Status=='reject'?' line-through':''}`}>{application?.Description}</p>
-                </article>
-            </div>  
-        </div>
-   </div>
-  )
-}
+    <>
+      {contextHolder}
+      <Modal
+        title={<p>{application.Title}</p>}
+        width={"75%"}
+        open={open}
+        footer={null}
+      >
+        <Card
+          style={{ width: "100%" }}
+          actions={[
+            !edit ? (
+              <EditOutlined key="edit" onClick={() => setEdit(!edit)} />
+            ) : (
+              <SaveOutlined onClick={SaveChange} />
+            ),
+            <DeleteOutlined
+              key="ellipsis"
+              onClick={showDeleteConfirm}
+            />,
+          ]}
+        >
+          <div className="flex flex-col md:flex-row gap-1 w-full">
+            <Card title="Entreprise" className="flex-1">
+              <ul className="flex flex-col space-y-3">
+                <li>
+                  Nom :{" "}
+                  <span className=" font-bold">{application.Entreprise}</span>
+                </li>
+                <li> Adresse : {application.Adresse}</li>
+                <li>Type Contrat : {application.TypeContrat}</li>
+                <li
+                  className={`${
+                    edit
+                      ? "flex justify-between"
+                      : "flex space-x-2 items-center"
+                  }`}
+                >
+                  <span>Status :</span>
+                  <Badge
+                    color={`${
+                      application.Status === "success" ? "#00FF00" : "#FF0000"
+                    }`}
+                    count={application.Status}
+                  />
+                  {edit && (
+                    <Select
+                      size="small"
+                      className=" uppercase"
+                      value={application.Status}
+                      onChange={(v) =>
+                        setApplication({ ...application, Status: v })
+                      }
+                      options={Status.map((r) => {
+                        return { value: r, label: r };
+                      })}
+                    />
+                  )}
+                </li>
+              </ul>
+            </Card>
+            <Card title="Fiche de poste" className="flex-1">
+              <p className=" truncate text-wrap">
+                {application.JobDescription}
+              </p>
+            </Card>
+          </div>
+        </Card>
+      </Modal>
+    </>
+  );
+};
+
+export default ApplicationDetail;
