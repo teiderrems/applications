@@ -23,7 +23,7 @@ export type CustomType = {
 };
 
 import React, { SetStateAction, useState } from "react";
-import { Badge, Card, Modal, Select, message } from "antd";
+import { Badge, Button, Card, Modal, Select, message } from "antd";
 import { DeleteOutlined, EditOutlined, ExclamationCircleFilled, SaveOutlined } from "@ant-design/icons";
 import Axios from "@/hooks/axios.config";
 import { usePathname, useRouter } from "next/navigation";
@@ -155,9 +155,14 @@ const ApplicationDetail = ({
       {contextHolder}
       <Modal
         title={<p>{application.Title}</p>}
-        width={"75%"}
+        width={"65%"}
         open={open}
-        footer={null}
+        destroyOnClose
+        closeIcon={null}
+        maskClosable={true}
+        footer={<Button type="primary" onClick={()=>setOpen(state=>!state)}>
+            Close
+        </Button>}
       >
         <Card
           style={{ width: "100%" }}
