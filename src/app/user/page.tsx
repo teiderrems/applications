@@ -30,6 +30,7 @@ export default function UserList() {
   const [prev,setPrev]=useState(null);
   const [filter,setFilter]=useState('all');
   const [total,setTotal]=useState(10);
+  const [open,setOpen] =useState(false);
 
   const columns: TableColumnsType<UserType> = [
     {
@@ -135,7 +136,7 @@ export default function UserList() {
     <div className='flex-1 flex overflow-hidden flex-col  mx-2'>
       <div className="h-10 bg-slate-50 mt-2 flex items-center rounded-t-md justify-end">
         {
-          (!handleAdd) ? <button onClick={() => setHandleAdd(!handleAdd)} className='mx-2 rounded-full hover:bg-blue-500 hover:text-white text-2xl w-8 h-8'><PlusOutlined /></button> : <AddUser setHandleAdd={setHandleAdd} setIsAdd={setIsAdd} />
+          (!open) ? <button onClick={() => setOpen(!open)} className='mx-2 rounded-full hover:bg-blue-500 hover:text-white text-2xl w-8 h-8'><PlusOutlined /></button> : <AddUser setOpen={setOpen} open={open} />
         }
       </div>
       <Table className=' cursor-pointer' onRow={(record,index)=>{

@@ -18,6 +18,7 @@ import { usePathname, useRouter } from "next/navigation";
 import logo from "../../public/icon.png";
 import Image  from "next/image";
 import Link from "next/link";
+import Axios from "@/hooks/axios.config";
 
 const { Header, Sider, Content } = Layout;
 
@@ -31,7 +32,12 @@ const AppLayout = ({
     token: { colorBgContainer},
   } = theme.useToken();
 
-  const isAuthencatedAndIsAdmin=()=>window.localStorage&&!!(localStorage.getItem("token")&&JSON.parse(atob((localStorage.getItem("token")?.split('.')[1] as string)))?.role!=='admin');
+  const isAuthencatedAndIsAdmin=()=>{
+    if (localStorage.getItem('user')) {
+      console.log(JSON.parse(localStorage.getItem('user') as string));
+    }
+  };
+  const [user,setUser]=useState<any>();
   const logItems:ItemType<MenuItemType>[]=[
     {
       key: "1",
@@ -41,7 +47,6 @@ const AppLayout = ({
         router.push("/");
         setSelected("1");
       },
-      disabled:false
     },
     {
       key: "4",
@@ -60,7 +65,7 @@ const AppLayout = ({
         router.push("/user");
         setSelected("5");
       },
-      disabled:isAuthencatedAndIsAdmin()?true:false
+      disabled:(user && user.role=="admin")?false:true
     },
     {
       key: "6",
@@ -115,7 +120,9 @@ const AppLayout = ({
             },
           },
         ]);
+        setUser(null);
         localStorage.clear();
+        router.push(`/login?ReturnUrl=${pathname}`);
         setSelected("7");
       },
     },
@@ -132,6 +139,7 @@ const AppLayout = ({
 
   const router = useRouter();
   const [selected,setSelected]=useState("1");
+  
   const [items, setItems] = useState<ItemType<MenuItemType>[]>([
     {
       key: "1",
@@ -174,8 +182,11 @@ const AppLayout = ({
 
   const pathname=usePathname();
   const isAuthencated=()=>window.localStorage&&!!(localStorage.getItem("token"));
+  
+  const [profile, setProfile] = useState<any>("");
   useEffect(()=>{
     if (isAuthencated()) {
+      setUser(JSON.parse(localStorage.getItem("user")!));
       setItems(logItems);
     }
     switch (pathname) {
@@ -205,7 +216,23 @@ const AppLayout = ({
         break;
     }
 
-  },[selected,pathname,router]);
+    const getProfile = async () => {
+      try {
+        const res = await Axios.get(`profile/${user.profileId}`);
+        const imgb64 = Buffer.from(res.data.image).toString("base64");
+        setProfile(
+          (state: string) =>(state = `data:${res.data.minetype};base64,${imgb64}`)
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    console.log(profile);
+    if (user) {
+      getProfile();
+    }
+
+  },[selected,pathname,router,profile]);
 
   return (
     <html>
@@ -217,20 +244,20 @@ const AppLayout = ({
           className="min-h-screen static bg-white"
         >
           <Sider trigger={null} collapsible collapsed={collapsed}>
-            <Link href="/"><Image src={logo} alt="logo" className="h-16 w-full cursor-pointer"/></Link>
-            {/* <div className="demo-logo-vertical" /> */}
+            <Link href="/"><Image src={logo} alt="logo" className="h-12 w-4/6 cursor-pointer"/></Link>
+            
             <Menu
               theme="light"
               mode="inline"
               selectedKeys={[selected]}
               style={{
-                height:"100%"
+                height:"100%",
               }}
               items={items}
             />
           </Sider>
           <Layout className="min-h-screen w-full">
-            <Header style={{ padding: 0, background: colorBgContainer }}>
+            <Header style={{ padding: 0, background: colorBgContainer }} className="flex justify-between items-center">
               <Button
                 type="text"
                 icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
@@ -241,6 +268,7 @@ const AppLayout = ({
                   height: 64,
                 }}
               />
+              {profile && user?<Link href="/user/profile"><Avatar className="mr-2 cursor-pointer" icon={<Image src={profile} width={100} height={64} alt="profile"/>}/></Link>:<Avatar className="mr-2"/>}
             </Header>
             <Content
               className="flex-1"

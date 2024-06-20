@@ -55,6 +55,10 @@ function Login() {
             "userId",
             JSON.parse(atob(res.data.token.split(".")[1]))._id
           );
+          window.localStorage&&localStorage.setItem(
+            "user",
+            JSON.stringify(JSON.parse(atob(res.data.token.split(".")[1])))
+          );
           window.localStorage&&localStorage.setItem("refresh", res.data.refresh);
           if (query.get("ReturnUrl") != null) {
             router.push(query.get("ReturnUrl") as string);

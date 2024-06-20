@@ -197,6 +197,7 @@ export default function UserDetailInfo() {
             if (res.status == 201 || res.status == 200) {
               setToken(res.data.token);
               window.localStorage&&localStorage.setItem("token", res.data.token);
+              window.localStorage&&localStorage.setItem("user",JSON.stringify(atob(res.data.token.split('.')[1])));
             }
           } catch (err: any) {
             localStorage.clear();
