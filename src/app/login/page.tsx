@@ -67,8 +67,13 @@ function Login() {
               atob(localStorage.getItem("token")!.split(".")[1])
             ):null;
             localStorage.setItem("userId", user?._id);
+            if (user.role!=='instructor' && user.role!=='admin') {
+              router.push("/application");
+            }
+            else{
+              router.push("/");
+            }
             setIsSubmit((state) => !state);
-            router.push("/application");
           }
         }, 500);
       }
@@ -157,7 +162,6 @@ function Login() {
               alignSelf:"end"
             }} className=" md:self-start md:mt-3 hover:underline">
               <Link href="/register" className="text-blue-400">You do not have acount
-              
                 SignUp
               </Link>
             </span>

@@ -310,7 +310,7 @@ const AppLayout = ({
     if (user) {
       getProfile();
     }
-  }, [selected, pathname, router, profile,user,items]);
+  }, [selected, pathname, router, profile]);
 
   return (
     <html>
