@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { Button, Row, Table } from 'antd';
 import type { TableColumnsType } from 'antd';
 import ApplicationDetail, { CustomType, Props } from '../components/ApplicationDetail';
@@ -148,4 +148,10 @@ const Application: React.FC = () => {
   );
 };
 
-export default Application;
+export default function ApplicationView(){
+  return(
+    <Suspense>
+      <Application/>
+    </Suspense>
+  )
+};
