@@ -247,6 +247,7 @@ export default function UserDetailInfo() {
     router,
     profile,
     pathname,
+    response?.data?.ProfileId
   ]);
 
   if (response?.isLoading || !param) {
