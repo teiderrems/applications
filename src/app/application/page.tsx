@@ -5,22 +5,13 @@ import type { TableColumnsType } from 'antd';
 import ApplicationDetail, { CustomType, Props } from '../components/ApplicationDetail';
 import Axios from '@/hooks/axios.config';
 import axios from 'axios';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { PlusOutlined } from '@ant-design/icons';
 import AddApplication from '../components/AddApplication';
 
-
-  
-
-  
-
-  
-
-
 const Application: React.FC = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-  const [loading, setLoading] = useState(false);
-
+  const params=useSearchParams();
   const [token, setToken] = useState<any>();
   const [response, setResponse] = useState<CustomType>({ isLoading: false, status: 0, data: undefined, error: undefined, isSuccess: false });
   const [isAdd, setIsAdd] = useState(false);
@@ -31,11 +22,10 @@ const Application: React.FC = () => {
 
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(12);
-  const [url, setUrl] = useState<any>(`${Axios.defaults.baseURL}` + `applications?page=${page}&limit=${limit}`);
+  const [url, setUrl] = useState<any>(`${Axios.defaults.baseURL}${params.get('user')?'users/':''}` + `applications?page=${page}&limit=${limit}${params.get('user')?`&owner=${params.get('user')}`:''}`);
   const router = useRouter();
   const pathname = usePathname();
   const [currentApp, setCurrentApp] = useState<any>({});
-  const [showDetail, setShowDetail] = useState(false);
   const [total,setTotal]=useState(10);
   const [handleDetail,setHandleDetail]=useState(false);
   
@@ -69,6 +59,8 @@ const Application: React.FC = () => {
     },
     
   ];
+
+  
 
   useEffect(() => {
     setTimeout(()=>{
@@ -105,7 +97,7 @@ const Application: React.FC = () => {
         }
         
       } catch (error: any) {
-        if (error.response.status == 401) {
+        if (error?.response?.status == 401) {
   
           try {
             const res = await Axios.post("users/refresh_token", { refresh: localStorage.getItem("refresh") });
@@ -118,9 +110,8 @@ const Application: React.FC = () => {
             }
           } catch (err: any) {
   
-            localStorage.removeItem("token");
-            localStorage.removeItem("refresh");
-            if (err.response.status == 401) {
+            localStorage.clear();
+            if (err?.response?.status == 401) {
               router.push(`/login?ReturnUrl=${pathname}`);
             }
             setReload(false);
@@ -131,25 +122,13 @@ const Application: React.FC = () => {
     findAll();
   }, [limit, page, response.isLoading, prev, url, filter, token, next, pathname, router, isAdd, reload, response?.data]);
 
-
-  const start = () => {
-    setLoading(true);
-    // ajax request after empty completing
-    setTimeout(() => {
-      setSelectedRowKeys([]);
-      setLoading(false);
-    }, 1000);
-  };
-
-
-
   return (
     <div className='mx-2 flex flex-col min-h-full'>
       <div className='h-10 bg-slate-50 mt-2 flex items-center rounded-t-md justify-end'>
         <Button icon={<PlusOutlined />} onClick={() => setOpen(!open)} className='mx-2 rounded-full hover:bg-blue-500 hover:text-white text-2xl w-8 h-8'/>
       </div>
       
-      <Table className=' cursor-pointer' onRow={(record,index)=>{
+      <Table className=' cursor-pointer' key={"applications"} onRow={(record,index)=>{
         return{
           onClick:(e)=>{
             setCurrentApp((state:Props)=>state=record);
@@ -160,7 +139,7 @@ const Application: React.FC = () => {
         onChange:()=>console.log('hello'),
         total:total
       }}/>{
-        handleDetail && currentApp && <ApplicationDetail setApplication={setCurrentApp} application={currentApp} setOpen={setHandleDetail} open={handleDetail}/>
+        handleDetail && currentApp && <ApplicationDetail canEdit={(!!params.get('user'))?false:true} setApplication={setCurrentApp} application={currentApp} setOpen={setHandleDetail} open={handleDetail}/>
       }
       {
         open &&<AddApplication setOpen={setOpen} open={open}/> 

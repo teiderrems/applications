@@ -4,7 +4,7 @@ import { UploadOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import Axios from "@/hooks/axios.config";
 
-const UserRole = ["admin", "user", "guest"];
+const UserRole = ["admin", "user", "guest","instructor","student",];
 
 const AddUser = ({
   open,

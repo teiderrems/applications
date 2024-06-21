@@ -228,10 +228,10 @@ export default function UserDetailInfo() {
     };
     const getProfile = async () => {
       try {
-        const res = await Axios.get(`profile/${response.data.ProfileId}`);
+        const res = await Axios.get(`profile/${response?.data?.ProfileId}`);
         const imgb64 = Buffer.from(res.data.image).toString("base64");
         setProfile(
-          (state: string) =>(state = `data:${res.data.minetype};base64,${imgb64}`)
+          (state: string) =>(state = `data:${res?.data?.minetype};base64,${imgb64}`)
         );
       } catch (error) {
         console.log(error);
@@ -245,7 +245,6 @@ export default function UserDetailInfo() {
     param,
     reload,
     router,
-    response?.data?.ProfileId,
     profile,
     pathname,
   ]);
@@ -274,7 +273,7 @@ export default function UserDetailInfo() {
             className="h-24 w-24 self-start"
             draggable={false}
             size={"large"}
-            src={userEdit?.ProfileId ? profile : profileImg}
+            src={(!!profile) ? profile : profileImg}
           />:<Avatar
           className="h-24 w-24 self-start bg-slate-400 shadow"
           size={"large"}

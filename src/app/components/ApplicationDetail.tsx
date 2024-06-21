@@ -29,11 +29,13 @@ import Axios from "@/hooks/axios.config";
 import { usePathname, useRouter } from "next/navigation";
 
 const ApplicationDetail = ({
+  canEdit,
   application,
   setOpen,
   open,
   setApplication,
 }: {
+  canEdit:boolean,
   application: Props;
   setOpen: React.Dispatch<SetStateAction<boolean>>;
   open: boolean;
@@ -91,7 +93,7 @@ const ApplicationDetail = ({
         success("deleted");
       }
     } catch (err: any) {
-      if (err.response.status == 401) {
+      if (err?.response?.status == 401) {
         error();
         try {
           const res = await Axios.post("users/refresh_token", {
@@ -102,7 +104,7 @@ const ApplicationDetail = ({
           }
         } catch (err: any) {
           localStorage.clear();
-          if (err.response.status == 401) {
+          if (err?.response?.status == 401) {
             router.push(`/login?ReturnUrl=${pathname}`);
           }
         }
@@ -166,7 +168,7 @@ const ApplicationDetail = ({
       >
         <Card
           style={{ width: "100%" }}
-          actions={[
+          actions={canEdit?[
             !edit ? (
               <EditOutlined key="edit" onClick={() => setEdit(!edit)} />
             ) : (
@@ -176,7 +178,7 @@ const ApplicationDetail = ({
               key="ellipsis"
               onClick={showDeleteConfirm}
             />,
-          ]}
+          ]:undefined}
         >
           <div className="flex flex-col md:flex-row gap-1 w-full">
             <Card title="Entreprise" className="flex-1">

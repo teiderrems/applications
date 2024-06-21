@@ -28,8 +28,8 @@ function Login() {
     Username: string;
     Password: string;
   }>({
-    Username: "",
-    Password: "",
+    Username: "teida",
+    Password: "rems2001",
   });
 
   const query = useSearchParams();
@@ -129,15 +129,15 @@ function Login() {
           <div className="flex flex-col space-y-1 w-full"
           >
             <label htmlFor="Username">Username</label>
-            <Input  placeholder="Input your username or email address" onChange={(e)=>setUser({...user,Username:e.target.value})} name="Username" required/>
+            <Input value={user.Username} placeholder="Input your username or email address" onChange={(e)=>setUser({...user,Username:e.target.value})} name="Username" required/>
           </div>
           <div className="flex flex-col space-y-1 w-full"
           >
             <label htmlFor="Password">Password</label>
-            <Input.Password placeholder="Input your password" onChange={(e)=>setUser({...user,Password:e.target.value})} name="Password" required min={8} max={15} onError={(e)=>console.log(e)}/>
+            <Input.Password value={user.Password} placeholder="Input your password" onChange={(e)=>setUser({...user,Password:e.target.value})} name="Password" required min={8} max={15} onError={(e)=>console.log(e)}/>
           </div>
           <div
-            className="flex justify-between"
+            className="flex justify-between items-center w-full"
           >
             {isSubmit ? (
               <Spin
@@ -146,7 +146,7 @@ function Login() {
               />
             ) : (
               <Button
-                className=" rounded-full"
+                className=""
                 htmlType="submit"
                 type="primary"
               >
@@ -156,8 +156,8 @@ function Login() {
             <span style={{
               alignSelf:"end"
             }} className=" md:self-start md:mt-3 hover:underline">
-              You do not have acount{" "}
-              <Link href="/register" className="text-blue-400">
+              <Link href="/register" className="text-blue-400">You do not have acount
+              
                 SignUp
               </Link>
             </span>

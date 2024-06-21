@@ -171,11 +171,7 @@ export default function Register() {
             )}
           </div>
           <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-            className="w-full justify-between items-center flex h-12 md:flex-row flex-col"
+            className="w-full justify-between items-center flex"
           >
             {isSubmit ? (
               <Spin
@@ -184,7 +180,7 @@ export default function Register() {
               />
             ) : (
               <Button
-                className=" self-end"
+                className="mt-2"
                 type="primary"
                 htmlType="submit"
               >

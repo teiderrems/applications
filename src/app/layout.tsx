@@ -32,11 +32,6 @@ const AppLayout = ({
     token: { colorBgContainer },
   } = theme.useToken();
 
-  const isAuthencatedAndIsAdmin = () => {
-    if (localStorage.getItem("user")) {
-      console.log(JSON.parse(localStorage.getItem("user") as string));
-    }
-  };
   const [user, setUser] = useState<any>();
   const logItems: ItemType<MenuItemType>[] = [
     {
@@ -58,14 +53,92 @@ const AppLayout = ({
       },
     },
     {
+      key: "6",
+      icon: <UserOutlined />,
+      label: "Profile",
+      onClick: () => {
+        router.push("/user/profile");
+        setSelected("6");
+      },
+    },
+    {
+      key: "7",
+      icon: <LogoutOutlined />,
+      label: "LogOut",
+      onClick: () => {
+        setItems([
+          {
+            key: "1",
+            icon: <HomeOutlined />,
+            label: "Home",
+            onClick: () => {
+              router.push("/");
+              setSelected("1");
+            },
+            disabled: false,
+          },
+          {
+            key: "2",
+            icon: <LoginOutlined />,
+            label: "Login",
+            onClick: () => {
+              router.replace("/login");
+              setSelected("2");
+            },
+          },
+          {
+            key: "3",
+            icon: <SolutionOutlined />,
+            label: "Register",
+            onClick: () => {
+              router.replace("/register");
+              setSelected("3");
+            },
+          },
+          {
+            key: "7",
+            icon: <ReadOutlined />,
+            label: "About",
+            onClick: () => {
+              router.push("/about");
+              setSelected("7");
+            },
+          },
+        ]);
+        setUser(null);
+        localStorage.clear();
+        router.push(`/login?ReturnUrl=${pathname}`);
+        setSelected("7");
+      },
+    },
+    {
+      key: "8",
+      icon: <ReadOutlined />,
+      label: "About",
+      onClick: () => {
+        router.push("/about");
+        setSelected("8");
+      },
+    },
+  ];
+  const adminInstItems: ItemType<MenuItemType>[] = [
+    {
+      key: "1",
+      icon: <HomeOutlined />,
+      label: "Home",
+      onClick: () => {
+        router.push("/");
+        setSelected("1");
+      },
+    },
+    {
       key: "5",
       icon: <UnorderedListOutlined />,
       label: "Users",
       onClick: () => {
         router.push("/user");
         setSelected("5");
-      },
-      disabled: user && user.role == "admin" ? false : true,
+      }
     },
     {
       key: "6",
@@ -180,6 +253,8 @@ const AppLayout = ({
     },
   ]);
 
+  const isAdminOrInstructor=()=>user && (user.role==='admin'||user.role==='instructor');
+
   const pathname = usePathname();
   const isAuthencated = () =>
     window.localStorage && !!localStorage.getItem("token");
@@ -189,6 +264,9 @@ const AppLayout = ({
     if (isAuthencated()) {
       setUser(JSON.parse(localStorage.getItem("user")!));
       setItems(logItems);
+    }
+    if(isAdminOrInstructor()){
+      setItems(adminInstItems);
     }
     switch (pathname) {
       case "/register":
