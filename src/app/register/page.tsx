@@ -189,7 +189,7 @@ export default function Register() {
             )}
             <Link
               href="/login"
-              className="text-blue-400  font-bold self-end hover:underline"
+              className="text-blue-400 text-[12px]  font-bold self-end hover:underline"
             >
               You have acount <strong>SignIn</strong>
             </Link>
