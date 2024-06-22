@@ -41,5 +41,5 @@ next-env.d.ts
 modern-*
 
 #  others dir
-.idea
-.vscode
+/.idea/
+/.vscode/
