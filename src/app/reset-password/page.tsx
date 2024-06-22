@@ -38,19 +38,21 @@ function ResetPassword() {
         setLoading(state=>!state);
         try {
             const res=await Axios.post('users/reset-password',{email,password});
-            if (res.status===200 || res.status===201){
-                success();
+            if (res.status==200 || res.status==201){
                 router.replace('/login');
+                success();
+                setLoading(state=>!state);
             }
         }
         catch (e:any){
-            error();
+            console.log(e);
+            error(e.message);
         }
     }
     return (
         <div className="flex flex-col h-full items-center justify-center">
             {contextHolder}
-            <Card title="Reset Password">
+            <Card title="Reset Password" className="w-1/3">
                 <form className="w-full flex flex-col space-y-2" onSubmit={handleSubmit}>
                     <div className="flex flex-col space-y-1 w-full">
                         <label htmlFor="Password">Password</label>
@@ -78,7 +80,7 @@ function ResetPassword() {
                             </span>
                         )}
                     </div>
-                    <Button className="" type="primary" htmlType="submit" loading={loading}>Submit</Button>
+                    <Button className="" disabled={loading} type="primary" htmlType="submit" loading={loading}>Submit</Button>
                 </form>
             </Card>
         </div>

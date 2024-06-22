@@ -195,7 +195,7 @@ const AppLayout = ({
         ]);
         setUser(null);
         localStorage.clear();
-        router.push(`/login?ReturnUrl=${pathname}`);
+        router.push(`/login`);
         setSelected("7");
       },
     },
@@ -310,7 +310,7 @@ const AppLayout = ({
     if (user) {
       getProfile();
     }
-  }, [selected, pathname, router, profile]);
+  }, [selected, pathname, router]);
 
   return (
     <html>

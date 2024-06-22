@@ -71,14 +71,14 @@ function Login() {
               router.push("/application");
             }
             else{
-              router.push("/user");
+              router.push("/application");
             }
             setIsSubmit((state) => !state);
           }
         }, 500);
       }
     } catch (er: any) {
-      if (er.response.status == 401) {
+      if (er?.response?.status == 401) {
         warning();
       } else {
         error(er.message);
@@ -124,7 +124,7 @@ function Login() {
       className=" h-full flex flex-col justify-center items-center text-sm"
     >
       {contextHolder}
-      <Card title="Login to continue">
+      <Card title="Login to continue" className="w-1/3">
         <Form
           name="login"
           action=""

@@ -78,8 +78,9 @@ export default function UserList() {
   ];
   const [currentUser,setCurrentUser]=useState<UserType>();
   useEffect(() => {
-    
-    setUser(JSON.parse(localStorage.getItem("user")!));
+
+    if(localStorage)
+      setUser(JSON.parse(localStorage.getItem("user")!));
     const findAll = async () => {
       try {
         const res = await axios.get(url + `&role=${filter}`, {
@@ -102,9 +103,9 @@ export default function UserList() {
           });
           setPrev(res.data.prev);
           setNext(res.data.next);
-          return res.data.users;
         }
       } catch (error: any) {
+        console.log(error);
         setResponse((state) => {
           return {
             ...state,
@@ -136,14 +137,14 @@ export default function UserList() {
             setReload(false);
           }
         }
-        if (error?.response?.status == 401) {
+        if (error?.response?.status === 401) {
           router.push(`/`);
         }
       }
     };
-    findAll();
+    if (!!localStorage.getItem('token'))
+      findAll();
   }, [
-    token,
     pathname,
     filter,
     response.isLoading,
@@ -165,23 +166,14 @@ export default function UserList() {
   if (response?.isError) {
     return (
       <div className="flex justify-center items-center">
-        <p className="text-justify text-red-400">{response.error}</p>
+        <p className="text-justify text-red-400">{response?.error}</p>
       </div>
     );
   }
 
-  interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
-    editing: boolean;
-    dataIndex: string;
-    title: any;
-    inputType: 'number' | 'text';
-    record: UserType;
-    index: number;
-  }
-
   return (
     <div className="flex-1 flex overflow-hidden flex-col  mx-2">
-      {user?.role === "admin" && (
+      {user && user?.role === "admin" && (
         <div className="h-10 bg-slate-50 mt-2 flex items-center rounded-t-md justify-end">
           {!open ? (
             <button
@@ -197,7 +189,7 @@ export default function UserList() {
       )}
       <Table
         className=" cursor-pointer"
-        key={"users"}
+        key={"_id"}
         onRow={(record, index) => {
           return {
             onClick: (e) => {
