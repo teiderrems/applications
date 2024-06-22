@@ -78,9 +78,7 @@ export default function UserList() {
   ];
   const [currentUser,setCurrentUser]=useState<UserType>();
   useEffect(() => {
-    if (!!!localStorage.getItem("token")) {
-      router.push(`/login?ReturnUrl=${pathname}`);
-    }
+    
     setUser(JSON.parse(localStorage.getItem("user")!));
     const findAll = async () => {
       try {
