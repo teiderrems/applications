@@ -2,20 +2,22 @@
 import {Button, Card, Input, message} from "antd";
 import {FormEvent, Suspense, useEffect, useState} from "react";
 import Axios from "@/hooks/axios.config";
-import {useSearchParams} from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 
-export function ResetPassword() {
+function ResetPassword() {
 
-    const [email, setEmail] = useState<string>("");
+    const [email, setEmail] = useState<string|null>("");
     const [password, setPassword] = useState<string>("");
     const [confirmPassword, setConfirmPassword] = useState<string>("");
     const [messageApi, contextHolder] = message.useMessage();
-    const query=useSearchParams();
+    const params=useSearchParams();
     const [loading,setLoading]=useState(false);
     useEffect(() => {
-        setEmail(query.get('email')!);
-    }, []);
+        if (!!params?.get('email')){
+            setEmail(params?.get('email'));
+        }
+    }, [params]);
     const success = () => {
         messageApi.open({
             type: "success",

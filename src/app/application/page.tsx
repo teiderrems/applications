@@ -145,8 +145,7 @@ const Application: React.FC = () => {
     pathname,
     router,
     isAdd,
-    reload,
-    response?.data,
+    reload
   ]);
 
   return (
