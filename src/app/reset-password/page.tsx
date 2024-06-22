@@ -2,7 +2,7 @@
 import {Button, Card, Input, message} from "antd";
 import {FormEvent, Suspense, useEffect, useState} from "react";
 import Axios from "@/hooks/axios.config";
-import { useSearchParams } from "next/navigation";
+import {useRouter, useSearchParams} from "next/navigation";
 
 
 function ResetPassword() {
@@ -13,6 +13,7 @@ function ResetPassword() {
     const [messageApi, contextHolder] = message.useMessage();
     const params=useSearchParams();
     const [loading,setLoading]=useState(false);
+    const router=useRouter();
     useEffect(() => {
         if (!!params?.get('email')){
             setEmail(params?.get('email'));
@@ -39,6 +40,7 @@ function ResetPassword() {
             const res=await Axios.post('users/reset-password',{email,password});
             if (res.status===200 || res.status===201){
                 success();
+                router.replace('/login');
             }
         }
         catch (e:any){

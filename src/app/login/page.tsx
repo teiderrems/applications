@@ -71,7 +71,7 @@ function Login() {
               router.push("/application");
             }
             else{
-              router.push("/");
+              router.push("/user");
             }
             setIsSubmit((state) => !state);
           }

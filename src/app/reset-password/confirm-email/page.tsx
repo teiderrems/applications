@@ -9,6 +9,7 @@ export default function ConfirmEmail() {
     const [email, setEmail] = useState<string>("");
     const [messageApi, contextHolder] = message.useMessage();
     const [loading,setLoading]=useState(false);
+    const [togle,setTogle]=useState(false);
     const success = () => {
         messageApi.open({
             type: "success",
@@ -30,6 +31,8 @@ export default function ConfirmEmail() {
             const res=await Axios.post('users/confirm-email',{email});
             if (res.status===200 || res.status===201){
                 success();
+                setLoading(state=>!state);
+                setTogle(state=>!state);
             }
         }
         catch (e:any){
@@ -50,7 +53,7 @@ export default function ConfirmEmail() {
                             </span>
                         )}
                     </div>
-                    <Button className="" loading={loading} type="primary" htmlType="submit">Submit</Button>
+                    <Button className="" disabled={togle} loading={loading} type="primary" htmlType="submit">Submit</Button>
                 </form>
             </Card>
         </div>
