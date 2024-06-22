@@ -140,6 +140,7 @@ function Login() {
           >
             <label htmlFor="Password">Password</label>
             <Input.Password value={user.Password} placeholder="Input your password" onChange={(e)=>setUser({...user,Password:e.target.value})} name="Password" required min={8} max={15} onError={(e)=>console.log(e)}/>
+            <Link className="self-end hover:underline text-blue-400" type="link" href='/reset-password/confirm-email'> Forgot password</Link>
           </div>
           <div
             className="flex justify-between items-center w-full"
@@ -160,8 +161,8 @@ function Login() {
             )}
             <span style={{
               alignSelf:"end"
-            }} className=" md:self-start md:mt-3 hover:underline">
-              <Link href="/register" className="text-blue-400">You do not have acount
+            }} className=" md:self-start md:mt-3">
+              <Link href="/register" className="text-blue-400  hover:underline">You do not have acount
                 SignUp
               </Link>
             </span>

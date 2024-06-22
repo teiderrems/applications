@@ -13,6 +13,7 @@
 /.next/
 /out/
 
+
 # production
 /build
 
@@ -38,3 +39,7 @@ next-env.d.ts
 
 # others files
 modern-*
+
+#  others dir
+.idea
+.vscode
