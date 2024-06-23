@@ -30,7 +30,7 @@ const Application: React.FC = () => {
   const [filter, setFilter] = useState("all");
 
   const [page, setPage] = useState(0);
-  const [limit, setLimit] = useState(12);
+  const [limit, setLimit] = useState(3);
   const [url, setUrl] = useState<any>(
     `${Axios.defaults.baseURL}${params.get("user") ? "users/" : ""}` +
       `applications?page=${page}&limit=${limit}${
@@ -174,9 +174,23 @@ const Application: React.FC = () => {
         columns={columns}
         dataSource={response?.data}
         pagination={{
-          onChange: () => console.log("hello"),
+          onChange: (page,pageSize) => {
+            setLimit(state=>state=pageSize);
+            setPage(state=>state=page);
+            setUrl(Axios.defaults.baseURL+`users?page=${page-1}&limit=${pageSize}`);
+          },
           total: total,
+          hideOnSinglePage:true,
+          pageSize:limit,
+          showSizeChanger:true,
+          onShowSizeChange:(current,size)=>{
+            setLimit(state=>state=size);
+            setPage(state=>state=current);
+            setUrl(Axios.defaults.baseURL+`users?page=${page}&limit=${limit}`);
+          },
+          pageSizeOptions:[1,2,3,4,5,6,10,15,20,25,30,35,40,45,50,55]
         }}
+        scroll={{ y: '100%' }}
       />
       {handleDetail && currentApp && (
         <ApplicationDetail

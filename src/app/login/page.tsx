@@ -52,10 +52,6 @@ function Login() {
         setTimeout(() => {
           window.sessionStorage&&sessionStorage.setItem("token", res.data.token);
           window.sessionStorage&&sessionStorage.setItem(
-            "userId",
-            JSON.parse(atob(res.data.token.split(".")[1]))._id
-          );
-          window.sessionStorage&&sessionStorage.setItem(
             "user",
             JSON.stringify(JSON.parse(atob(res.data.token.split(".")[1])))
           );
@@ -66,7 +62,6 @@ function Login() {
             const user =window.sessionStorage? JSON.parse(
               atob(sessionStorage.getItem("token")!.split(".")[1])
             ):null;
-            // localStorage.setItem("userId", user?._id);
             if (user.role!=='instructor' && user.role!=='admin') {
               router.push("/application");
             }
@@ -124,7 +119,7 @@ function Login() {
       className=" h-full flex flex-col justify-center items-center text-sm"
     >
       {contextHolder}
-      <Card title="Login to continue" className="w-1/3">
+      <Card title="Login to continue" className="md:w-1/3">
         <Form
           name="login"
           action=""
