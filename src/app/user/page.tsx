@@ -8,7 +8,7 @@ import { PlusOutlined } from "@ant-design/icons";
 
 import AddUser from "../components/AddUser";
 import axios from "axios";
-import { Table, TableColumnsType } from "antd";
+import {Pagination, Table, TableColumnsType} from "antd";
 import UserDetail from "../components/UserDetail";
 export type UserType = {
   ProfileId: string;
@@ -35,7 +35,7 @@ export default function UserList() {
     isSuccess: false,
   });
   const [page, setPage] = useState(0);
-  const [limit, setLimit] = useState(12);
+  const [limit, setLimit] = useState(2);
   const [isAdd, setIsAdd] = useState(false);
   const [reload, setReload] = useState(false);
   const [url, setUrl] = useState<any>(
@@ -142,6 +142,7 @@ export default function UserList() {
         }
       }
     };
+    console.log(url);
     if (!!sessionStorage.getItem('token'))
       findAll();
   }, [
@@ -206,9 +207,23 @@ export default function UserList() {
         columns={columns}
         dataSource={response?.data}
         pagination={{
-          onChange: () => console.log("hello"),
+          onChange: (page,pageSize) => {
+            setLimit(state=>state=pageSize);
+            setPage(state=>state=page);
+            setUrl(Axios.defaults.baseURL+`users?page=${page-1}&limit=${pageSize}`);
+          },
           total: total,
+          // hideOnSinglePage:true,
+          pageSize:limit,
+          showSizeChanger:true,
+          onShowSizeChange:(current,size)=>{
+            setLimit(state=>state=size);
+            setPage(state=>state=current);
+            setUrl(Axios.defaults.baseURL+`users?page=${page}&limit=${limit}`);
+          },
+          pageSizeOptions:[1,2,3,4,5,6,10,15,20,25,30,35,40,45,50,55]
         }}
+        scroll={{ y: '100%' }}
       />
       {edit && currentUser &&<UserDetail user={currentUser} open={edit} setOpen={setEdit} setUser={setCurrentUser}/>}
     </div>

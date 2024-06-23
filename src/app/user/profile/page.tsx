@@ -5,8 +5,8 @@ import Axios from "@/hooks/axios.config";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import profileImg from "../../../../public/defaul.jpeg";
-import { DeleteOutlined, EditOutlined, ExclamationCircleFilled, LoadingOutlined, SaveOutlined } from "@ant-design/icons";
-import { Avatar, Button, Modal, Spin, message } from "antd";
+import { DeleteOutlined, EditOutlined, ExclamationCircleFilled, SaveOutlined } from "@ant-design/icons";
+import { Avatar, Button, Modal, Image, message } from "antd";
 
 export default function UserDetailInfo() {
   const [param, setParam] = useState<string | undefined>(undefined);
@@ -206,7 +206,7 @@ export default function UserDetailInfo() {
           });
         }
       } catch (error: any) {
-        if (error.response.status == 401) {
+        if (error?.response?.status == 401) {
           try {
             const res = await Axios.post("users/refresh_token", {
               refresh: window.sessionStorage&&window.sessionStorage.getItem("refresh"),
@@ -273,7 +273,7 @@ export default function UserDetailInfo() {
             className="h-24 w-24 self-start"
             draggable={false}
             size={"large"}
-            src={(!!profile) ? profile : profileImg}
+            src={<Image src={(!!profile) ? profile : profileImg} alt={"profile"}/>}
           />:<Avatar
           className="h-24 w-24 self-start bg-slate-400 shadow"
           size={"large"}
