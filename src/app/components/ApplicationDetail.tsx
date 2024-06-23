@@ -84,8 +84,8 @@ const ApplicationDetail = ({
     try {
       const res = await Axios.delete(`applications/${application._id}`, {
         headers: {
-          Authorization: (!!localStorage.getItem("token"))
-            ? "Bearer " + localStorage.getItem("token")
+          Authorization: (!!sessionStorage.getItem("token"))
+            ? "Bearer " + sessionStorage.getItem("token")
             : "",
         },
       });
@@ -97,13 +97,13 @@ const ApplicationDetail = ({
         error();
         try {
           const res = await Axios.post("users/refresh_token", {
-            refresh: localStorage.getItem("refresh"),
+            refresh: sessionStorage.getItem("refresh"),
           });
           if (res.status == 201 || res.status == 200) {
-            localStorage.setItem("token", res.data.token);
+            sessionStorage.setItem("token", res.data.token);
           }
         } catch (err: any) {
-          localStorage.clear();
+          sessionStorage.clear();
           if (err?.response?.status == 401) {
             router.push(`/login?ReturnUrl=${pathname}`);
           }
@@ -120,8 +120,8 @@ const ApplicationDetail = ({
         application,
         {
           headers: {
-            Authorization: !!localStorage.getItem("token")
-              ? "Bearer " + localStorage.getItem("token")
+            Authorization: !!sessionStorage.getItem("token")
+              ? "Bearer " + sessionStorage.getItem("token")
               : "",
           },
         }
@@ -135,14 +135,14 @@ const ApplicationDetail = ({
         error();
         try {
           const res = await Axios.post("users/refresh_token", {
-            refresh: localStorage.getItem("refresh"),
+            refresh: sessionStorage.getItem("refresh"),
           });
           if (res.status == 201 || res.status == 200) {
-            localStorage.setItem("token", res.data.token);
+            sessionStorage.setItem("token", res.data.token);
           }
         } catch (err: any) {
-          localStorage.removeItem("token");
-          localStorage.removeItem("refresh");
+          sessionStorage.removeItem("token");
+          sessionStorage.removeItem("refresh");
           if (err.response.status == 401) {
             error("unauthorized");
             setTimeout(() => router.push(`/login?ReturnUrl=${pathname}`), 1000);

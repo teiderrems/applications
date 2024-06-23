@@ -76,15 +76,15 @@ const Application: React.FC = () => {
 
   useEffect(() => {
     setToken((state: any) => {
-      state = window && localStorage.getItem("token");
+      state = window && sessionStorage.getItem("token");
       return state;
     });
     const findAll = async () => {
       try {
         const res = await axios.get(url + `&status=${filter}`, {
           headers: {
-            Authorization: window.localStorage
-              ? "Bearer " + window.localStorage.getItem("token")
+            Authorization: window.sessionStorage
+              ? "Bearer " + window.sessionStorage.getItem("token")
               : "",
           },
         });
@@ -113,17 +113,17 @@ const Application: React.FC = () => {
         if (error?.response?.status == 401) {
           try {
             const res = await Axios.post("users/refresh_token", {
-              refresh: localStorage.getItem("refresh"),
+              refresh: sessionStorage.getItem("refresh"),
             });
             if (res.status == 201 || res.status == 200) {
               setToken((state: any) => (state = res.data.token));
-              localStorage.setItem("token", res.data.token);
-              if (localStorage.getItem("token")) {
+              sessionStorage.setItem("token", res.data.token);
+              if (sessionStorage.getItem("token")) {
                 setReload((state) => !state);
               }
             }
           } catch (err: any) {
-            localStorage.clear();
+            sessionStorage.clear();
             if (err?.response?.status == 401) {
               router.push(`/login?ReturnUrl=${pathname}`);
             }

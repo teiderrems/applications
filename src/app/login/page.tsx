@@ -50,28 +50,28 @@ function Login() {
       if (res.status == 201 || res.status == 200) {
         success();
         setTimeout(() => {
-          window.localStorage&&localStorage.setItem("token", res.data.token);
-          window.localStorage&&localStorage.setItem(
+          window.sessionStorage&&sessionStorage.setItem("token", res.data.token);
+          window.sessionStorage&&sessionStorage.setItem(
             "userId",
             JSON.parse(atob(res.data.token.split(".")[1]))._id
           );
-          window.localStorage&&localStorage.setItem(
+          window.sessionStorage&&sessionStorage.setItem(
             "user",
             JSON.stringify(JSON.parse(atob(res.data.token.split(".")[1])))
           );
-          window.localStorage&&localStorage.setItem("refresh", res.data.refresh);
+          window.sessionStorage&&sessionStorage.setItem("refresh", res.data.refresh);
           if (query.get("ReturnUrl") != null) {
-            router.push(query.get("ReturnUrl") as string);
+            router.push(query.get("ReturnUrl")!);
           } else {
-            const user =window.localStorage? JSON.parse(
-              atob(localStorage.getItem("token")!.split(".")[1])
+            const user =window.sessionStorage? JSON.parse(
+              atob(sessionStorage.getItem("token")!.split(".")[1])
             ):null;
-            localStorage.setItem("userId", user?._id);
+            // localStorage.setItem("userId", user?._id);
             if (user.role!=='instructor' && user.role!=='admin') {
               router.push("/application");
             }
             else{
-              router.push("/application");
+              router.push("/user");
             }
             setIsSubmit((state) => !state);
           }

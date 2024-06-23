@@ -79,14 +79,14 @@ export default function UserList() {
   const [currentUser,setCurrentUser]=useState<UserType>();
   useEffect(() => {
 
-    if(localStorage)
-      setUser(JSON.parse(localStorage.getItem("user")!));
+    if(sessionStorage)
+      setUser(JSON.parse(sessionStorage.getItem("user")!));
     const findAll = async () => {
       try {
         const res = await axios.get(url + `&role=${filter}`, {
           headers: {
-            Authorization: window.localStorage
-              ? "Bearer " + window.localStorage.getItem("token")
+            Authorization: window.sessionStorage
+              ? "Bearer " + window.sessionStorage.getItem("token")
               : "",
           },
         });
@@ -121,16 +121,16 @@ export default function UserList() {
         ) {
           try {
             const res = await Axios.post("users/refresh_token", {
-              refresh: localStorage.getItem("refresh"),
+              refresh: sessionStorage.getItem("refresh"),
             });
             if (res.status == 201 || res.status == 200) {
-              localStorage.setItem("token", res.data.token);
-              if (localStorage.getItem("token")) {
+              sessionStorage.setItem("token", res.data.token);
+              if (sessionStorage.getItem("token")) {
                 setReload(true);
               }
             }
           } catch (err: any) {
-            localStorage.clear();
+            sessionStorage.clear();
             if (err?.response?.status == 401) {
               router.push(`/login?ReturnUrl=${pathname}`);
             }
@@ -142,7 +142,7 @@ export default function UserList() {
         }
       }
     };
-    if (!!localStorage.getItem('token'))
+    if (!!sessionStorage.getItem('token'))
       findAll();
   }, [
     pathname,

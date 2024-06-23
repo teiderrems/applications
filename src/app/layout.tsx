@@ -106,7 +106,7 @@ const AppLayout = ({
           },
         ]);
         setUser(null);
-        localStorage.clear();
+        sessionStorage.clear();
         router.push(`/login?ReturnUrl=${pathname}`);
         setSelected("7");
       },
@@ -194,7 +194,7 @@ const AppLayout = ({
           },
         ]);
         setUser(null);
-        localStorage.clear();
+        sessionStorage.clear();
         router.push(`/login`);
         setSelected("7");
       },
@@ -257,12 +257,12 @@ const AppLayout = ({
 
   const pathname = usePathname();
   const isAuthencated = () =>
-    window.localStorage && !!localStorage.getItem("token");
+    window.sessionStorage && !!sessionStorage.getItem("token");
 
   const [profile, setProfile] = useState<any>("");
   useEffect(() => {
     if (isAuthencated()) {
-      setUser(JSON.parse(localStorage.getItem("user")!));
+      setUser(JSON.parse(sessionStorage.getItem("user")!));
       setItems(logItems);
     }
     if(isAdminOrInstructor()){

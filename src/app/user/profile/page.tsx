@@ -75,8 +75,8 @@ export default function UserDetailInfo() {
     try {
       const res = await Axios.put("users/" + userEdit._id, userEdit, {
         headers: {
-          Authorization: window.localStorage
-            ? "Bearer " + window.localStorage.getItem("token")
+          Authorization: window.sessionStorage
+            ? "Bearer " + window.sessionStorage.getItem("token")
             : "",
         },
       });
@@ -88,18 +88,17 @@ export default function UserDetailInfo() {
       if (err.response.status == 401) {
         try {
           const res = await Axios.post("users/refresh_token", {
-            refresh: localStorage.getItem("refresh"),
+            refresh: sessionStorage.getItem("refresh"),
           });
           if (res.status == 201 || res.status == 200) {
-            localStorage.setItem("token", res.data.token);
-            localStorage.setItem("refresh", res.data.refresh);
-            if (localStorage.getItem("token")) {
+            sessionStorage.setItem("token", res.data.token);
+            sessionStorage.setItem("refresh", res.data.refresh);
+            if (sessionStorage.getItem("token")) {
               setReload(true);
             }
           }
         } catch (err: any) {
-          localStorage.removeItem("token");
-          localStorage.removeItem("refresh");
+          sessionStorage.clear();
           if (err.response.status == 401) {
             router.push(`/login?ReturnUrl=${pathname}`);
           }
@@ -123,18 +122,19 @@ export default function UserDetailInfo() {
     try {
       const res = await Axios.delete("users/" + userEdit._id, {
         headers: {
-          Authorization: window.localStorage
-            ? "Bearer " + window.localStorage.getItem("token")
+          Authorization: window.sessionStorage
+            ? "Bearer " + window.sessionStorage.getItem("token")
             : "",
         },
       });
       if (res.status == 204) {
         success('profile has been deleted successfully')
-        localStorage.removeItem('token');
-        localStorage.removeItem('refresh');
-        localStorage.removeItem('userId');
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('refresh');
+        sessionStorage.removeItem('userId');
         setTimeout(()=>router.push("/"),1000);
         setResponse({
+
           ...response,
           isLoading: false,
           status: res.status,
@@ -146,18 +146,18 @@ export default function UserDetailInfo() {
       if (error.response.status == 401) {
         try {
           const res = await Axios.post("users/refresh_token", {
-            refresh: localStorage.getItem("refresh"),
+            refresh: sessionStorage.getItem("refresh"),
           });
           if (res.status == 201 || res.status == 200) {
-            localStorage.setItem("token", res.data.token);
-            localStorage.setItem("refresh", res.data.refresh);
-            if (localStorage.getItem("token")) {
+            sessionStorage.setItem("token", res.data.token);
+            sessionStorage.setItem("refresh", res.data.refresh);
+            if (sessionStorage.getItem("token")) {
               setReload(true);
             }
           }
         } catch (err: any) {
-          localStorage.removeItem("token");
-          localStorage.removeItem("refresh");
+          sessionStorage.removeItem("token");
+          sessionStorage.removeItem("refresh");
           if (err.response.status == 401) {
             router.push(`/login?ReturnUrl=${pathname}`);
           }
@@ -169,25 +169,25 @@ export default function UserDetailInfo() {
   };
 
   useEffect(() => {
-    if (window.localStorage&&!(!!localStorage.getItem("token"))) {
+    if (window.sessionStorage&&!(!!sessionStorage.getItem("token"))) {
       router.push(`/login?ReturnUrl=${pathname}`);
     }
     setParam(
       window &&
-        (localStorage.getItem("userId") as string) &&
-        (localStorage.getItem("userId") as string)
+        (sessionStorage.getItem("user") as string) &&
+        JSON.parse(sessionStorage.getItem("user")!)._id
     );
     setToken(
-      window.localStorage&&
-        (localStorage.getItem("token") as string) &&
-        (localStorage.getItem("token") as string)
+      window.sessionStorage&&
+        (sessionStorage.getItem("token") as string) &&
+        (sessionStorage.getItem("token") as string)
     );
     const getUser = async () => {
       try {
         const res = await Axios.get(`users/${param}`, {
           headers: {
-            Authorization: window.localStorage
-              ? "Bearer " + window.localStorage.getItem("token")
+            Authorization: window.sessionStorage
+              ? "Bearer " + window.sessionStorage.getItem("token")
               : "",
           },
         });
@@ -210,16 +210,16 @@ export default function UserDetailInfo() {
         if (error.response.status == 401) {
           try {
             const res = await Axios.post("users/refresh_token", {
-              refresh: window.localStorage&&window.localStorage.getItem("refresh"),
+              refresh: window.sessionStorage&&window.sessionStorage.getItem("refresh"),
             });
             if (res.status == 201 || res.status == 200) {
               setToken(res.data.token);
-              window.localStorage&&localStorage.setItem("token", res.data.token);
-              window.localStorage&&localStorage.setItem("user",JSON.stringify(atob(res.data.token.split('.')[1])));
+              window.sessionStorage&&sessionStorage.setItem("token", res.data.token);
+              window.sessionStorage&&sessionStorage.setItem("user",JSON.stringify(atob(res.data.token.split('.')[1])));
             }
           } catch (err: any) {
-            localStorage.clear();
-            if (err.response.status == 401) {
+            sessionStorage.clear();
+            if (err?.response?.status == 401) {
               router.push(`/login?ReturnUrl=${pathname}`);
             }
           }

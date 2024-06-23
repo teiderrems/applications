@@ -62,8 +62,8 @@ const UserDetail = ({
         user,
         {
           headers: {
-            Authorization: !!localStorage.getItem("token")
-              ? "Bearer " + localStorage.getItem("token")
+            Authorization: !!sessionStorage.getItem("token")
+              ? "Bearer " + sessionStorage.getItem("token")
               : "",
           },
         }
@@ -77,13 +77,13 @@ const UserDetail = ({
         error();
         try {
           const res = await Axios.post("users/refresh_token", {
-            refresh: localStorage.getItem("refresh"),
+            refresh: sessionStorage.getItem("refresh"),
           });
           if (res.status == 201 || res.status == 200) {
-            localStorage.setItem("token", res.data.token);
+            sessionStorage.setItem("token", res.data.token);
           }
         } catch (err: any) {
-          localStorage.clear();
+          sessionStorage.clear();
           if (err.response.status == 401) {
             error("unauthorized");
             setTimeout(() => router.push(`/login?ReturnUrl=${pathname}`), 1000);
