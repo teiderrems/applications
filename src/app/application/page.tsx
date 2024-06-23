@@ -1,6 +1,6 @@
 "use client";
 import React, { Suspense, useEffect, useState } from "react";
-import { Button, Row, Table } from "antd";
+import {Button, Card, Row, Table} from "antd";
 import type { TableColumnsType } from "antd";
 import ApplicationDetail, {
   CustomType,
@@ -159,7 +159,6 @@ const Application: React.FC = () => {
           />
         </div>
       )}
-
       <Table
         className=" cursor-pointer"
         key={"applications"}
