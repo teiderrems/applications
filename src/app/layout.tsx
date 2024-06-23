@@ -319,40 +319,47 @@ const AppLayout = ({
       </head>
       <body className="h-screen">
         <Layout className="min-h-screen static bg-white">
-          <Sider trigger={null} collapsible collapsed={collapsed}>
+          { user && <Sider trigger={null} collapsible collapsed={collapsed}>
             <Link href="/">
               <Image
-                src={logo}
-                alt="logo"
-                className="h-12 w-4/6 cursor-pointer"
+                  src={logo}
+                  alt="logo"
+                  className="h-12 w-4/6 cursor-pointer"
               />
             </Link>
 
             <Menu
-              theme="light"
-              mode="inline"
-              selectedKeys={[selected]}
-              style={{
-                height: "100%",
-              }}
-              items={items}
+                theme="light"
+                mode="inline"
+                selectedKeys={[selected]}
+                style={{
+                  height: "100%",
+                }}
+                items={items}
             />
           </Sider>
+          }
           <Layout className="min-h-screen w-full">
             <Header
               style={{ padding: 0, background: colorBgContainer }}
               className="flex justify-between items-center"
             >
-              <Button
-                type="text"
-                icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                onClick={() => setCollapsed(!collapsed)}
-                style={{
-                  fontSize: "16px",
-                  width: 64,
-                  height: 64,
-                }}
-              />
+              {user?<Button
+                  type="text"
+                  icon={collapsed ? <MenuUnfoldOutlined/> : <MenuFoldOutlined/>}
+                  onClick={() => setCollapsed(!collapsed)}
+                  style={{
+                    fontSize: "16px",
+                    width: 64,
+                    height: 64,
+                  }}
+              />:<Link href="/" className="w-16 ml-2">
+                <Image
+                    src={logo}
+                    alt="logo"
+                    className="h-12 w-4/6 cursor-pointer"
+                />
+              </Link>}
               {profile && user ? (
                 <Link href="/user/profile">
                   <Avatar
@@ -368,7 +375,7 @@ const AppLayout = ({
                   />
                 </Link>
               ) : (
-                <Avatar className="mr-2" />
+                  <Button href="/about" className="rounded-full mr-2" >About</Button>
               )}
             </Header>
             <Content
