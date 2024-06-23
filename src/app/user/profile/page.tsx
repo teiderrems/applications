@@ -156,8 +156,7 @@ export default function UserDetailInfo() {
             }
           }
         } catch (err: any) {
-          sessionStorage.removeItem("token");
-          sessionStorage.removeItem("refresh");
+          sessionStorage.clear();
           if (err.response.status == 401) {
             router.push(`/login?ReturnUrl=${pathname}`);
           }

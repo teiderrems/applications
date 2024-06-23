@@ -52,7 +52,7 @@ function ResetPassword() {
     return (
         <div className="flex flex-col h-full items-center justify-center">
             {contextHolder}
-            <Card title="Reset Password" className="w-1/3">
+            <Card title="Reset Password" className="md:w-1/3">
                 <form className="w-full flex flex-col space-y-2" onSubmit={handleSubmit}>
                     <div className="flex flex-col space-y-1 w-full">
                         <label htmlFor="Password">Password</label>
