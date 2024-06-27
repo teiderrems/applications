@@ -1,6 +1,6 @@
 "use client";
 import React, { Suspense, useEffect, useState } from "react";
-import {Button, Card, Row, Table} from "antd";
+import {Button, Modal, Select, Table, message} from "antd";
 import type { TableColumnsType } from "antd";
 import ApplicationDetail, {
   CustomType,
@@ -9,9 +9,11 @@ import ApplicationDetail, {
 import Axios from "@/hooks/axios.config";
 import axios from "axios";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { PlusOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditTwoTone, ExclamationCircleFilled, PlusOutlined } from "@ant-design/icons";
 import AddApplication from "../components/AddApplication";
 
+
+const Status = ["pending", "postponed", "success", "reject","all",];
 const Application: React.FC = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const params = useSearchParams();
@@ -23,10 +25,9 @@ const Application: React.FC = () => {
     error: undefined,
     isSuccess: false,
   });
+  const { confirm } = Modal;
   const [isAdd, setIsAdd] = useState(false);
   const [reload, setReload] = useState(false);
-  const [next, setNext] = useState(null);
-  const [prev, setPrev] = useState(null);
   const [filter, setFilter] = useState("all");
 
   const [page, setPage] = useState(0);
@@ -37,6 +38,72 @@ const Application: React.FC = () => {
         params.get("user") ? `&owner=${params.get("user")}` : ""
       }`
   );
+
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const success = (title:string,message: string = "updated") => {
+    messageApi.open({
+      type: "success",
+      content: `Application with title ${title} has ${message}`,
+      duration: 0,
+    });
+  };
+
+  const error = (message: any = "unauthorized") => {
+    messageApi.open({
+      type: "error",
+      content: message,
+    });
+  };
+
+  const showDeleteConfirm = (id:string,title:string) => {
+    confirm({
+      title: 'Delete application!',
+      icon: <ExclamationCircleFilled />,
+      content: 'Are you sure to want to delete this item?',
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk:async()=>{
+        await HandleDelete(id,title);
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
+  };
+
+  async function HandleDelete(id:string,title:string): Promise<void> {
+    try {
+      const res = await Axios.delete(`applications/${id}`, {
+        headers: {
+          Authorization: (!!sessionStorage.getItem("token"))
+            ? "Bearer " + sessionStorage.getItem("token")
+            : "",
+        },
+      });
+      if (res.status == 204 || res.status == 200) {
+        success(title,"deleted");
+      }
+    } catch (err: any) {
+      if (err?.response?.status == 401) {
+        error();
+        try {
+          const res = await Axios.post("users/refresh_token", {
+            refresh: sessionStorage.getItem("refresh"),
+          });
+          if (res.status == 201 || res.status == 200) {
+            sessionStorage.setItem("token", res.data.token);
+          }
+        } catch (err: any) {
+          sessionStorage.clear();
+          if (err?.response?.status == 401) {
+            router.push(`/login?ReturnUrl=${pathname}`);
+          }
+        }
+      }
+    }
+  }
   const router = useRouter();
   const pathname = usePathname();
   const [currentApp, setCurrentApp] = useState<any>({});
@@ -60,7 +127,7 @@ const Application: React.FC = () => {
     },
     {
       title: "Status",
-      dataIndex: "Status",
+      dataIndex: "Status"
     },
     {
       title: "TypeContrat",
@@ -72,6 +139,23 @@ const Application: React.FC = () => {
       render: (value) =>
         (value as string).split("T")[0].split("-").reverse().join("/"),
     },
+    {
+      title:"Action",
+      dataIndex:"action",
+      render:(value, record, index)=> {
+        return(
+          <div className="flex space-x-4">
+              <Button size="small" icon={<EditTwoTone/>} onClick={()=>{
+                setCurrentApp((state:Props|undefined)=>state=record);
+                setHandleDetail(!handleDetail);
+              }}/>
+              <Button size="small" danger icon={<DeleteOutlined/>} onClick={()=>{
+                showDeleteConfirm(record._id as string,record.Title as string);
+              }}/>
+          </div>
+        )
+      },
+    }
   ];
 
   useEffect(() => {
@@ -98,12 +182,6 @@ const Application: React.FC = () => {
               data: res.data.data.applications,
               isSuccess: true,
             };
-          });
-          setPrev((state) => {
-            return (state = res.data.prev);
-          });
-          setNext((state) => {
-            return (state = res.data.next);
           });
           if (response?.data) {
             setReload((state) => !state);
@@ -133,25 +211,16 @@ const Application: React.FC = () => {
       }
     };
     findAll();
-  }, [
-    limit,
-    page,
-    response.isLoading,
-    prev,
-    url,
-    filter,
-    token,
-    next,
-    pathname,
-    router,
-    isAdd,
-    reload
-  ]);
+  }, [pathname, filter, response.isLoading, isAdd, reload, url, router, response.isSuccess, limit, response?.data]);
 
   return (
     <div className="mx-2 flex flex-col min-h-full">
+      {contextHolder}
       {!!!params.get("user") && (
         <div className="h-10 bg-slate-50 mt-2 flex items-center rounded-t-md justify-end">
+          {/* <Select className="w-24 uppercase" placeholder="select filter" defaultValue={filter} options={Status.map((r) => {
+          return { value: r, label: r };
+        })} onChange={(value)=>setFilter(value)}/> */}
           <Button
             icon={<PlusOutlined />}
             onClick={() => setOpen(!open)}
@@ -162,14 +231,6 @@ const Application: React.FC = () => {
       <Table
         className=" cursor-pointer"
         key={"applications"}
-        onRow={(record, index) => {
-          return {
-            onClick: (e) => {
-              setCurrentApp((state: Props) => (state = record));
-              setHandleDetail((state) => !state);
-            },
-          };
-        }}
         columns={columns}
         dataSource={response?.data}
         pagination={{

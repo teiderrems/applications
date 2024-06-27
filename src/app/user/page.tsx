@@ -4,11 +4,11 @@ import Axios from "@/hooks/axios.config";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { CustomType } from "../components/ApplicationDetail";
-import { PlusOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditFilled, EditTwoTone, PlusOutlined } from "@ant-design/icons";
 
 import AddUser from "../components/AddUser";
 import axios from "axios";
-import {Pagination, Table, TableColumnsType} from "antd";
+import {Button, Pagination, Table, TableColumnsType} from "antd";
 import UserDetail from "../components/UserDetail";
 export type UserType = {
   ProfileId: string;
@@ -75,6 +75,18 @@ export default function UserList() {
       render: (value) =>
         (value as string).split("T")[0].split("-").reverse().join("/"),
     },
+    {
+      title:"Action",
+      dataIndex:"action",
+      render:(value, record, index)=> {
+        return(
+              <Button icon={<EditTwoTone/>} onClick={()=>{
+                setCurrentUser((state:UserType|undefined)=>state=record);
+                setEdit(!edit);
+              }}/>
+        )
+      },
+    }
   ];
   const [currentUser,setCurrentUser]=useState<UserType>();
   useEffect(() => {
@@ -117,7 +129,7 @@ export default function UserList() {
         });
         if (
           error?.response?.status == 401 &&
-          (error?.response?.data?.message as string).includes("jwt")
+          (error?.response?.data?.message as string)?.includes("jwt")
         ) {
           try {
             const res = await Axios.post("users/refresh_token", {
@@ -196,10 +208,6 @@ export default function UserList() {
             onClick: (e) => {
               if (user?.role==='instructor') {
                 router.push(`/application?user=${record._id}`);
-              }
-              else{
-                setCurrentUser((state:UserType|undefined)=>state=record);
-                setEdit(!edit);
               }
             },
           };

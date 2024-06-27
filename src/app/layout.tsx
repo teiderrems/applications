@@ -310,10 +310,10 @@ const AppLayout = ({
     if (user) {
       getProfile();
     }
-  }, [selected, pathname, router]);
+  }, [selected, pathname]);
 
   return (
-    <html>
+    <html lang="fr">
       <head>
         <title>Applications Histories</title>
       </head>
@@ -353,7 +353,7 @@ const AppLayout = ({
                     width: 64,
                     height: 64,
                   }}
-              />:<Link href="/" className="w-16 ml-2">
+              />:<Link href={isAdminOrInstructor()?"#":'/application'} className="w-16 ml-2">
                 <Image
                     src={logo}
                     alt="logo"

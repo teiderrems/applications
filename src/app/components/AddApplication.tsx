@@ -54,7 +54,6 @@ const AddApplication = ({
 
   const HandleSubmit = async () => {
     try {
-      console.log(application);
       const res = await Axios.post("applications", application, {
         headers: {
           Authorization: window.sessionStorage
@@ -63,8 +62,10 @@ const AddApplication = ({
         },
       });
       router.refresh();
-    } catch (error: any) {
-      if (error.response.status == 401) {
+      success();
+    } catch (err: any) {
+      error();
+      if (err?.response.status == 401) {
         try {
           const res = await Axios.post("users/refresh_token", {
             refresh: sessionStorage.getItem("refresh"),
