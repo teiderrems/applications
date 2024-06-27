@@ -353,13 +353,11 @@ const AppLayout = ({
                     width: 64,
                     height: 64,
                   }}
-              />:<Link href={isAdminOrInstructor()?"#":'/application'} className="w-16 ml-2">
-                <Image
-                    src={logo}
-                    alt="logo"
-                    className="h-12 w-4/6 cursor-pointer"
-                />
-              </Link>}
+              />:<Button icon={<Image
+                src={logo}
+                alt="logo"
+                className="h-12 w-4/6 cursor-pointer"
+            />} type="text"  className="w-16 ml-2"/>}
               {profile && user ? (
                 <Link href="/user/profile">
                   <Avatar
