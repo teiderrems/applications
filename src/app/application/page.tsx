@@ -31,7 +31,7 @@ const Application: React.FC = () => {
   const [filter, setFilter] = useState("all");
 
   const [page, setPage] = useState(0);
-  const [limit, setLimit] = useState(3);
+  const [limit, setLimit] = useState(2);
   const [url, setUrl] = useState<any>(
     `${Axios.defaults.baseURL}${params.get("user") ? "users/" : ""}` +
       `applications?page=${page}&limit=${limit}${
