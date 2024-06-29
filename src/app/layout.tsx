@@ -107,7 +107,7 @@ const AppLayout = ({
         ]);
         setUser(null);
         sessionStorage.clear();
-        router.push(`/login?ReturnUrl=${pathname}`);
+        router.push(`/login`);
         setSelected("7");
       },
     },

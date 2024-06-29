@@ -41,8 +41,6 @@ export default function UserList() {
   const [url, setUrl] = useState<any>(
     `${Axios.defaults.baseURL}` + `users?page=${page}&limit=${limit}`
   );
-  const [next, setNext] = useState(null);
-  const [prev, setPrev] = useState(null);
   const [filter, setFilter] = useState("all");
   const [total, setTotal] = useState(10);
   const [open, setOpen] = useState(false);
@@ -103,18 +101,16 @@ export default function UserList() {
           },
         });
         if (res.status == 201 || res.status == 200) {
-          setTotal((state) => (state = res.data.data.count));
+          setTotal((state) => (state = res.data.count));
           setResponse((state) => {
             return {
               ...state,
               isLoading: false,
               status: res.status,
-              data: res.data.data.users,
+              data: res.data.users,
               isSuccess: true,
             };
           });
-          setPrev(res.data.prev);
-          setNext(res.data.next);
         }
       } catch (error: any) {
         console.log(error);
@@ -154,7 +150,6 @@ export default function UserList() {
         }
       }
     };
-    console.log(url);
     if (!!sessionStorage.getItem('token'))
       findAll();
   }, [
@@ -164,8 +159,11 @@ export default function UserList() {
     isAdd,
     reload,
     url,
+      limit,
+      page,
     router,
     response?.isSuccess,
+    response?.data
   ]);
 
   if (response?.isLoading) {
@@ -227,7 +225,7 @@ export default function UserList() {
           onShowSizeChange:(current,size)=>{
             setLimit(state=>state=size);
             setPage(state=>state=current);
-            setUrl(Axios.defaults.baseURL+`users?page=${page}&limit=${limit}`);
+            setUrl(Axios.defaults.baseURL+`users?page=${page-1}&limit=${limit}`);
           },
           pageSizeOptions:[1,2,3,4,5,6,10,15,20,25,30,35,40,45,50,55]
         }}
