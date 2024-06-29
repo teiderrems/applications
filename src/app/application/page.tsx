@@ -138,6 +138,7 @@ const Application: React.FC = () => {
             }}/>
         )
       },
+      hidden:(!!sessionStorage.getItem("user"))?true:false,
     },
     {
       title: "Title",
@@ -181,7 +182,7 @@ const Application: React.FC = () => {
           </div>
         )
       },
-      hidden:selectedRowKeys.length>0?true:false,
+      hidden:(selectedRowKeys.length>0 || !!sessionStorage.getItem("user"))?true:false,
     }
   ];
 
