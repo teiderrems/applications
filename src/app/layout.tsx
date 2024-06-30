@@ -317,7 +317,7 @@ const AppLayout = ({
       <head>
         <title>Applications Histories</title>
       </head>
-      <body className="h-screen">
+      <body className="h-screen overflow-hidden">
         <Layout className="min-h-screen static bg-white">
           { user && <Sider trigger={null} collapsible collapsed={collapsed}>
             <Link href="/">
@@ -356,7 +356,7 @@ const AppLayout = ({
               />:<Button icon={<Image
                 src={logo}
                 alt="logo"
-                className="h-12 w-4/6 cursor-pointer"
+                className="h-12 w-52 cursor-pointer"
             />} type="text"  className="w-16 ml-2"/>}
               {profile && user ? (
                 <Link href="/user/profile">
@@ -377,10 +377,8 @@ const AppLayout = ({
               )}
             </Header>
             <Content
-              className="flex-1"
+              className="flex-1 m-4"
               style={{
-                margin: "24px 16px",
-                padding: 24,
                 backgroundColor: "white",
               }}
             >

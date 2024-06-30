@@ -1,6 +1,6 @@
 "use client";
 import React, { Suspense, useEffect, useState } from "react";
-import {Button, Modal, Select, Table, message, Checkbox} from "antd";
+import { Button, Modal, Table, message, Checkbox } from "antd";
 import type { TableColumnsType } from "antd";
 import ApplicationDetail, {
   CustomType,
@@ -9,12 +9,16 @@ import ApplicationDetail, {
 import Axios from "@/hooks/axios.config";
 import axios from "axios";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { DeleteOutlined, EditTwoTone, ExclamationCircleFilled, PlusOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditTwoTone,
+  ExclamationCircleFilled,
+  PlusOutlined,
+} from "@ant-design/icons";
 import AddApplication from "../components/AddApplication";
 
-
-const Status = ["pending", "postponed", "success", "reject","all",];
-const Application: React.FC = () => {
+// const Status = ["pending", "postponed", "success", "reject","all",];
+const Application = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<any>([]);
   const params = useSearchParams();
   const [response, setResponse] = useState<CustomType>({
@@ -35,12 +39,12 @@ const Application: React.FC = () => {
     `${Axios.defaults.baseURL}${params.get("user") ? "users/" : ""}` +
       `applications?page=${page}&limit=${limit}${
         params.get("user") ? `&owner=${params.get("user")}` : ""
-      }&status=${filter}`
+      }`
   );
 
   const [messageApi, contextHolder] = message.useMessage();
 
-  const success = (title:string,message: string = "updated") => {
+  const success = (title: string, message: string = "updated") => {
     messageApi.open({
       type: "success",
       content: `Application with title ${title} has ${message}`,
@@ -55,49 +59,50 @@ const Application: React.FC = () => {
     });
   };
 
-  const showDeleteConfirm = (id:string,title:string) => {
+  const showDeleteConfirm = (id: string, title: string) => {
     confirm({
-      title: 'Delete application!',
+      title: "Delete application!",
       icon: <ExclamationCircleFilled />,
-      content: `Are you sure to want to delete ${selectedRowKeys.length>0?'these items':'this item'}?`,
-      okText: 'Yes',
-      okType: 'danger',
-      cancelText: 'No',
-      onOk:async()=>{
-        await HandleDelete(id,title);
+      content: `Are you sure to want to delete ${
+        selectedRowKeys.length > 0 ? "these items" : "this item"
+      }?`,
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
+      onOk: async () => {
+        await HandleDelete(id, title);
       },
       onCancel() {
-        console.log('Cancel');
+        console.log("Cancel");
       },
     });
   };
 
-  async function HandleDelete(id:string,title:string): Promise<void> {
+  async function HandleDelete(id: string, title: string): Promise<void> {
     try {
-      if (selectedRowKeys.length>0){
+      if (selectedRowKeys.length > 0) {
         const res = await Axios.delete(`applications`, {
           headers: {
-            Authorization: (!!sessionStorage.getItem("token"))
-                ? "Bearer " + sessionStorage.getItem("token")
-                : "",
+            Authorization: !!sessionStorage.getItem("token")
+              ? "Bearer " + sessionStorage.getItem("token")
+              : "",
           },
-          data:{applications:selectedRowKeys}
+          data: { applications: selectedRowKeys },
         });
         if (res.status == 204 || res.status == 200) {
           selectedRowKeys([]);
-          success(title,"deleted");
+          success(title, "deleted");
         }
-      }
-      else{
+      } else {
         const res = await Axios.delete(`applications/${id}`, {
           headers: {
-            Authorization: (!!sessionStorage.getItem("token"))
-                ? "Bearer " + sessionStorage.getItem("token")
-                : "",
+            Authorization: !!sessionStorage.getItem("token")
+              ? "Bearer " + sessionStorage.getItem("token")
+              : "",
           },
         });
         if (res?.status == 204 || res?.status == 200) {
-          success(title,"deleted");
+          success(title, "deleted");
         }
       }
     } catch (err: any) {
@@ -131,14 +136,16 @@ const Application: React.FC = () => {
     {
       title: "Checked",
       dataIndex: "Checked",
-      render:(value,record,index)=>{
-        return(
-            <Checkbox onChange={()=>{
-              setSelectedRowKeys((state:any)=>[...state,record._id]);
-            }}/>
-        )
+      render: (value, record, index) => {
+        return (
+          <Checkbox
+            onChange={() => {
+              setSelectedRowKeys((state: any) => [...state, record._id]);
+            }}
+          />
+        );
       },
-      hidden:(!!sessionStorage.getItem("user"))?true:false,
+      hidden: (user && user.role==='instructor') ? true : false,
     },
     {
       title: "Title",
@@ -154,7 +161,7 @@ const Application: React.FC = () => {
     },
     {
       title: "Status",
-      dataIndex: "Status"
+      dataIndex: "Status",
     },
     {
       title: "TypeContrat",
@@ -167,36 +174,46 @@ const Application: React.FC = () => {
         (value as string).split("T")[0].split("-").reverse().join("/"),
     },
     {
-      title:"Action",
-      dataIndex:"action",
-      render:(value, record, index)=> {
-        return(
+      title: "Action",
+      dataIndex: "action",
+      render: (value, record, index) => {
+        return (
           <div className="flex space-x-4">
-              <Button size="small" icon={<EditTwoTone/>} onClick={()=>{
-                setCurrentApp((state:Props|undefined)=>state=record);
+            <Button
+              size="small"
+              icon={<EditTwoTone />}
+              onClick={() => {
+                setCurrentApp((state: Props | undefined) => (state = record));
                 setHandleDetail(!handleDetail);
-              }}/>
-              <Button size="small" danger icon={<DeleteOutlined/>} onClick={()=>{
-                showDeleteConfirm(record._id as string,record.Title as string);
-              }}/>
+              }}
+            />
+            <Button
+              size="small"
+              danger
+              icon={<DeleteOutlined />}
+              onClick={() => {
+                showDeleteConfirm(record._id as string, record.Title as string);
+              }}
+            />
           </div>
-        )
+        );
       },
-      hidden:(selectedRowKeys.length>0 || !!sessionStorage.getItem("user"))?true:false,
-    }
+      hidden:
+        (selectedRowKeys.length > 0 || (user && user.role==='instructor'))
+          ? true
+          : false,
+    },
   ];
 
   useEffect(() => {
-
-    if(sessionStorage)
-      setUser(JSON.parse(sessionStorage.getItem("user")!));
+    if (sessionStorage) setUser(JSON.parse(sessionStorage.getItem("user")!));
     const findAll = async () => {
       try {
-        const res = await axios.get(url , {
+        const res = await axios.get(url, {
           headers: {
             Authorization: window.sessionStorage
-                ? "Bearer " + window.sessionStorage.getItem("token")
-                : "",
+              ? "Bearer " + window.sessionStorage.getItem("token")
+              : "",
           },
         });
         if (res.status == 201 || res.status == 200) {
@@ -210,7 +227,6 @@ const Application: React.FC = () => {
               isSuccess: true,
             };
           });
-
         }
       } catch (error: any) {
         setUser(undefined);
@@ -224,8 +240,8 @@ const Application: React.FC = () => {
           };
         });
         if (
-            error?.response?.status == 401 &&
-            (error?.response?.data?.message as string)?.includes("jwt")
+          error?.response?.status == 401 &&
+          (error?.response?.data?.message as string)?.includes("jwt")
         ) {
           try {
             const res = await Axios.post("users/refresh_token", {
@@ -248,8 +264,7 @@ const Application: React.FC = () => {
         }
       }
     };
-    if (!!sessionStorage.getItem('token'))
-      findAll();
+    if (!!sessionStorage.getItem("token")) findAll();
   }, [
     pathname,
     filter,
@@ -260,20 +275,24 @@ const Application: React.FC = () => {
     page,
     response?.isSuccess,
     response?.data,
-    selectedRowKeys
+    selectedRowKeys,
   ]);
 
   return (
-    <div className="mx-2 flex flex-col min-h-full">
+    <div className="mx-1 flex flex-col h-full">
       {contextHolder}
       {!!!params.get("user") && (
-        <div className="h-10 bg-slate-50 mt-2 flex items-center rounded-t-md justify-end">
-          {
-
-            selectedRowKeys.length>0&&<Button icon={<DeleteOutlined/>} danger onClick={()=>{
-                showDeleteConfirm(selectedRowKeys[0],"items");
-              }}/>
-          }
+        <div className="h-5  flex items-center rounded-t-md my-4 justify-end">
+          {selectedRowKeys.length > 0 && (
+            <Button className="h-full"
+              icon={<DeleteOutlined />}
+              danger
+              size="small"
+              onClick={() => {
+                showDeleteConfirm(selectedRowKeys[0], "items");
+              }}
+            />
+          )}
           <Button
             icon={<PlusOutlined />}
             onClick={() => setOpen(!open)}
@@ -282,28 +301,39 @@ const Application: React.FC = () => {
         </div>
       )}
       <Table
-        className=" cursor-pointer"
+        className=" cursor-pointer flex-1"
         key={"_id"}
         columns={columns}
         dataSource={response?.data}
         pagination={{
-          onChange: (page,pageSize) => {
-            setLimit(state=>state=pageSize);
-            setPage(state=>state=page);
-            setUrl(Axios.defaults.baseURL+`applications?page=${page-1}&limit=${pageSize}`);
+          onChange: (page, pageSize) => {
+            setLimit((state) => (state = pageSize));
+            setPage((state) => (state = page));
+            setUrl(
+              (state :string)=>state=`${Axios.defaults.baseURL}${params.get("user") ? "users/" : ""}` +
+                `applications?page=${page - 1}&limit=${pageSize}${
+                  params.get("user") ? `&owner=${params.get("user")}` : ""
+                }`
+            );
           },
           total: total,
-          // hideOnSinglePage:true,
-          pageSize:limit,
-          showSizeChanger:true,
-          onShowSizeChange:(current,size)=>{
-            setLimit(state=>state=size);
-            setPage(state=>state=current);
-            setUrl(Axios.defaults.baseURL+`applications?page=${page-1}&limit=${limit}`);
+          pageSize: limit,
+          showSizeChanger: true,
+          onShowSizeChange: (current, size) => {
+            setLimit((state) => (state = size));
+            setPage((state) => (state = current));
+            setUrl(
+              (state :string)=>state=`${Axios.defaults.baseURL}${params.get("user") ? "users/" : ""}` +
+                `applications?page=${page - 1}&limit=${size}${
+                  params.get("user") ? `&owner=${params.get("user")}` : ""
+                }`
+            );
           },
-          pageSizeOptions:[1,2,3,4,5,6,10,15,20,25,30,35,40,45,50,55]
+          pageSizeOptions: [
+            1, 2, 3, 4, 5, 6, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55,
+          ],
         }}
-        scroll={{ y: '100%' }}
+        scroll={{ y: 250 }}
       />
       {handleDetail && currentApp && (
         <ApplicationDetail

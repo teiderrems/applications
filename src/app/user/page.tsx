@@ -4,7 +4,7 @@ import Axios from "@/hooks/axios.config";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { CustomType } from "../components/ApplicationDetail";
-import { DeleteOutlined, EditFilled, EditTwoTone, PlusOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditFilled, EditTwoTone, MoreOutlined, PlusOutlined } from "@ant-design/icons";
 
 import AddUser from "../components/AddUser";
 import axios from "axios";
@@ -25,7 +25,6 @@ export type UserType = {
 export default function UserList() {
   const router = useRouter();
   const pathname = usePathname();
-  const [token, setToken] = useState<string>();
   const [edit,setEdit]=useState(false);
   const [response, setResponse] = useState<CustomType>({
     isLoading: false,
@@ -42,7 +41,7 @@ export default function UserList() {
     `${Axios.defaults.baseURL}` + `users?page=${page}&limit=${limit}`
   );
   const [filter, setFilter] = useState("all");
-  const [total, setTotal] = useState(10);
+  const [total, setTotal] = useState(0);
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState<any>();
 
@@ -78,12 +77,16 @@ export default function UserList() {
       dataIndex:"action",
       render:(value, record, index)=> {
         return(
-              <Button icon={<EditTwoTone/>} onClick={()=>{
+          user && user.role!=='admin'?<Button onClick={(e) => {
+            if (user?.role==='instructor') {
+              router.push(`/application?user=${record._id}`);
+            }
+          }} type="primary" icon={<MoreOutlined />}/>:<Button icon={<EditTwoTone/>} onClick={()=>{
                 setCurrentUser((state:UserType|undefined)=>state=record);
                 setEdit(!edit);
               }}/>
         )
-      },
+      }
     }
   ];
   const [currentUser,setCurrentUser]=useState<UserType>();
@@ -185,11 +188,11 @@ export default function UserList() {
   return (
     <div className="flex-1 flex overflow-hidden flex-col  mx-2">
       {user && user?.role === "admin" && (
-        <div className="h-10 bg-slate-50 mt-2 flex items-center rounded-t-md justify-end">
+        <div className="h-5  flex items-center rounded-t-md my-4 justify-end">
           {!open ? (
             <button
               onClick={() => setOpen(!open)}
-              className="mx-2 rounded-full hover:bg-blue-500 hover:text-white text-2xl w-8 h-8"
+              className="mx-2 rounded-full border hover:bg-blue-500 hover:text-white text-2xl w-8 h-8"
             >
               <PlusOutlined />
             </button>
@@ -201,15 +204,6 @@ export default function UserList() {
       <Table
         className=" cursor-pointer"
         key={"_id"}
-        onRow={(record, index) => {
-          return {
-            onClick: (e) => {
-              if (user?.role==='instructor') {
-                router.push(`/application?user=${record._id}`);
-              }
-            },
-          };
-        }}
         columns={columns}
         dataSource={response?.data}
         pagination={{
@@ -219,7 +213,6 @@ export default function UserList() {
             setUrl(Axios.defaults.baseURL+`users?page=${page-1}&limit=${pageSize}`);
           },
           total: total,
-          // hideOnSinglePage:true,
           pageSize:limit,
           showSizeChanger:true,
           onShowSizeChange:(current,size)=>{
@@ -229,7 +222,7 @@ export default function UserList() {
           },
           pageSizeOptions:[1,2,3,4,5,6,10,15,20,25,30,35,40,45,50,55]
         }}
-        scroll={{ y: '100%' }}
+        scroll={{ y:250 }}
       />
       {edit && currentUser &&<UserDetail user={currentUser} open={edit} setOpen={setEdit} setUser={setCurrentUser}/>}
     </div>
