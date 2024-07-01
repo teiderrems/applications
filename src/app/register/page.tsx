@@ -101,7 +101,7 @@ export default function Register() {
   };
   return (
     <div
-      className="h-screen flex flex-col text-sm items-center"
+      className="h-full mt-4 flex flex-col text-sm items-center"
     >
       {contextHolder}
       <Card title="SignIn to continue">

@@ -25,22 +25,18 @@ export default function Home() {
                     Que vous soyez un professionnel chevronné ou un jeune talent plein de potentiel, nous sommes
                     impatients
                     de découvrir ce que vous pouvez apporter à notre équipe.</p>
-                <div className="flex justify-center space-x-10">
-                    <Button type="link" size="large" href="/login" className=" font-bold border border-gray-300 hover:bg-blue-500 hover:text-white">Sign In </Button>
-                    <Button type="link" size="large" href="/register" className="font-bold border border-gray-300 hover:bg-blue-500 hover:text-white">Sign Up </Button>
-                </div>
+                <Card title="Contact" className="flex flex-col space-y-2">
+                    <div className="flex space-x-3">
+                        <MailOutlined/><span>teidaremi0@gmail.com</span>
+                    </div>
+                    <div className="flex space-x-3">
+                        <PhoneOutlined/><span>0758703501</span>
+                    </div>
+                    &copy; 2024
+
+                </Card>
             </div>
         </div>
-        <Card title="Contact" className="flex flex-col space-y-2">
-            <div className="flex space-x-3">
-                <MailOutlined/><span>teidaremi0@gmail.com</span>
-            </div>
-            <div className="flex space-x-3">
-                <PhoneOutlined/><span>0758703501</span>
-            </div>
-            &copy; 2024
-
-        </Card>
     </main>
   );
 }

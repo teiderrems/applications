@@ -116,7 +116,7 @@ function Login() {
 
   return (
     <div
-      className=" h-full flex flex-col justify-center items-center text-sm"
+      className=" h-full flex flex-col mt-14 justify-center items-center text-sm"
     >
       {contextHolder}
       <Card title="Login to continue" className="md:w-1/3">

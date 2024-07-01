@@ -12,7 +12,7 @@ import {
   UnorderedListOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Avatar, Button, Layout, Menu, theme } from "antd";
+import { Avatar, Button, Layout, Menu, MenuProps, theme } from "antd";
 import { ItemType, MenuItemType } from "antd/es/menu/hooks/useItems";
 import { usePathname, useRouter } from "next/navigation";
 import logo from "../../public/icon.png";
@@ -21,6 +21,11 @@ import Link from "next/link";
 import Axios from "@/hooks/axios.config";
 
 const { Header, Sider, Content } = Layout;
+
+
+
+
+
 
 const AppLayout = ({
   children,
@@ -210,6 +215,38 @@ const AppLayout = ({
     },
   ];
 
+  type MenuItem = Required<MenuProps>['items'][number];
+
+const navBar: MenuItem[] = [
+  {
+    key: "2",
+    icon: <LoginOutlined />,
+    label: "Login",
+    onClick: () => {
+      router.replace("/login");
+      setSelected("2");
+    },
+  },
+  {
+    key: "3",
+    icon: <SolutionOutlined />,
+    label: "Register",
+    onClick: () => {
+      router.replace("/register");
+      setSelected("3");
+    },
+  },
+  {
+    key: "7",
+    icon: <ReadOutlined />,
+    label: "About",
+    onClick: () => {
+      router.push("/about");
+      setSelected("7");
+    },
+  },
+];
+
   const router = useRouter();
   const [selected, setSelected] = useState("1");
 
@@ -318,7 +355,7 @@ const AppLayout = ({
         <title>Applications Histories</title>
       </head>
       <body className="h-screen overflow-hidden">
-        <Layout className="min-h-screen static bg-white">
+        <Layout className="min-h-screen static">
           { user && <Sider trigger={null} collapsible collapsed={collapsed}>
             <Link href="/">
               <Image
@@ -339,7 +376,7 @@ const AppLayout = ({
             />
           </Sider>
           }
-          <Layout className="min-h-screen w-full">
+          <Layout className="h-full w-full">
             <Header
               style={{ padding: 0, background: colorBgContainer }}
               className="flex justify-between items-center"
@@ -357,7 +394,7 @@ const AppLayout = ({
                 src={logo}
                 alt="logo"
                 className="h-12 w-52 cursor-pointer"
-            />} type="text"  className="w-16 ml-2"/>}
+            />} type="link" href="/"  className="w-16 ml-2" />}
               {profile && user ? (
                 <Link href="/user/profile">
                   <Avatar
@@ -373,7 +410,16 @@ const AppLayout = ({
                   />
                 </Link>
               ) : (
-                  <Button href="/about" className="rounded-full mr-2" >About</Button>
+                <Menu
+                theme="light"
+                mode="horizontal"
+                selectedKeys={[selected]}
+                style={{
+                  width: "25%",
+                  height:"100%"
+                }}
+                items={navBar}
+            />
               )}
             </Header>
             <Content

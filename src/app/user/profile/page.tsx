@@ -266,8 +266,8 @@ export default function UserDetailInfo() {
   }
   return (
     <div className="flex-1 flex flex-col items-center">
-      <div className="flex-1 space-y-5 h-5/6 justify-center items-center mx-2 md:mx-0 my-4 flex flex-col">
-      <div className="flex-1 space-y-10 h-5/6 flex flex-col">
+      <div className="flex-1 space-y-3 h-5/6 justify-center items-center mx-2 md:mx-0 my-4 flex flex-col">
+      <div className="flex-1 space-y-6 h-5/6 flex flex-col">
         <div className=" w-full flex flex-row space-x-2">
           {(profile as string).includes('base64')?<Avatar
             className="h-24 w-24 self-start"
