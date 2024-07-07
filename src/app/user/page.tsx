@@ -3,13 +3,12 @@
 import Axios from "@/hooks/axios.config";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { CustomType } from "../components/ApplicationDetail";
-import { DeleteOutlined, EditFilled, EditTwoTone, MoreOutlined, PlusOutlined } from "@ant-design/icons";
+import { EditTwoTone, MoreOutlined, PlusOutlined } from "@ant-design/icons";
 
 import AddUser from "../components/AddUser";
-import axios from "axios";
-import {Button, Pagination, Table, TableColumnsType} from "antd";
+import {Button, Table, TableColumnsType} from "antd";
 import UserDetail from "../components/UserDetail";
+import { useFindAllQuery } from "@/lib/features/users/usersApiSlice";
 export type UserType = {
   ProfileId: string;
   Username?: string;
@@ -26,17 +25,8 @@ export default function UserList() {
   const router = useRouter();
   const pathname = usePathname();
   const [edit,setEdit]=useState(false);
-  const [response, setResponse] = useState<CustomType>({
-    isLoading: false,
-    status: 0,
-    data: undefined,
-    error: undefined,
-    isSuccess: false,
-  });
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(2);
-  const [isAdd, setIsAdd] = useState(false);
-  const [reload, setReload] = useState(false);
   const [url, setUrl] = useState<any>(
     `${Axios.defaults.baseURL}` + `users?page=${page}&limit=${limit}`
   );
@@ -44,6 +34,8 @@ export default function UserList() {
   const [total, setTotal] = useState(0);
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState<any>();
+
+  const {isError,isFetching,error,isLoading,isSuccess,data}=useFindAllQuery(url);
 
   const columns: TableColumnsType<UserType> = [
     {
@@ -89,87 +81,14 @@ export default function UserList() {
       }
     }
   ];
+
   const [currentUser,setCurrentUser]=useState<UserType>();
   useEffect(() => {
-
     if(sessionStorage)
       setUser(JSON.parse(sessionStorage.getItem("user")!));
-    const findAll = async () => {
-      try {
-        const res = await axios.get(url + `&role=${filter}`, {
-          headers: {
-            Authorization: window.sessionStorage
-              ? "Bearer " + window.sessionStorage.getItem("token")
-              : "",
-          },
-        });
-        if (res.status == 201 || res.status == 200) {
-          setTotal((state) => (state = res.data.count));
-          setResponse((state) => {
-            return {
-              ...state,
-              isLoading: false,
-              status: res.status,
-              data: res.data.users,
-              isSuccess: true,
-            };
-          });
-        }
-      } catch (error: any) {
-        console.log(error);
-        setResponse((state) => {
-          return {
-            ...state,
-            error: error?.message,
-            isLoading: false,
-            status: error?.response?.status,
-            isSuccess: true,
-          };
-        });
-        if (
-          error?.response?.status == 401 &&
-          (error?.response?.data?.message as string)?.includes("jwt")
-        ) {
-          try {
-            const res = await Axios.post("users/refresh_token", {
-              refresh: sessionStorage.getItem("refresh"),
-            });
-            if (res.status == 201 || res.status == 200) {
-              sessionStorage.setItem("token", res.data.token);
-              if (sessionStorage.getItem("token")) {
-                setReload(true);
-              }
-            }
-          } catch (err: any) {
-            sessionStorage.clear();
-            if (err?.response?.status == 401) {
-              router.push(`/login?ReturnUrl=${pathname}`);
-            }
-            setReload(false);
-          }
-        }
-        if (error?.response?.status === 401) {
-          router.push(`/`);
-        }
-      }
-    };
-    if (!!sessionStorage.getItem('token'))
-      findAll();
-  }, [
-    pathname,
-    filter,
-    response.isLoading,
-    isAdd,
-    reload,
-    url,
-      limit,
-      page,
-    router,
-    response?.isSuccess,
-    response?.data
-  ]);
+  }, [isError,isFetching,error,isLoading,isSuccess,data]);
 
-  if (response?.isLoading) {
+  if (isLoading) {
     return (
       <div className="flex flex-col justify-center h-full items-center">
         <p className=" animate-bounce text-center">Loading...</p>
@@ -177,10 +96,10 @@ export default function UserList() {
     );
   }
 
-  if (response?.isError) {
+  if (isError) {
     return (
-      <div className="flex justify-center items-center">
-        <p className="text-justify text-red-400">{response?.error}</p>
+      <div className="flex justify-center h-full items-center">
+        <p className="text-justify text-red-400">error</p>
       </div>
     );
   }
@@ -205,14 +124,14 @@ export default function UserList() {
         className=" cursor-pointer"
         key={"_id"}
         columns={columns}
-        dataSource={response?.data}
+        dataSource={data?.users}
         pagination={{
           onChange: (page,pageSize) => {
             setLimit(state=>state=pageSize);
             setPage(state=>state=page);
             setUrl(Axios.defaults.baseURL+`users?page=${page-1}&limit=${pageSize}`);
           },
-          total: total,
+          total: data?.count,
           pageSize:limit,
           showSizeChanger:true,
           onShowSizeChange:(current,size)=>{
@@ -228,3 +147,19 @@ export default function UserList() {
     </div>
   );
 }
+
+// export async function fetchRefreshToken(router:AppRouterInstance,pathname:string='/'){
+//   try {
+//     const res = await Axios.post("users/refresh_token", {
+//       refresh: sessionStorage.getItem("refresh"),
+//     });
+//     if (res.status == 201 || res.status == 200) {
+//       sessionStorage.setItem("token", res.data.token);
+//     }
+//   } catch (err: any) {
+//     sessionStorage.clear();
+//     if (err?.response?.status == 401) {
+//       router.push(`/login?ReturnUrl=${pathname}`);
+//     }
+//   }
+// }

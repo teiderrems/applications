@@ -7,7 +7,7 @@ import ApplicationDetail, {
   Props,
 } from "../components/ApplicationDetail";
 import Axios from "@/hooks/axios.config";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   DeleteOutlined,
@@ -16,6 +16,7 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import AddApplication from "../components/AddApplication";
+import { useDeleteApplicationMutation, useDeleteManyApplicationMutation, useFindAllQuery } from "@/lib/features/applications/applicationsApiSlice";
 
 // const Status = ["pending", "postponed", "success", "reject","all",];
 const Application = () => {
@@ -78,56 +79,31 @@ const Application = () => {
     });
   };
 
+  const [deleteOneApp,{isError:isErrorDeleteOne,isLoading:isLoadingDeleteOne,isSuccess: isSuccessDeleteOne,data:deleteOne}]=useDeleteApplicationMutation();
+  const [deleteManyApp,{isError:isErrorDeleteMany,isLoading:isLoadingDeleteMany,isSuccess: isSuccessDeleteMany,data:deleteMany}]=useDeleteManyApplicationMutation();
+
   async function HandleDelete(id: string, title: string): Promise<void> {
-    try {
       if (selectedRowKeys.length > 0) {
-        const res = await Axios.delete(`applications`, {
-          headers: {
-            Authorization: !!sessionStorage.getItem("token")
-              ? "Bearer " + sessionStorage.getItem("token")
-              : "",
-          },
-          data: { applications: selectedRowKeys },
-        });
-        if (res.status == 204 || res.status == 200) {
-          selectedRowKeys([]);
-          success(title, "deleted");
+        const res=await deleteManyApp(selectedRowKeys);
+        if(res.data){
+          success(title,'deleted');
+        }
+        if (res.error) {
+          error();
         }
       } else {
-        const res = await Axios.delete(`applications/${id}`, {
-          headers: {
-            Authorization: !!sessionStorage.getItem("token")
-              ? "Bearer " + sessionStorage.getItem("token")
-              : "",
-          },
-        });
-        if (res?.status == 204 || res?.status == 200) {
+        const res=await deleteOneApp(id);
+        if (res.data) {
           success(title, "deleted");
         }
-      }
-    } catch (err: any) {
-      if (err?.response?.status == 401) {
-        error();
-        try {
-          const res = await Axios.post("users/refresh_token", {
-            refresh: sessionStorage.getItem("refresh"),
-          });
-          if (res?.status == 201 || res?.status == 200) {
-            sessionStorage.setItem("token", res.data.token);
-          }
-        } catch (err: any) {
-          sessionStorage.clear();
-          if (err?.response?.status == 401) {
-            router.push(`/login?ReturnUrl=${pathname}`);
-          }
+        if (res.error) {
+          error();
         }
       }
-    }
   }
   const router = useRouter();
   const pathname = usePathname();
   const [currentApp, setCurrentApp] = useState<any>({});
-  const [total, setTotal] = useState(10);
   const [handleDetail, setHandleDetail] = useState(false);
 
   const [open, setOpen] = useState(false);
@@ -205,78 +181,12 @@ const Application = () => {
     },
   ];
 
+  const {isError,isFetching,error:Error,isLoading,isSuccess,data}=useFindAllQuery(url);
+
+
   useEffect(() => {
     if (sessionStorage) setUser(JSON.parse(sessionStorage.getItem("user")!));
-    const findAll = async () => {
-      try {
-        const res = await axios.get(url, {
-          headers: {
-            Authorization: window.sessionStorage
-              ? "Bearer " + window.sessionStorage.getItem("token")
-              : "",
-          },
-        });
-        if (res.status == 201 || res.status == 200) {
-          setTotal((state) => (state = res.data.count));
-          setResponse((state) => {
-            return {
-              ...state,
-              isLoading: false,
-              status: res.status,
-              data: res.data.applications,
-              isSuccess: true,
-            };
-          });
-        }
-      } catch (error: any) {
-        setUser(undefined);
-        setResponse((state) => {
-          return {
-            ...state,
-            error: error?.message,
-            isLoading: false,
-            status: error?.response?.status,
-            isSuccess: true,
-          };
-        });
-        if (
-          error?.response?.status == 401 &&
-          (error?.response?.data?.message as string)?.includes("jwt")
-        ) {
-          try {
-            const res = await Axios.post("users/refresh_token", {
-              refresh: sessionStorage.getItem("refresh"),
-            });
-            if (res.status == 201 || res.status == 200) {
-              setUser(JSON.parse(sessionStorage.getItem("user")!));
-              sessionStorage.setItem("token", res.data.token);
-              if (sessionStorage.getItem("token")) {
-                setReload(true);
-              }
-            }
-          } catch (err: any) {
-            sessionStorage.clear();
-            if (err?.response?.status == 401) {
-              router.push(`/login?ReturnUrl=${pathname}`);
-            }
-            setReload(false);
-          }
-        }
-      }
-    };
-    if (!!sessionStorage.getItem("token")) findAll();
-  }, [
-    pathname,
-    filter,
-    response?.isLoading,
-    url,
-    router,
-    limit,
-    page,
-    response?.isSuccess,
-    response?.data,
-    selectedRowKeys,
-  ]);
+  }, [limit, isError,page, isFetching, Error, isLoading, isSuccess, data, url, router, pathname]);
 
   return (
     <div className="mx-1 flex flex-col h-full">
@@ -304,7 +214,7 @@ const Application = () => {
         className=" cursor-pointer flex-1"
         key={"_id"}
         columns={columns}
-        dataSource={response?.data}
+        dataSource={data?.applications}
         pagination={{
           onChange: (page, pageSize) => {
             setLimit((state) => (state = pageSize));
@@ -316,7 +226,7 @@ const Application = () => {
                 }`
             );
           },
-          total: total,
+          total: data?.count,
           pageSize: limit,
           showSizeChanger: true,
           onShowSizeChange: (current, size) => {

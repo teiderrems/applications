@@ -19,6 +19,7 @@ import logo from "../../public/icon.png";
 import Image from "next/image";
 import Link from "next/link";
 import Axios from "@/hooks/axios.config";
+import { StoreProvider } from "./components/StoreProvider";
 
 const { Header, Sider, Content } = Layout;
 
@@ -437,4 +438,18 @@ const navBar: MenuItem[] = [
   );
 };
 
-export default AppLayout;
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>){
+  
+  
+  return(
+    <StoreProvider>
+        <AppLayout>
+          {children}
+        </AppLayout>
+    </StoreProvider>
+  )
+};

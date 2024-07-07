@@ -18,6 +18,7 @@ import {
   Upload,
   message,
 } from "antd";
+import { usePostUserMutation } from "@/lib/features/users/usersApiSlice";
 
 export default function Register() {
   const [user, setUser] = useState<{
@@ -37,43 +38,45 @@ export default function Register() {
   const [response, setResponse] = useState<CustomType>();
   const [isSubmit, setIsSubmit] = useState(false);
 
+
+  const [register,{isError,isSuccess}]=usePostUserMutation();
+
   const HandleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmit(!isSubmit);
-    setResponse({
-      ...response,
-      status: 0,
-      data: null,
-      isLoading: true,
-      isError: false,
-      error: "",
-      isSuccess: false,
-    });
     const formData=new FormData();
     formData.append("Username",user.Username);
     formData.append("Email",user.Email);
     formData.append("Password",user.Password);
     formData.append("profile",user.Profile.originFileObj as File,user.Profile.originFileObj.name);
-    try {
-      const res = await Axios.post(
-        "users",
-        formData
-      );
-      if (res.status == 201 || res.status == 200) {
-        success();
-        //setResponse({...response,isSuccess:true,isLoading:false,data:res.data});
-        router.push("/login");
-      }
-    } catch (err: any) {
-      error();
-      setIsSubmit((state) => !state);
-      setResponse({
-        ...response,
-        error: "register failed please try again",
-        isError: true,
-        isLoading: false,
-      });
+    const res=await register(formData);
+    console.log(res)
+    if (res.data) {
+      success();
     }
+    if (res.error) {
+      error();
+    }
+    // try {
+    //   const res = await Axios.post(
+    //     "users",
+    //     formData
+    //   );
+    //   if (res.status == 201 || res.status == 200) {
+    //     success();
+    //     //setResponse({...response,isSuccess:true,isLoading:false,data:res.data});
+    //     router.push("/login");
+    //   }
+    // } catch (err: any) {
+    //   error();
+    //   setIsSubmit((state) => !state);
+    //   setResponse({
+    //     ...response,
+    //     error: "register failed please try again",
+    //     isError: true,
+    //     isLoading: false,
+    //   });
+    // }
   };
   useEffect(() => {}, []);
   const [messageApi, contextHolder] = message.useMessage();
@@ -90,14 +93,6 @@ export default function Register() {
       type: "error",
       content: `login failed try again`,
     });
-  };
-
-  type FieldType = {
-    Username?: string;
-    Password?: string;
-    ConfirmPassword?: string;
-    Email?: string;
-    Profile?: any;
   };
   return (
     <div

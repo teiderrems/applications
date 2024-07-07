@@ -3,7 +3,7 @@ import { Badge, Button, Card, Modal, Select, message } from "antd";
 import { UserType } from "../user/page";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
 import { usePathname, useRouter } from "next/navigation";
-import Axios from "@/hooks/axios.config";
+import {  usePutUserMutation } from "@/lib/features/users/usersApiSlice";
 
 const UserRole = ["admin", "user", "guest","instructor","student",];
 
@@ -18,7 +18,6 @@ const UserDetail = ({
   setOpen: React.Dispatch<SetStateAction<boolean>>,setUser: React.Dispatch<SetStateAction<UserType|undefined>>
 }) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [modalText, setModalText] = useState("Content of the modal");
   const [edit,setEdit]=useState(false);
 
   const router = useRouter();
@@ -54,44 +53,83 @@ const UserDetail = ({
     setOpen(false);
   };
 
-  const SaveChange = async () => {
-    setEdit(!edit);
-    try {
-      const res = await Axios.put(
-        `users/${user._id}`,
-        user,
-        {
-          headers: {
-            Authorization: !!sessionStorage.getItem("token")
-              ? "Bearer " + sessionStorage.getItem("token")
-              : "",
-          },
-        }
-      );
-      if (res.status == 201 || res.status == 200) {
-        success();
-        router.refresh();
-      }
-    } catch (err: any) {
-      if (err?.response?.status == 401) {
-        error();
-        try {
-          const res = await Axios.post("users/refresh_token", {
-            refresh: sessionStorage.getItem("refresh"),
-          });
-          if (res.status == 201 || res.status == 200) {
-            sessionStorage.setItem("token", res.data.token);
-          }
-        } catch (err: any) {
-          sessionStorage.clear();
-          if (err.response.status == 401) {
-            error("unauthorized");
-            setTimeout(() => router.push(`/login?ReturnUrl=${pathname}`), 1000);
-          }
-        }
-      }
+
+
+  const [putUser,{isSuccess,data}]=usePutUserMutation();
+
+  const HandleUpdate=async()=>{
+    const res=await putUser(user);
+    if(res.data){
+      success();
     }
-  };
+    if (res.error) {
+      error();
+    }
+  }
+  // const {mutateAsync,isError,isSuccess}=useMutation({
+  //   mutationKey:["users"],
+  //   mutationFn:()=>Axios.put(
+  //     `users/${user._id}`,
+  //     user,
+  //     {
+  //       headers: {
+  //         Authorization: !!sessionStorage.getItem("token")
+  //           ? "Bearer " + sessionStorage.getItem("token")
+  //           : "",
+  //       },
+  //     }
+  //   ).then(res=>res.data),
+  //   onSuccess:()=>{
+  //     success();
+  //     router.refresh();
+  //   },
+  //   onError(err:AxiosError, variables, context) {
+  //     error();
+  //     if (err.response?.status===401) {
+  //       // fetchRefreshToken(router,pathname);
+  //     }
+  //   },
+  // })
+
+
+  // const SaveChange = async () => {
+  //   setEdit(!edit);
+  //   try {
+  //     const res = await Axios.put(
+  //       `users/${user._id}`,
+  //       user,
+  //       {
+  //         headers: {
+  //           Authorization: !!sessionStorage.getItem("token")
+  //             ? "Bearer " + sessionStorage.getItem("token")
+  //             : "",
+  //         },
+  //       }
+  //     );
+  //     if (res.status == 201 || res.status == 200) {
+  //       success();
+  //       router.refresh();
+  //     }
+  //   } catch (err: any) {
+  //     if (err?.response?.status == 401) {
+  //       error();
+  //       try {
+  //         const res = await Axios.post("users/refresh_token", {
+  //           refresh: sessionStorage.getItem("refresh"),
+  //         });
+  //         if (res.status == 201 || res.status == 200) {
+  //           sessionStorage.setItem("token", res.data.token);
+  //         }
+  //       } catch (err: any) {
+  //         sessionStorage.clear();
+  //         if (err.response.status == 401) {
+  //           error("unauthorized");
+  //           setTimeout(() => router.push(`/login?ReturnUrl=${pathname}`), 1000);
+  //         }
+  //       }
+  //     }
+  //   }
+  // };
 
   return (
     <>
@@ -113,7 +151,7 @@ const UserDetail = ({
             !edit ? (
                 <EditOutlined key="edit" onClick={() => setEdit(!edit)} />
               ) : (
-                <SaveOutlined onClick={SaveChange} />
+                <SaveOutlined onClick={HandleUpdate} />
               )
           ]}
         >

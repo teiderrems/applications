@@ -17,6 +17,10 @@ import {
   Spin,
   message,
 } from "antd";
+import { useLoginMutation } from "@/lib/features/auth/authApi";
+import { setToken } from "@/lib/features/auth/authSlice";
+import { useSelector } from "react-redux";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 type FieldType = {
   Username?: string;
@@ -35,56 +39,45 @@ function Login() {
   const query = useSearchParams();
 
   const router = useRouter();
-  const [response, setResponse] = useState<CustomType>();
   const [isSubmit, setIsSubmit] = useState(false);
+
+  const [login,{data,isLoading,isError,isSuccess}]=useLoginMutation();
 
   const [messageApi, contextHolder] = message.useMessage();
 
   const onFinish: FormProps<FieldType>["onFinish"] = async(values) => {
     setIsSubmit((state) => !state);
-    try {
-      const res = await Axios.post("users/login", {
-        Username: user.Username,
-        Password: user.Password,
-      });
-      if (res.status == 201 || res.status == 200) {
-        success();
-        setTimeout(() => {
-          window.sessionStorage&&sessionStorage.setItem("token", res.data.token);
-          window.sessionStorage&&sessionStorage.setItem(
-            "user",
-            JSON.stringify(JSON.parse(atob(res.data.token.split(".")[1])))
-          );
-          window.sessionStorage&&sessionStorage.setItem("refresh", res.data.refresh);
-          if (query.get("ReturnUrl") != null) {
-            router.push(query.get("ReturnUrl")!);
-          } else {
-            const user =window.sessionStorage? JSON.parse(
-              atob(sessionStorage.getItem("token")!.split(".")[1])
-            ):null;
-            if (user.role!=='instructor' && user.role!=='admin') {
-              router.push("/application");
-            }
-            else{
-              router.push("/user");
-            }
-            setIsSubmit((state) => !state);
+    const res=await login(user);
+    if (res.data) {
+      sessionStorage.setItem('token',res.data.token)
+      sessionStorage.setItem('refresh',res.data.refresh)
+      setToken(res.data);
+      success();
+      setTimeout(() => {
+        window.sessionStorage&&sessionStorage.setItem("token", res.data.token);
+        window.sessionStorage&&sessionStorage.setItem(
+          "user",
+          JSON.stringify(JSON.parse(atob(res.data.token.split(".")[1])))
+        );
+        if (query.get("ReturnUrl") != null) {
+          router.push(query.get("ReturnUrl")!);
+        } else {
+          const user =window.sessionStorage? JSON.parse(
+            atob(res.data.token.split(".")[1])
+          ):null;
+          if (user.role!=='instructor' && user.role!=='admin') {
+            router.push("/application");
           }
-        }, 500);
-      }
-    } catch (er: any) {
-      if (er?.response?.status == 401) {
+          else{
+            router.push("/user");
+          }
+          setIsSubmit((state) => !state);
+        }
+      }, 500);
+
+    }
+    if (res.error as FetchBaseQueryError) {
         warning();
-      } else {
-        error(er.message);
-      }
-      setIsSubmit((state) => !state);
-      setResponse({
-        ...response,
-        error: er.message,
-        isError: true,
-        isLoading: false,
-      });
     }
   };
   const success = () => {
