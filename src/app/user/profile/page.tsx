@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import profileImg from "../../../../public/defaul.jpeg";
 import { DeleteOutlined, EditOutlined, ExclamationCircleFilled, SaveOutlined } from "@ant-design/icons";
-import { Avatar, Button, Modal, Image, message } from "antd";
+import {Avatar, Button, Modal, Image, message, Input, Descriptions} from "antd";
 import { useDeleteUserMutation, useFindOneQuery, usePutUserMutation } from "@/lib/features/users/usersApiSlice";
 import { UserType } from "../page";
 
@@ -14,7 +14,6 @@ export default function UserDetailInfo() {
   const [param, setParam] = useState<string | any>();
   const { confirm } = Modal;
   const router = useRouter();
-  const [token, setToken] = useState<string>();
   const pathname = usePathname();
   const [reload, setReload] = useState(false);
   const [submit, setSubmit] = useState(false);
@@ -60,7 +59,7 @@ export default function UserDetailInfo() {
   const HandleClick = async () => {
     setSubmit(true);
     setIsEditable(state=>!state);
-    console.log(userEdit)
+
     const res= await updateUser(userEdit);
     if (res.data) {
       success()
@@ -77,7 +76,7 @@ export default function UserDetailInfo() {
     const res=await deleteUser(userEdit?._id);
     if (res.data) {
       success();
-      router.refresh();
+      router.push('/')
     }
     if (res.error) {
       error();
@@ -95,11 +94,6 @@ export default function UserDetailInfo() {
       sessionStorage &&
         (sessionStorage.getItem("user") as string) &&
         JSON.parse(sessionStorage.getItem("user")!)._id
-    );
-    setToken(
-      sessionStorage&&
-        (sessionStorage.getItem("token") as string) &&
-        (sessionStorage.getItem("token") as string)
     );
     if (userData) {
       setUserEdit(userData?.user);
@@ -119,7 +113,7 @@ export default function UserDetailInfo() {
     if (userEdit) {
       getProfile();
     }
-  }, [data, param, pathname, router, userData]);
+  }, [isError, isLoading, isSuccess, data, userData, userEdit, router, pathname]);
 
   if (userIsLoading || !param) {
     return (
@@ -138,10 +132,10 @@ export default function UserDetailInfo() {
   }
   if (userData.user) {
     return (
-      <div className="flex-1 flex flex-col items-center">
-        <div className="flex-1 space-y-3 h-5/6 justify-center items-center mx-2 md:mx-0 my-4 flex flex-col">
-        <div className="flex-1 space-y-6 h-5/6 flex flex-col">
-          <div className=" w-full flex flex-row space-x-2">
+      <div className="flex-1 flex justify-center h-full flex-col items-center">
+        <div className=" justify-center items-center mx-2 md:mx-0 w-4/6 flex flex-col h-5/6">
+        <div className="flex-1 flex space-y-10 flex-col">
+          <div className=" w-full flex flex-row items-center space-x-5">
             {(profile as string).includes('base64')?<Avatar
               className="h-24 w-24 self-start"
               draggable={false}
@@ -151,40 +145,63 @@ export default function UserDetailInfo() {
             className="h-24 w-24 self-start bg-slate-400 shadow"
             size={"large"}
           />}
-            <div className=" flex flex-col space-y-2 mt-4">
+            <div className=" flex flex-col space-y-2">
               <span className=" font-bold">{userEdit?.Username}</span>
               <span className="">{userEdit?.Email}</span>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-5 w-[598px]">
-            <input
-              type="text"
-              disabled={!isEditable}
-              onChange={(e) =>
-                setUserEdit({ ...userEdit, Firstname: e.target.value })}
-              className="rounded shadow w-[279px] hover:cursor-text py-2 px-[10px]"
-              value={userEdit?.Firstname}
-            />
-            <input
-              type="text"
-              disabled={!isEditable}
-              onChange={(e) =>
-                setUserEdit({ ...userEdit, Lastname: e.target.value })
-              }
-              className="rounded shadow w-[279px] hover:cursor-text py-2 px-[10px]"
-              value={userEdit?.Lastname}
-            />
-            <input
-              type="email"
-              disabled={!isEditable}
-              onChange={(e) =>
-                setUserEdit({ ...userEdit, Email: e.target.value })
-              }
-              className="rounded shadow w-[279px] py-2 hover:cursor-text px-[10px]"
-              value={userEdit?.Email}
-            />
-          </div>
-          <p className="text-wrap w-[598px] overflow-hidden h-[100px]">
+          {
+            (!isEditable)?(<Descriptions title="User Info" items={[
+              {
+                key: '1',
+                label: 'FirstName',
+                children: userEdit?.Firstname,
+              },
+              {
+                key: '2',
+                label: 'LastName',
+                children: userEdit?.Lastname,
+              },
+              {
+                key: '3',
+                label: 'Email',
+                children: userEdit?.Email,
+              },
+            ]}
+            />): (<div className="grid grid-cols-2 gap-5">
+              <div className="flex flex-col space-y-2">
+                <label>Firstname</label>
+                <Input
+                    onChange={(e) =>
+                        setUserEdit({...userEdit, Firstname: e.target.value})}
+                    className="hover:cursor-text"
+                    value={userEdit?.Firstname}
+                />
+              </div>
+              <div className="flex flex-col space-y-2">
+                <label>Lastname</label>
+                <Input
+                    onChange={(e) =>
+                        setUserEdit({...userEdit, Lastname: e.target.value})
+                    }
+                    className="hover:cursor-text"
+                    value={userEdit?.Lastname}
+                />
+              </div>
+              <div className="flex flex-col space-y-2">
+                <label>Email</label>
+                <Input
+                  type="email"
+                  onChange={(e) =>
+                      setUserEdit({...userEdit, Email: e.target.value})
+                  }
+                  className="hover:cursor-text"
+                  value={userEdit?.Email}
+              /></div>
+
+            </div>)
+          }
+          <p className="text-wrap overflow-hidden">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti
             ducimus error qui fugit atque porro expedita, blanditiis, minus esse
             unde facilis. Totam maiores eaque laborum eveniet error quibusdam
@@ -210,19 +227,17 @@ export default function UserDetailInfo() {
             <Button
               icon={<DeleteOutlined />}
               onClick={showDeleteConfirm}
-              className=" ml-2"
               danger
             >
               Delete
             </Button>
             {(!isEditable) ? (
-              <Button icon={<EditOutlined />} onClick={()=>setIsEditable(state=>!state)} className=" mr-2">
+              <Button icon={<EditOutlined />} onClick={()=>setIsEditable(state=>!state)}>
                 Edit
               </Button>
             ): (
               <Button htmlType="button"
                 icon={<SaveOutlined />}
-                className=" mr-2"
                 onClick={HandleClick}
               >
                 SaveChange

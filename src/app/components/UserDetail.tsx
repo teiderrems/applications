@@ -2,7 +2,7 @@ import React, { SetStateAction, useState } from "react";
 import { Badge, Button, Card, Modal, Select, message } from "antd";
 import { UserType } from "../user/page";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import {  usePutUserMutation } from "@/lib/features/users/usersApiSlice";
 
 const UserRole = ["admin", "user", "guest","instructor","student",];
@@ -21,7 +21,6 @@ const UserDetail = ({
   const [edit,setEdit]=useState(false);
 
   const router = useRouter();
-  const pathname = usePathname();
 
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -66,70 +65,6 @@ const UserDetail = ({
       error();
     }
   }
-  // const {mutateAsync,isError,isSuccess}=useMutation({
-  //   mutationKey:["users"],
-  //   mutationFn:()=>Axios.put(
-  //     `users/${user._id}`,
-  //     user,
-  //     {
-  //       headers: {
-  //         Authorization: !!sessionStorage.getItem("token")
-  //           ? "Bearer " + sessionStorage.getItem("token")
-  //           : "",
-  //       },
-  //     }
-  //   ).then(res=>res.data),
-  //   onSuccess:()=>{
-  //     success();
-  //     router.refresh();
-  //   },
-  //   onError(err:AxiosError, variables, context) {
-  //     error();
-  //     if (err.response?.status===401) {
-  //       // fetchRefreshToken(router,pathname);
-  //     }
-  //   },
-  // })
-
-
-  // const SaveChange = async () => {
-  //   setEdit(!edit);
-  //   try {
-  //     const res = await Axios.put(
-  //       `users/${user._id}`,
-  //       user,
-  //       {
-  //         headers: {
-  //           Authorization: !!sessionStorage.getItem("token")
-  //             ? "Bearer " + sessionStorage.getItem("token")
-  //             : "",
-  //         },
-  //       }
-  //     );
-  //     if (res.status == 201 || res.status == 200) {
-  //       success();
-  //       router.refresh();
-  //     }
-  //   } catch (err: any) {
-  //     if (err?.response?.status == 401) {
-  //       error();
-  //       try {
-  //         const res = await Axios.post("users/refresh_token", {
-  //           refresh: sessionStorage.getItem("refresh"),
-  //         });
-  //         if (res.status == 201 || res.status == 200) {
-  //           sessionStorage.setItem("token", res.data.token);
-  //         }
-  //       } catch (err: any) {
-  //         sessionStorage.clear();
-  //         if (err.response.status == 401) {
-  //           error("unauthorized");
-  //           setTimeout(() => router.push(`/login?ReturnUrl=${pathname}`), 1000);
-  //         }
-  //       }
-  //     }
-  //   }
-  // };
 
   return (
     <>
@@ -176,7 +111,6 @@ const UserDetail = ({
                     />
                   )}</li>
             </ul>
-
         </Card>
       </Modal>
     </>

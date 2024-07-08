@@ -356,7 +356,7 @@ const navBar: MenuItem[] = [
         <title>Applications Histories</title>
       </head>
       <body className="h-screen overflow-hidden">
-        <Layout className="min-h-screen static">
+        <Layout className="h-full flex-grow static">
           { user && <Sider trigger={null} collapsible collapsed={collapsed}>
             <Link href="/">
               <Image
@@ -396,17 +396,17 @@ const navBar: MenuItem[] = [
                 alt="logo"
                 className="h-12 w-52 cursor-pointer"
             />} type="link" href="/"  className="w-16 ml-2" />}
-              {profile && user ? (
+              {user ? (
                 <Link href="/user/profile">
                   <Avatar
                     className="mr-2 cursor-pointer"
                     icon={
-                      <Image
-                        src={profile}
-                        width={100}
-                        height={64}
-                        alt="profile"
-                      />
+                      profile?<Image
+                          src={profile}
+                          width={100}
+                          height={64}
+                          alt="profile"
+                      />:null
                     }
                   />
                 </Link>
@@ -416,8 +416,7 @@ const navBar: MenuItem[] = [
                 mode="horizontal"
                 selectedKeys={[selected]}
                 style={{
-                  width: "25%",
-                  height:"100%"
+                  height:"75%"
                 }}
                 items={navBar}
             />

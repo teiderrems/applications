@@ -3,6 +3,8 @@ import React, { SetStateAction, useState } from "react";
 import { Card, Input, Modal, Select, message } from "antd";
 import Axios from "@/hooks/axios.config";
 import { usePathname, useRouter } from "next/navigation";
+import {usePostApplication} from "@/hooks/application.service";
+import {usePostApplicationMutation} from "@/lib/features/applications/applicationsApiSlice";
 let Contrat = ["alternance", "stage", "cdi", "cdd", "interim"];
 type Application = {
   Title?: string;
@@ -50,37 +52,17 @@ const AddApplication = ({
     Adresse: "",
   });
   const router = useRouter();
-  const pathname = usePathname();
+
+  const [postApplication,{isError,isSuccess,isLoading,data}]=usePostApplicationMutation();
 
   const HandleSubmit = async () => {
-    try {
-      const res = await Axios.post("applications", application, {
-        headers: {
-          Authorization: window.sessionStorage
-            ? "Bearer " + window.sessionStorage.getItem("token")
-            : "",
-        },
-      });
-      router.refresh();
+    const res=await postApplication(application);
+    if (isSuccess){
       success();
-    } catch (err: any) {
+      router.refresh();
+    }
+    if (isError) {
       error();
-      if (err?.response.status == 401) {
-        try {
-          const res = await Axios.post("users/refresh_token", {
-            refresh: sessionStorage.getItem("refresh"),
-          });
-          if (res.status == 201 || res.status == 200) {
-            sessionStorage.setItem("token", res.data.token);
-            sessionStorage.setItem("refresh", res.data.refresh);
-          }
-        } catch (err: any) {
-          sessionStorage.clear();
-          if (err?.response?.status == 401) {
-            router.push(`/login?ReturnUrl=${pathname}`);
-          }
-        }
-      }
     }
   };
 

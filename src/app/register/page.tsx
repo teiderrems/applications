@@ -96,7 +96,7 @@ export default function Register() {
   };
   return (
     <div
-      className="h-full mt-4 flex flex-col text-sm items-center"
+      className="h-full justify-center flex flex-col text-sm items-center"
     >
       {contextHolder}
       <Card title="SignIn to continue">
@@ -168,20 +168,14 @@ export default function Register() {
           <div
             className="w-full justify-between items-center flex"
           >
-            {isSubmit ? (
-              <Spin
-                className="md:text-center"
-                indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
-              />
-            ) : (
               <Button
                 className="mt-2"
                 type="primary"
                 htmlType="submit"
+                loading={isSubmit}
               >
                 Submit
               </Button>
-            )}
             <Link
               href="/login"
               className="text-blue-400 text-[12px]  font-bold self-end hover:underline"

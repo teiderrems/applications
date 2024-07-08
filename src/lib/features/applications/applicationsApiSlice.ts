@@ -4,7 +4,7 @@ import { Props } from '@/app/components/ApplicationDetail';
 
 //'http://localhost:5000/api/'
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'https://applications-api.vercel.app/api/',
+  baseUrl: 'http://localhost:5000/api/'                                  ,//'https://applications-api.vercel.app/api/',
   prepareHeaders: (headers) => {
     const token = sessionStorage.getItem('token');
     if (token) {
@@ -30,9 +30,9 @@ const baseQueryWithReauth = async (args: string | FetchArgs, api: BaseQueryApi, 
         refresh:sessionStorage.getItem('refresh')??(api.getState() as any).auth.refreshResult
       }
   }, api, extraOptions);
-
     if (refreshResult.data) {
-      api.dispatch(setToken(refreshResult.data));
+      api.dispatch(setToken((refreshResult.data as any).token));
+      sessionStorage.setItem('token',(refreshResult.data as any).token);
       result = await baseQuery(args, api, extraOptions);
     } else {
       api.dispatch(logout());
@@ -68,10 +68,10 @@ const applicationsApi = createApi({
         }
       },
     }),
-    putApplication:builder.mutation<any,{body:Partial<Props>,id:string}>({
-      query({body,id}) {
+    putApplication:builder.mutation<any,Props>({
+      query(body) {
         return{
-          url:`applications/${id}`,
+          url:`applications/${body._id}`,
           method:"PUT",
           body,
         }
@@ -96,7 +96,7 @@ const applicationsApi = createApi({
         return{
           url:`applications`,
           method:"DELETE",
-          body
+          body:{applications:body}
         }
       },
       transformErrorResponse(baseQueryReturnValue, meta, arg) {

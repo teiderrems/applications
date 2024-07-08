@@ -1,3 +1,5 @@
+import {usePostUserMutation} from "@/lib/features/users/usersApiSlice";
+
 const Status = ["pending", "postponed", "success", "reject"];
 export interface Props {
   _id?: string;
@@ -27,6 +29,7 @@ import { Badge, Button, Card, Modal, Select, message } from "antd";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
 import Axios from "@/hooks/axios.config";
 import { usePathname, useRouter } from "next/navigation";
+import {usePutApplicationMutation} from "@/lib/features/applications/applicationsApiSlice";
 
 const ApplicationDetail = ({
   canEdit,
@@ -62,42 +65,17 @@ const ApplicationDetail = ({
     });
   };
 
+  const [putApplication,{isSuccess,isError,isLoading}]=usePutApplicationMutation();
+
   const SaveChange = async () => {
     setEdit(!edit);
-    try {
-      const res = await Axios.put(
-        `applications/${application._id}`,
-        application,
-        {
-          headers: {
-            Authorization: !!sessionStorage.getItem("token")
-              ? "Bearer " + sessionStorage.getItem("token")
-              : "",
-          },
-        }
-      );
-      if (res.status == 201 || res.status == 200) {
-        success();
-        router.refresh();
-      }
-    } catch (err: any) {
-      if (err.response.status == 401) {
-        error();
-        try {
-          const res = await Axios.post("users/refresh_token", {
-            refresh: sessionStorage.getItem("refresh"),
-          });
-          if (res.status == 201 || res.status == 200) {
-            sessionStorage.setItem("token", res.data.token);
-          }
-        } catch (err: any) {
-          sessionStorage.clear();
-          if (err.response.status == 401) {
-            error("unauthorized");
-            setTimeout(() => router.push(`/login?ReturnUrl=${pathname}`), 1000);
-          }
-        }
-      }
+    const res=await putApplication(application);
+    if (res.data) {
+      success();
+      setOpen(state=>!state);
+    }
+    if (res.error){
+      error();
     }
   };
 

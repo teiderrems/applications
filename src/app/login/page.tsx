@@ -109,10 +109,10 @@ function Login() {
 
   return (
     <div
-      className=" h-full flex flex-col mt-14 justify-center items-center text-sm"
+      className=" h-full flex flex-col justify-center items-center text-sm"
     >
       {contextHolder}
-      <Card title="Login to continue" className="md:w-1/3">
+      <Card title="Login to continue">
         <Form
           name="login"
           action=""
@@ -133,20 +133,14 @@ function Login() {
           <div
             className="flex justify-between items-center w-full"
           >
-            {isSubmit ? (
-              <Spin
-                className="md:text-center"
-                indicator={<LoadingOutlined style={{ fontSize: 16 }} spin />}
-              />
-            ) : (
               <Button
                 className=""
                 htmlType="submit"
                 type="primary"
+                loading={isSubmit}
               >
                 Submit
               </Button>
-            )}
             <span style={{
               alignSelf:"end"
             }} className=" md:self-start md:mt-3">

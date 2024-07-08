@@ -2,7 +2,8 @@ import { SetStateAction, useEffect, useState } from "react";
 import { Button, Card, Input, Modal, Select, Upload, message } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
-import Axios from "@/hooks/axios.config";
+// import Axios from "@/hooks/axios.config";
+import {usePostUserMutation} from "@/lib/features/users/usersApiSlice";
 
 const UserRole = ["admin", "user", "guest","instructor","student",];
 
@@ -31,6 +32,9 @@ const AddUser = ({
     Role: "user",
   })
   const router = useRouter();
+
+  const [postUser,{isSuccess,isError,isLoading}]=usePostUserMutation();
+
   const HandleSubmit = async () => {
     const formData = new FormData();
     formData.append("Username", user.Username);
@@ -42,7 +46,16 @@ const AddUser = ({
       (user.Profile.originFileObj as File) ?? undefined,
       user.Profile.originFileObj.name
     );
-    try {
+
+    const res=await postUser(formData);
+    if (isSuccess) {
+      success();
+    }
+    if (isError){
+      error();
+    }
+
+    /*try {
       const res = await Axios.post("users", formData);
       if (res.status == 201 || res.status == 200) {
         success();
@@ -50,9 +63,9 @@ const AddUser = ({
       }
     } catch (err: any) {
       error();
-    }
+    }*/
   };
-  useEffect(() => {}, []);
+  useEffect(() => {}, [isError,isSuccess,open,]);
   const [messageApi, contextHolder] = message.useMessage();
   const success = () => {
     messageApi.open({

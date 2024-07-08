@@ -26,7 +26,7 @@ export default function UserList() {
   const pathname = usePathname();
   const [edit,setEdit]=useState(false);
   const [page, setPage] = useState(0);
-  const [limit, setLimit] = useState(2);
+  const [limit, setLimit] = useState(10);
   const [url, setUrl] = useState<any>(
     `${Axios.defaults.baseURL}` + `users?page=${page}&limit=${limit}`
   );
@@ -141,25 +141,9 @@ export default function UserList() {
           },
           pageSizeOptions:[1,2,3,4,5,6,10,15,20,25,30,35,40,45,50,55]
         }}
-        scroll={{ y:250 }}
+        scroll={{ y: 650 }}
       />
       {edit && currentUser &&<UserDetail user={currentUser} open={edit} setOpen={setEdit} setUser={setCurrentUser}/>}
     </div>
   );
 }
-
-// export async function fetchRefreshToken(router:AppRouterInstance,pathname:string='/'){
-//   try {
-//     const res = await Axios.post("users/refresh_token", {
-//       refresh: sessionStorage.getItem("refresh"),
-//     });
-//     if (res.status == 201 || res.status == 200) {
-//       sessionStorage.setItem("token", res.data.token);
-//     }
-//   } catch (err: any) {
-//     sessionStorage.clear();
-//     if (err?.response?.status == 401) {
-//       router.push(`/login?ReturnUrl=${pathname}`);
-//     }
-//   }
-// }

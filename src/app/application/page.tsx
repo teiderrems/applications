@@ -35,7 +35,7 @@ const Application = () => {
   const [user, setUser] = useState<any>();
 
   const [page, setPage] = useState(0);
-  const [limit, setLimit] = useState(2);
+  const [limit, setLimit] = useState(10);
   const [url, setUrl] = useState<any>(
     `${Axios.defaults.baseURL}${params.get("user") ? "users/" : ""}` +
       `applications?page=${page}&limit=${limit}${
@@ -186,7 +186,7 @@ const Application = () => {
 
   useEffect(() => {
     if (sessionStorage) setUser(JSON.parse(sessionStorage.getItem("user")!));
-  }, [limit, isError,page, isFetching, Error, isLoading, isSuccess, data, url, router, pathname]);
+  }, [limit, isError,page,open, isFetching, Error, isLoading, isSuccess, data, url, router, pathname]);
 
   return (
     <div className="mx-1 flex flex-col h-full">
@@ -243,7 +243,7 @@ const Application = () => {
             1, 2, 3, 4, 5, 6, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55,
           ],
         }}
-        scroll={{ y: 250 }}
+        scroll={{ y: 650 }}
       />
       {handleDetail && currentApp && (
         <ApplicationDetail

@@ -6,7 +6,7 @@ import { error } from 'console';
 
 //'http://localhost:5000/api/'
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'https://applications-api.vercel.app/api/',
+  baseUrl: 'http://localhost:5000/api/',//'https://applications-api.vercel.app/api/',
   prepareHeaders: (headers) => {
     const token = sessionStorage.getItem('token');
     if (token) {
@@ -30,11 +30,10 @@ const baseQueryWithReauth = async (args: string | FetchArgs, api: BaseQueryApi, 
         refresh:sessionStorage.getItem('refresh')??(api.getState() as any).auth.refreshResult
       }
   }, api, extraOptions);
-
-    if (refreshResult) {
-      api.dispatch(setToken(refreshResult.data));
+    if (refreshResult.data) {
       let token=(refreshResult?.data as any).token;
       sessionStorage.setItem('token',token);
+      api.dispatch(setToken(refreshResult.data));
       result = await baseQuery(args, api, extraOptions);
     } else {
       api.dispatch(logout());
