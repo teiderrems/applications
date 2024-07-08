@@ -4,7 +4,7 @@ import { Props } from '@/app/components/ApplicationDetail';
 
 //'http://localhost:5000/api/'
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'http://localhost:5000/api/'                                  ,//'https://applications-api.vercel.app/api/',
+  baseUrl:'https://applications-api.vercel.app/api/',
   prepareHeaders: (headers) => {
     const token = sessionStorage.getItem('token');
     if (token) {

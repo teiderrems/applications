@@ -5,7 +5,7 @@ import { BaseQueryFn, createApi, EndpointBuilder, EndpointDefinitions, FetchArgs
 const authApi=createApi({
     baseQuery: fetchBaseQuery(
         {
-            baseUrl:'http://localhost:5000/api/' //'https://applications-api.vercel.app/api/'
+            baseUrl:'https://applications-api.vercel.app/api/'
         }),
     reducerPath:'authApi',
     endpoints: (build)=>({
