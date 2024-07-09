@@ -1,9 +1,7 @@
 
 import React, { SetStateAction, useState } from "react";
 import { Card, Input, Modal, Select, message } from "antd";
-import Axios from "@/hooks/axios.config";
-import { usePathname, useRouter } from "next/navigation";
-import {usePostApplication} from "@/hooks/application.service";
+import { useRouter } from "next/navigation";
 import {usePostApplicationMutation} from "@/lib/features/applications/applicationsApiSlice";
 let Contrat = ["alternance", "stage", "cdi", "cdd", "interim"];
 type Application = {
@@ -15,11 +13,15 @@ type Application = {
   Adresse?: string;
 };
 const AddApplication = ({
+                          isSubmit,
+                          setIsSubmit,
   open,
   setOpen,
 }: {
   open: boolean;
   setOpen: React.Dispatch<SetStateAction<boolean>>;
+  isSubmit:boolean;
+  setIsSubmit: React.Dispatch<SetStateAction<boolean>>;
 }) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
 
@@ -59,7 +61,7 @@ const AddApplication = ({
     const res=await postApplication(application);
     if (isSuccess){
       success();
-      router.refresh();
+      setIsSubmit(state=>!state);
     }
     if (isError) {
       error();

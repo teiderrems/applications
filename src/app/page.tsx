@@ -11,7 +11,7 @@ export default function Home() {
     setToken(sessionStorage.getItem("token") as string);
   },[token])
   return (
-    <main className="flex h-full container mx-auto flex-col">
+    <main className="flex h-full justify-center items-center flex-col">
 
         <div className="container mx-auto p-4 pt-6 pb-8"><Head><title>Applications Manager</title>
             <link rel="icon" href="/favicon.ico"/>

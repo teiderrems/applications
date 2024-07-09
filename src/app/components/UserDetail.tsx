@@ -1,5 +1,5 @@
-import React, { SetStateAction, useState } from "react";
-import { Badge, Button, Card, Modal, Select, message } from "antd";
+import React, {SetStateAction, useEffect, useState} from "react";
+import {Badge, Button, Card, Modal, Select, message, Descriptions} from "antd";
 import { UserType } from "../user/page";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
@@ -60,11 +60,15 @@ const UserDetail = ({
     const res=await putUser(user);
     if(res.data){
       success();
+      setEdit(state=>!state);
+      // setOpen(state=>!state);
     }
     if (res.error) {
       error();
     }
   }
+
+  useEffect(()=>{},[isSuccess,data,open])
 
   return (
     <>
@@ -90,14 +94,48 @@ const UserDetail = ({
               )
           ]}
         >
-            <ul className="flex flex-col space-y-3">
+          <Descriptions column={1} key={user._id} items={[
+            {
+              key:'1',
+              label:"Username",
+              children:user.Username
+            },
+            {
+              key:'2',
+              label:"Email",
+              children:user.Email
+            },
+            {
+              key:'3',
+              label:"Role",
+              children:(<li className={`${
+                  edit
+                      ? "flex justify-between w-full"
+                      : "flex space-x-2 items-center"
+              }`}><Badge color="gold" count={user.Role}/>{edit && (
+                  <Select
+                      size="small"
+                      className=" uppercase"
+                      value={user.Role}
+                      onChange={(v) =>{
+                        setUser({...user, Role: v})
+                      }
+                      }
+                      options={UserRole.map((r) => {
+                        return {value: r, label: r};
+                      })}
+                  />
+              )}</li>)
+            },
+          ]}/>
+          {/*<ul className="flex flex-col space-y-3">
                 <li><span>Username : </span>{user.Username}</li>
                 <li><span>Email : </span>{user.Email}</li>
                 <li className={`${
                     edit
                       ? "flex justify-between"
                       : "flex space-x-2 items-center"
-                  }`}><span>Role</span><Badge count={user.Role}/>{edit && (
+                  }`}><span>Role</span><Badge color="gold" count={user.Role}/>{edit && (
                     <Select
                       size="small"
                       className=" uppercase"
@@ -110,7 +148,7 @@ const UserDetail = ({
                       })}
                     />
                   )}</li>
-            </ul>
+            </ul>*/}
         </Card>
       </Modal>
     </>

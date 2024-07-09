@@ -18,7 +18,6 @@ const baseQueryWithReauth = async (args: string | FetchArgs, api: BaseQueryApi, 
   let result = await baseQuery(args, api, extraOptions);
 
   if (result.meta && result.meta.response?.status === 401) {
-    console.log(result.meta.response.statusText)
     const refreshResult = await baseQuery({
       url: 'users/refresh_token',
       method: 'POST',
@@ -45,14 +44,21 @@ const baseQueryWithReauth = async (args: string | FetchArgs, api: BaseQueryApi, 
 const applicationsApi = createApi({
   baseQuery: baseQueryWithReauth,
   reducerPath: "applicationsApi",
+  tagTypes:["Applications"],
   endpoints: (builder) => ({
     findAll:builder.query<{applications:[Props],count:number},string>({
       query:(url)=>url,
       transformErrorResponse(baseQueryReturnValue, meta, arg) {
         return {status:baseQueryReturnValue.status,message:baseQueryReturnValue.data}
       },
-    }
-    ),
+      providesTags: (result) =>
+          result
+              ? [
+                ...result.applications.map(({ _id }) => ({ type: 'Applications' as const, _id })),
+                { type: 'Applications', id: 'LIST' },
+              ]
+              : [{ type: 'Applications', id: 'LIST' }],
+    }),
     findOne:builder.query<Props,string>({
       query:(id)=>`applications/${id}`,
       transformErrorResponse(baseQueryReturnValue, meta, arg) {
@@ -67,6 +73,7 @@ const applicationsApi = createApi({
           body,
         }
       },
+      invalidatesTags: [{ type: 'Applications', id: 'LIST' }],
     }),
     putApplication:builder.mutation<any,Props>({
       query(body) {
@@ -79,6 +86,7 @@ const applicationsApi = createApi({
       transformErrorResponse(baseQueryReturnValue, meta, arg) {
         return {status:baseQueryReturnValue.status,message:baseQueryReturnValue.data}
       },
+      invalidatesTags: [{ type: 'Applications', id: 'LIST' }],
     }),
     deleteApplication:builder.mutation<any,string>({
       query(id) {
@@ -90,6 +98,7 @@ const applicationsApi = createApi({
       transformErrorResponse(baseQueryReturnValue, meta, arg) {
         return {status:baseQueryReturnValue.status,message:baseQueryReturnValue.data}
       },
+      invalidatesTags: [{ type: 'Applications', id: 'LIST' }],
     }),
     deleteManyApplication:builder.mutation<any,[string]>({
       query(body) {
@@ -101,7 +110,9 @@ const applicationsApi = createApi({
       },
       transformErrorResponse(baseQueryReturnValue, meta, arg) {
         return {status:baseQueryReturnValue.status,message:baseQueryReturnValue.data}
-      },})
+      },
+      invalidatesTags: [{ type: 'Applications', id: 'LIST' }],
+    })
   }),
 });
 

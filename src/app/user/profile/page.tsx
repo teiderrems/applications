@@ -26,10 +26,8 @@ export default function UserDetailInfo() {
         messageApi.open({
           type: 'success',
           content: message,
-          duration:2000
         });
       };
-    
       const error = () => {
         messageApi.open({
           type: 'error',
@@ -72,7 +70,6 @@ export default function UserDetailInfo() {
   const [deleteUser,{isError:isErrorDelete,isSuccess:isSuccessDelete,isLoading:isLoadingDelete}]=useDeleteUserMutation();
 
   const HandleDelete = async () => {
-
     const res=await deleteUser(userEdit?._id);
     if (res.data) {
       success();
@@ -130,10 +127,10 @@ export default function UserDetailInfo() {
       </div>
     );
   }
-  if (userData.user) {
+  if (userEdit) {
     return (
       <div className="flex-1 flex justify-center h-full flex-col items-center">
-        <div className=" justify-center items-center mx-2 md:mx-0 w-4/6 flex flex-col h-5/6">
+        <div className=" justify-center items-center mx-2 md:mx-0 w-3/6 flex flex-col h-4/6 overflow-y-auto">
         <div className="flex-1 flex space-y-10 flex-col">
           <div className=" w-full flex flex-row items-center space-x-5">
             {(profile as string).includes('base64')?<Avatar
@@ -147,60 +144,27 @@ export default function UserDetailInfo() {
           />}
             <div className=" flex flex-col space-y-2">
               <span className=" font-bold">{userEdit?.Username}</span>
-              <span className="">{userEdit?.Email}</span>
+              <span className="">{userEdit.Email}</span>
             </div>
           </div>
-          {
-            (!isEditable)?(<Descriptions title="User Info" items={[
+            <Descriptions layout={"vertical"} size={"small"} title="User Info" column={1} items={[
               {
                 key: '1',
                 label: 'FirstName',
-                children: userEdit?.Firstname,
+                children: <Input defaultValue={userEdit?.Firstname} size={"large"} disabled={!isEditable} onChange={(e)=>setUserEdit({...userEdit,Firstname:e.target})}/>,
               },
               {
                 key: '2',
                 label: 'LastName',
-                children: userEdit?.Lastname,
+                children:<Input disabled={!isEditable} size={"large"} defaultValue={ userEdit?.Lastname} onChange={(e)=>setUserEdit({...userEdit,Lastname:e.target})}/>,
               },
               {
                 key: '3',
                 label: 'Email',
-                children: userEdit?.Email,
+                children: <Input disabled={!isEditable} size={"large"} defaultValue={userEdit?.Email} type="email" onChange={(e)=>setUserEdit({...userEdit,Email:e.target})}/>,
               },
             ]}
-            />): (<div className="grid grid-cols-2 gap-5">
-              <div className="flex flex-col space-y-2">
-                <label>Firstname</label>
-                <Input
-                    onChange={(e) =>
-                        setUserEdit({...userEdit, Firstname: e.target.value})}
-                    className="hover:cursor-text"
-                    value={userEdit?.Firstname}
-                />
-              </div>
-              <div className="flex flex-col space-y-2">
-                <label>Lastname</label>
-                <Input
-                    onChange={(e) =>
-                        setUserEdit({...userEdit, Lastname: e.target.value})
-                    }
-                    className="hover:cursor-text"
-                    value={userEdit?.Lastname}
-                />
-              </div>
-              <div className="flex flex-col space-y-2">
-                <label>Email</label>
-                <Input
-                  type="email"
-                  onChange={(e) =>
-                      setUserEdit({...userEdit, Email: e.target.value})
-                  }
-                  className="hover:cursor-text"
-                  value={userEdit?.Email}
-              /></div>
-
-            </div>)
-          }
+            />
           <p className="text-wrap overflow-hidden">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti
             ducimus error qui fugit atque porro expedita, blanditiis, minus esse

@@ -84,7 +84,6 @@ function Login() {
     messageApi.open({
       type: "success",
       content: `Welcome ${user.Username}`,
-      duration: 2000,
     });
   };
 

@@ -31,7 +31,6 @@ export default function UserList() {
     `${Axios.defaults.baseURL}` + `users?page=${page}&limit=${limit}`
   );
   const [filter, setFilter] = useState("all");
-  const [total, setTotal] = useState(0);
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState<any>();
 
@@ -86,11 +85,11 @@ export default function UserList() {
   useEffect(() => {
     if(sessionStorage)
       setUser(JSON.parse(sessionStorage.getItem("user")!));
-  }, [isError,isFetching,error,isLoading,isSuccess,data]);
+  }, [isError,isFetching,error,isLoading,isSuccess,data,edit,open,currentUser,]);
 
   if (isLoading) {
     return (
-      <div className="flex flex-col justify-center h-full items-center">
+      <div className="flex flex-col justify-center flex-1 items-center">
         <p className=" animate-bounce text-center">Loading...</p>
       </div>
     );
@@ -98,7 +97,7 @@ export default function UserList() {
 
   if (isError) {
     return (
-      <div className="flex justify-center h-full items-center">
+      <div className="flex justify-center flex-1 items-center">
         <p className="text-justify text-red-400">error</p>
       </div>
     );

@@ -46,19 +46,27 @@ const baseQueryWithReauth = async (args: string | FetchArgs, api: BaseQueryApi, 
 const usersApi = createApi({
   baseQuery: baseQueryWithReauth,
   reducerPath: "UsersApi",
+  tagTypes:["Users"],
   endpoints: (builder) => ({
     findAll:builder.query<{users:[UserType],count:number},string>({
       query:(url)=>url,
       transformErrorResponse(baseQueryReturnValue, meta, arg) {
         return {status:baseQueryReturnValue.status,message:baseQueryReturnValue.data}
       },
-    }
-    ),
-    findOne:builder.query<any,string>({
+      providesTags: (result) =>
+          result
+              ? [
+                ...result.users.map(({ _id }) => ({ type: 'Users' as const, _id })),
+                { type: 'Users', id: 'LIST' },
+              ]
+              : [{ type: 'Users', id: 'LIST' }],
+    }),
+    findOne:builder.query<{user:UserType},string>({
       query:(id)=>`users/${id}`,
       transformErrorResponse(baseQueryReturnValue, meta, arg) {
         return {status:baseQueryReturnValue.status,message:baseQueryReturnValue.data}
       },
+      providesTags:(result)=>[{type:'Users',id: 'LIST'}],
     }),
     postUser:builder.mutation<any,FormData>({
       query(body) {
@@ -68,8 +76,9 @@ const usersApi = createApi({
           body,
         }
       },
+      invalidatesTags: [{ type: 'Users', id: 'LIST' }],
     }),
-    putUser:builder.mutation<UserType,UserType>({
+    putUser:builder.mutation<any,UserType>({
       query(payload) {
         return{
           url:`users/${payload._id}`,
@@ -77,6 +86,7 @@ const usersApi = createApi({
           body:payload,
         }
       },
+      invalidatesTags: [{ type: 'Users', id: 'LIST' }],
       transformErrorResponse(baseQueryReturnValue, meta, arg) {
         return {status:baseQueryReturnValue.status,message:baseQueryReturnValue.data}
       },
@@ -91,6 +101,7 @@ const usersApi = createApi({
       transformErrorResponse(baseQueryReturnValue, meta, arg) {
         return {status:baseQueryReturnValue.status,message:baseQueryReturnValue.data}
       },
+      invalidatesTags: [{ type: 'Users', id: 'LIST' }],
     }),
     getProfil:builder.query<{image:Buffer,minetype:string},string>({
       query(id){

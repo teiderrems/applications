@@ -87,6 +87,7 @@ const Application = () => {
         const res=await deleteManyApp(selectedRowKeys);
         if(res.data){
           success(title,'deleted');
+          setReload(state=>!state);
         }
         if (res.error) {
           error();
@@ -107,6 +108,7 @@ const Application = () => {
   const [handleDetail, setHandleDetail] = useState(false);
 
   const [open, setOpen] = useState(false);
+  const [isSubmit,setIsSubmit]=useState(false);
 
   const columns: TableColumnsType<Props> = [
     {
@@ -121,7 +123,7 @@ const Application = () => {
           />
         );
       },
-      hidden: (user && user.role==='instructor') ? true : false,
+      hidden: !!(user && user.role === 'instructor'),
     },
     {
       title: "Title",
@@ -175,9 +177,7 @@ const Application = () => {
         );
       },
       hidden:
-        (selectedRowKeys.length > 0 || (user && user.role==='instructor'))
-          ? true
-          : false,
+        !!(selectedRowKeys.length > 0 || (user && user.role === 'instructor')),
     },
   ];
 
@@ -186,12 +186,12 @@ const Application = () => {
 
   useEffect(() => {
     if (sessionStorage) setUser(JSON.parse(sessionStorage.getItem("user")!));
-  }, [limit, isError,page,open, isFetching, Error, isLoading, isSuccess, data, url, router, pathname]);
+  }, [limit, isError,page,open, isFetching,reload, Error, isLoading, isSuccess, data, url, router, pathname]);
 
   return (
     <div className="mx-1 flex flex-col h-full">
       {contextHolder}
-      {!!!params.get("user") && (
+      {!params.get("user") && (
         <div className="h-5  flex items-center rounded-t-md my-4 justify-end">
           {selectedRowKeys.length > 0 && (
             <Button className="h-full"
@@ -247,14 +247,14 @@ const Application = () => {
       />
       {handleDetail && currentApp && (
         <ApplicationDetail
-          canEdit={!!params.get("user") ? false : true}
+          canEdit={!params.get("user")}
           setApplication={setCurrentApp}
           application={currentApp}
           setOpen={setHandleDetail}
           open={handleDetail}
         />
       )}
-      {open && <AddApplication setOpen={setOpen} open={open} />}
+      {open && <AddApplication isSubmit={isSubmit} setIsSubmit={setIsSubmit} setOpen={setOpen} open={open} />}
     </div>
   );
 };

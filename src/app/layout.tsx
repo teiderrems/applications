@@ -352,24 +352,31 @@ const navBar: MenuItem[] = [
 
   return (
     <html lang="fr">
-      <head>
-        <title>Applications Histories</title>
-      </head>
-      <body className="h-screen overflow-hidden">
-        <Layout className="h-full flex-grow static">
-          { user && <Sider trigger={null} collapsible collapsed={collapsed}>
-            <Link href="/">
-              <Image
-                  src={logo}
-                  alt="logo"
-                  className="h-12 w-4/6 cursor-pointer"
-              />
-            </Link>
+    <head>
+      <title>Applications Histories</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <link rel="icon" href="/favicon.ico"/>
+      <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
+      <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"/>
+      <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"/>
+      <link rel="manifest" href="/site.webmanifest"/>
+      <meta name="theme-color" content="#ffffff"/>
+    </head>
+    <body className="h-screen">
+    <Layout className="h-full flex-grow static">
+      {user && <Sider trigger={null} collapsible collapsed={collapsed}>
+        <Link href="/">
+          <Image
+              src={logo}
+              alt="logo"
+              className="h-12 w-4/6 cursor-pointer"
+          />
+        </Link>
 
-            <Menu
-                theme="light"
-                mode="inline"
-                selectedKeys={[selected]}
+        <Menu
+            theme="light"
+            mode="inline"
+            selectedKeys={[selected]}
                 style={{
                   height: "100%",
                 }}
@@ -377,10 +384,10 @@ const navBar: MenuItem[] = [
             />
           </Sider>
           }
-          <Layout className="h-full w-full">
+          <Layout className="h-full">
             <Header
               style={{ padding: 0, background: colorBgContainer }}
-              className="flex justify-between items-center"
+              className="flex justify-between items-center w-full"
             >
               {user?<Button
                   type="text"
@@ -416,7 +423,7 @@ const navBar: MenuItem[] = [
                 mode="horizontal"
                 selectedKeys={[selected]}
                 style={{
-                  height:"75%"
+                  height:"100%"
                 }}
                 items={navBar}
             />
