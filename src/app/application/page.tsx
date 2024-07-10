@@ -189,7 +189,7 @@ const Application = () => {
   }, [limit, isError,page,open, isFetching,reload, Error, isLoading, isSuccess, data, url, router, pathname]);
 
   return (
-    <div className="mx-1 flex flex-col h-full">
+    <div className="mx-1 flex flex-col flex-1">
       {contextHolder}
       {!params.get("user") && (
         <div className="h-5  flex items-center rounded-t-md my-4 justify-end">
@@ -243,7 +243,7 @@ const Application = () => {
             1, 2, 3, 4, 5, 6, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55,
           ],
         }}
-        scroll={{ y: 650 }}
+        scroll={{ y: 300 }}
       />
       {handleDetail && currentApp && (
         <ApplicationDetail

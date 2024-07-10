@@ -352,31 +352,24 @@ const navBar: MenuItem[] = [
 
   return (
     <html lang="fr">
-    <head>
-      <title>Applications Histories</title>
-      <meta name="viewport" content="width=device-width, initial-scale=1"/>
-      <link rel="icon" href="/favicon.ico"/>
-      <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
-      <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"/>
-      <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"/>
-      <link rel="manifest" href="/site.webmanifest"/>
-      <meta name="theme-color" content="#ffffff"/>
-    </head>
-    <body className="h-screen">
-    <Layout className="h-full flex-grow static">
-      {user && <Sider trigger={null} collapsible collapsed={collapsed}>
-        <Link href="/">
-          <Image
-              src={logo}
-              alt="logo"
-              className="h-12 w-4/6 cursor-pointer"
-          />
-        </Link>
+      <head>
+        <title>Applications Histories</title>
+      </head>
+      <body className="h-screen overflow-hidden">
+        <Layout className="min-h-screen static">
+          { user && <Sider trigger={null} collapsible collapsed={collapsed}>
+            <Link href="/">
+              <Image
+                  src={logo}
+                  alt="logo"
+                  className="h-12 w-4/6 cursor-pointer"
+              />
+            </Link>
 
-        <Menu
-            theme="light"
-            mode="inline"
-            selectedKeys={[selected]}
+            <Menu
+                theme="light"
+                mode="inline"
+                selectedKeys={[selected]}
                 style={{
                   height: "100%",
                 }}
@@ -384,10 +377,10 @@ const navBar: MenuItem[] = [
             />
           </Sider>
           }
-          <Layout className="h-full">
+          <Layout className="">
             <Header
-              style={{ padding: 0, background: colorBgContainer }}
-              className="flex justify-between items-center w-full"
+              style={{ padding: 0, background: colorBgContainer,height:"48px" }}
+              className="flex justify-between items-center border-b"
             >
               {user?<Button
                   type="text"
@@ -395,8 +388,8 @@ const navBar: MenuItem[] = [
                   onClick={() => setCollapsed(!collapsed)}
                   style={{
                     fontSize: "16px",
-                    width: 64,
-                    height: 64,
+                    width: 45,
+                    height: 45,
                   }}
               />:<Button icon={<Image
                 src={logo}
@@ -407,14 +400,14 @@ const navBar: MenuItem[] = [
                 <Link href="/user/profile">
                   <Avatar
                     className="mr-2 cursor-pointer"
-                    icon={
-                      profile?<Image
-                          src={profile}
-                          width={100}
-                          height={64}
-                          alt="profile"
-                      />:null
-                    }
+                    // icon={
+                    //   <Image
+                    //     src={profile}
+                    //     width={100}
+                    //     height={64} profile && 
+                    //     alt="profile"
+                    //   />
+                    // }
                   />
                 </Link>
               ) : (
@@ -423,6 +416,7 @@ const navBar: MenuItem[] = [
                 mode="horizontal"
                 selectedKeys={[selected]}
                 style={{
+                  width: "25%",
                   height:"100%"
                 }}
                 items={navBar}
@@ -430,7 +424,7 @@ const navBar: MenuItem[] = [
               )}
             </Header>
             <Content
-              className="flex-1 m-4"
+              className="flex-1 flex flex-col"
               style={{
                 backgroundColor: "white",
               }}

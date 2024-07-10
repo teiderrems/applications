@@ -57,26 +57,6 @@ export default function Register() {
     if (res.error) {
       error();
     }
-    // try {
-    //   const res = await Axios.post(
-    //     "users",
-    //     formData
-    //   );
-    //   if (res.status == 201 || res.status == 200) {
-    //     success();
-    //     //setResponse({...response,isSuccess:true,isLoading:false,data:res.data});
-    //     router.push("/login");
-    //   }
-    // } catch (err: any) {
-    //   error();
-    //   setIsSubmit((state) => !state);
-    //   setResponse({
-    //     ...response,
-    //     error: "register failed please try again",
-    //     isError: true,
-    //     isLoading: false,
-    //   });
-    // }
   };
   useEffect(() => {}, []);
   const [messageApi, contextHolder] = message.useMessage();
@@ -96,10 +76,10 @@ export default function Register() {
   };
   return (
     <div
-      className="h-full justify-center flex flex-col text-sm items-center"
+      className="flex-1 justify-center flex flex-col text-sm items-center"
     >
       {contextHolder}
-      <Card title="SignIn to continue">
+      <Card title="SignIn to continue" className="">
         <form
           action=""
           onSubmit={HandleSubmit}

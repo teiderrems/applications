@@ -140,7 +140,7 @@ export default function UserList() {
           },
           pageSizeOptions:[1,2,3,4,5,6,10,15,20,25,30,35,40,45,50,55]
         }}
-        scroll={{ y: 650 }}
+        scroll={{ y: 300 }}
       />
       {edit && currentUser &&<UserDetail user={currentUser} open={edit} setOpen={setEdit} setUser={setCurrentUser}/>}
     </div>

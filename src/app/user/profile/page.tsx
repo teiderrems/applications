@@ -130,8 +130,8 @@ export default function UserDetailInfo() {
   if (userEdit) {
     return (
       <div className="flex-1 flex justify-center h-full flex-col items-center">
-        <div className=" justify-center items-center mx-2 md:mx-0 w-3/6 flex flex-col h-4/6 overflow-y-auto">
-        <div className="flex-1 flex space-y-10 flex-col">
+        <div className=" justify-center items-center mx-2 md:mx-0 w-2/6 flex flex-col h-4/6">
+        <div className="flex-1 flex space-y-4 flex-col">
           <div className=" w-full flex flex-row items-center space-x-5">
             {(profile as string).includes('base64')?<Avatar
               className="h-24 w-24 self-start"
@@ -139,8 +139,8 @@ export default function UserDetailInfo() {
               size={"large"}
               src={<Image src={(!!profile) ? profile : profileImg} alt={"profile"}/>}
             />:<Avatar
-            className="h-24 w-24 self-start bg-slate-400 shadow"
-            size={"large"}
+            className="h-20 w-20 self-start bg-slate-400 shadow"
+            size={"small"}
           />}
             <div className=" flex flex-col space-y-2">
               <span className=" font-bold">{userEdit?.Username}</span>
@@ -165,28 +165,6 @@ export default function UserDetailInfo() {
               },
             ]}
             />
-          <p className="text-wrap overflow-hidden">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti
-            ducimus error qui fugit atque porro expedita, blanditiis, minus esse
-            unde facilis. Totam maiores eaque laborum eveniet error quibusdam
-            assumenda tenetur. Culpa quod libero dicta nulla eaque ad? Nisi vitae
-            a aperiam, beatae deleniti magnam ducimus corporis corrupti debitis
-            repudiandae blanditiis tempora esse deserunt ullam nesciunt
-            consequatur amet doloribus alias quis. Inventore maiores placeat
-            molestiae? Laborum cumque error voluptatibus quia expedita recusandae
-            cum, odit beatae quas mollitia distinctio quos architecto possimus,
-            unde ex sint. Asperiores ex magnam autem soluta doloremque pariatur.
-            Obcaecati cum laborum ducimus quo eius minus inventore nobis placeat
-            rem, fugit harum, porro praesentium ea qui neque tempore saepe.
-            Voluptatem odit doloribus necessitatibus tempora repellat ipsa? Hic,
-            sequi distinctio! Corrupti hic repellendus excepturi, accusantium
-            saepe aperiam blanditiis rem dolorem ducimus corporis dolores ex
-            recusandae unde sint. Quae et animi error facilis, totam accusantium
-            fugiat at consequatur cumque. Corrupti, nemo? Hic eos facere vitae
-            incidunt perferendis quos a rerum possimus, ducimus vel? Ex, vitae,
-            facilis corporis voluptatem vel rem ullam dicta, repudiandae eius eos
-            minima eaque quam consequatur provident eveniet!
-          </p>
           <div className="flex w-full justify-between">
             <Button
               icon={<DeleteOutlined />}
