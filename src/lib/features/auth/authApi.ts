@@ -1,4 +1,4 @@
-import { BaseQueryFn, createApi, EndpointBuilder, EndpointDefinitions, FetchArgs, fetchBaseQuery, FetchBaseQueryError, FetchBaseQueryMeta } from "@reduxjs/toolkit/query/react";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 
 
@@ -18,21 +18,32 @@ const authApi=createApi({
                 }
             }
         }),
-        refreshToken:build.mutation<{token:string},void>({
-            query(){
-                let refresh=sessionStorage.getItem('refresh');
+        confirmEmail:build.mutation<any,string>({
+            query(email){
                 return{
-                    url:'users/refresh_token',
-                    method:"POST",
-                    body:{
-                        refresh
-                    }
+                    url:'users/confirm-email',
+                    method:'POST',
+                    body:{email}
                 }
-            }
-        })
-
+            },
+            transformErrorResponse(baseQueryReturnValue, meta, arg) {
+                return {status:baseQueryReturnValue.status,message:baseQueryReturnValue.data}
+            },
+        }),
+        resetPassword:build.mutation<any,{email:string,password:string}>({
+            query({email,password}){
+                return{
+                    url:'users/reset-password',
+                    method:'POST',
+                    body:{email,password}
+                }
+            },
+            transformErrorResponse(baseQueryReturnValue, meta, arg) {
+                return {status:baseQueryReturnValue.status,message:baseQueryReturnValue.data}
+            },
+        }),
     })
 });
 
-export const {useLoginMutation,useRefreshTokenMutation}=authApi;
+export const { useLoginMutation,useConfirmEmailMutation,useResetPasswordMutation }=authApi;
 export default authApi;

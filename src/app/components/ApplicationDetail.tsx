@@ -1,4 +1,3 @@
-import {usePostUserMutation} from "@/lib/features/users/usersApiSlice";
 
 const Status = ["pending", "postponed", "success", "reject"];
 export interface Props {
@@ -24,10 +23,9 @@ export type CustomType = {
   error?: string;
 };
 
-import React, { SetStateAction, useState } from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 import { Badge, Button, Card, Modal, Select, message } from "antd";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
-import Axios from "@/hooks/axios.config";
 import { usePathname, useRouter } from "next/navigation";
 import {usePutApplicationMutation} from "@/lib/features/applications/applicationsApiSlice";
 
@@ -65,7 +63,7 @@ const ApplicationDetail = ({
     });
   };
 
-  const [putApplication,{isSuccess,isError,isLoading}]=usePutApplicationMutation();
+  const [putApplication,{isSuccess,isError,error:Error,isLoading}]=usePutApplicationMutation();
 
   const SaveChange = async () => {
     setEdit(!edit);
@@ -74,10 +72,18 @@ const ApplicationDetail = ({
       success();
       setOpen(state=>!state);
     }
-    if (res.error){
+    if (isError && ((Error as any)?.status as number)===401) {
       error();
+      sessionStorage.setItem("application",JSON.stringify(application));
+      router.push(`/login?ReturnUrl=${pathname}`);
     }
   };
+
+  useEffect(()=>{
+    if (sessionStorage.getItem("application")) {
+      setApplication(JSON.parse(sessionStorage.getItem("application")!));
+    }
+  }, [setApplication]);
 
   return (
     <>

@@ -6,10 +6,7 @@ import Head from "next/head";
 import {MailOutlined, PhoneOutlined } from "@ant-design/icons";
 
 export default function Home() {
-  const [token,setToken]=useState<string>();
-  useEffect(()=>{
-    setToken(sessionStorage.getItem("token") as string);
-  },[token])
+  
   return (
     <main className="flex h-full justify-center items-center flex-col">
 
@@ -33,7 +30,6 @@ export default function Home() {
                         <PhoneOutlined/><span>0758703501</span>
                     </div>
                     &copy; 2024
-
                 </Card>
             </div>
         </div>

@@ -160,45 +160,6 @@ const AppLayout = ({
       icon: <LogoutOutlined />,
       label: "LogOut",
       onClick: () => {
-        setItems([
-          {
-            key: "1",
-            icon: <HomeOutlined />,
-            label: "Home",
-            onClick: () => {
-              router.push("/");
-              setSelected("1");
-            },
-            disabled: false,
-          },
-          {
-            key: "2",
-            icon: <LoginOutlined />,
-            label: "Login",
-            onClick: () => {
-              router.replace("/login");
-              setSelected("2");
-            },
-          },
-          {
-            key: "3",
-            icon: <SolutionOutlined />,
-            label: "Register",
-            onClick: () => {
-              router.replace("/register");
-              setSelected("3");
-            },
-          },
-          {
-            key: "7",
-            icon: <ReadOutlined />,
-            label: "About",
-            onClick: () => {
-              router.push("/about");
-              setSelected("7");
-            },
-          },
-        ]);
         setUser(null);
         sessionStorage.clear();
         router.push(`/login`);
@@ -238,12 +199,12 @@ const navBar: MenuItem[] = [
     },
   },
   {
-    key: "7",
+    key: "8",
     icon: <ReadOutlined />,
     label: "About",
     onClick: () => {
       router.push("/about");
-      setSelected("7");
+      setSelected("8");
     },
   },
 ];

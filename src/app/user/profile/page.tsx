@@ -52,39 +52,40 @@ export default function UserDetailInfo() {
         });
       };
   
-  const [updateUser,{isError,isLoading,isSuccess,data}]=usePutUserMutation();
+  const [updateUser,{isError,error:errorUpdate,isLoading,isSuccess,data}]=usePutUserMutation();
 
   const HandleClick = async () => {
     setSubmit(true);
     setIsEditable(state=>!state);
 
     const res= await updateUser(userEdit);
-    if (res.data) {
+    if (isSuccess) {
       success()
     }
-    if (res.error) {
+    if (isError && (errorUpdate as any)?.status===401) {
       error();
+      router.push(`/login?ReturnUrl=${pathname}`);
     }
   };
 
-  const [deleteUser,{isError:isErrorDelete,isSuccess:isSuccessDelete,isLoading:isLoadingDelete}]=useDeleteUserMutation();
+  const [deleteUser,{isError:isErrorDelete,error:errorDelete,isSuccess:isSuccessDelete,isLoading:isLoadingDelete}]=useDeleteUserMutation();
 
   const HandleDelete = async () => {
     const res=await deleteUser(userEdit?._id);
-    if (res.data) {
+    if (isSuccessDelete) {
       success();
       router.push('/')
     }
-    if (res.error) {
+    if (isErrorDelete && (errorDelete as any)?.status===401) {
       error();
-      router.refresh();
+      router.push(`/login?ReturnUrl=${pathname}`);
     }
   };
 
   const {data:userData,error:userError,isError:userIsError,isLoading:userIsLoading,isSuccess:userIsSuccess}=useFindOneQuery(param as string);
 
   useEffect(() => {
-    if (sessionStorage&&!(!!sessionStorage.getItem("token"))) {
+    if (userIsError && (userError as any)?.status===401) {
       router.push(`/login?ReturnUrl=${pathname}`);
     }
     setParam(

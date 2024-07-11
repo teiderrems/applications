@@ -54,16 +54,6 @@ const AddUser = ({
     if (isError){
       error();
     }
-
-    /*try {
-      const res = await Axios.post("users", formData);
-      if (res.status == 201 || res.status == 200) {
-        success();
-        router.refresh();
-      }
-    } catch (err: any) {
-      error();
-    }*/
   };
   useEffect(() => {}, [isError,isSuccess,open,]);
   const [messageApi, contextHolder] = message.useMessage();

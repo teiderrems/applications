@@ -2,7 +2,7 @@ import React, {SetStateAction, useEffect, useState} from "react";
 import {Badge, Button, Card, Modal, Select, message, Descriptions} from "antd";
 import { UserType } from "../user/page";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {  usePutUserMutation } from "@/lib/features/users/usersApiSlice";
 
 const UserRole = ["admin", "user", "guest","instructor","student",];
@@ -54,17 +54,18 @@ const UserDetail = ({
 
 
 
-  const [putUser,{isSuccess,data}]=usePutUserMutation();
+  const [putUser,{isSuccess,isError,error:Error,data}]=usePutUserMutation();
 
+  const pathname=usePathname();
   const HandleUpdate=async()=>{
     const res=await putUser(user);
-    if(res.data){
+    if(isSuccess){
       success();
       setEdit(state=>!state);
-      // setOpen(state=>!state);
     }
-    if (res.error) {
+    if (isError && ((Error as any)?.status as number)===401) {
       error();
+      router.push(`/login?ReturnUrl=${pathname}`);
     }
   }
 
@@ -128,27 +129,6 @@ const UserDetail = ({
               )}</li>)
             },
           ]}/>
-          {/*<ul className="flex flex-col space-y-3">
-                <li><span>Username : </span>{user.Username}</li>
-                <li><span>Email : </span>{user.Email}</li>
-                <li className={`${
-                    edit
-                      ? "flex justify-between"
-                      : "flex space-x-2 items-center"
-                  }`}><span>Role</span><Badge color="gold" count={user.Role}/>{edit && (
-                    <Select
-                      size="small"
-                      className=" uppercase"
-                      value={user.Role}
-                      onChange={(v) =>
-                        setUser({ ...user, Role: v })
-                      }
-                      options={UserRole.map((r) => {
-                        return { value: r, label: r };
-                      })}
-                    />
-                  )}</li>
-            </ul>*/}
         </Card>
       </Modal>
     </>

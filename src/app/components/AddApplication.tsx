@@ -1,7 +1,7 @@
 
-import React, { SetStateAction, useState } from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 import { Card, Input, Modal, Select, message } from "antd";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {usePostApplicationMutation} from "@/lib/features/applications/applicationsApiSlice";
 let Contrat = ["alternance", "stage", "cdi", "cdd", "interim"];
 type Application = {
@@ -13,8 +13,7 @@ type Application = {
   Adresse?: string;
 };
 const AddApplication = ({
-                          isSubmit,
-                          setIsSubmit,
+  setIsSubmit,
   open,
   setOpen,
 }: {
@@ -45,6 +44,8 @@ const AddApplication = ({
     });
   };
 
+  const pathname=usePathname();
+
   const [application, setApplication] = useState<Application>({
     Title: "",
     Description: "",
@@ -63,8 +64,10 @@ const AddApplication = ({
       success();
       setIsSubmit(state=>!state);
     }
-    if (isError) {
+    if (isError && ((error as any)?.status as number)===401) {
       error();
+      sessionStorage.setItem("application",JSON.stringify(application));
+      router.push(`/login?ReturnUrl=${pathname}`);
     }
   };
 
@@ -82,6 +85,13 @@ const AddApplication = ({
     setOpen(false);
   };
 
+
+  useEffect(()=>{
+    if (sessionStorage.getItem("application")) {
+      setApplication(JSON.parse(sessionStorage.getItem("application")!));
+    }
+  }, []);
+
   return (
     <>
     {contextHolder}
@@ -97,7 +107,7 @@ const AddApplication = ({
             <div className="flex space-x-2 w-full">
               <div className="flex flex-col w-4/6 space-y-1">
                 <label htmlFor="Title" className="w-full">Title</label>
-                <Input
+                <Input value={application?.Title}
                   onChange={(e) =>
                     setApplication({ ...application, Title: e.target.value })
                   }
@@ -107,7 +117,7 @@ const AddApplication = ({
                 <label htmlFor="ContratType" className="w-full">ContratType</label>
                 <Select
                   className=" uppercase"
-                  value={application.TypeContrat}
+                  value={application?.TypeContrat}
                   onChange={(v) =>
                     setApplication({ ...application, TypeContrat: v })
                   }
@@ -120,7 +130,7 @@ const AddApplication = ({
             <div className="flex space-x-2 w-full">
               <div className="flex-1 flex flex-col space-y-1">
                 <label htmlFor="Entreprise" className="w-full">Entreprise</label>
-                <Input
+                <Input value={application?.Entreprise}
                   onChange={(e) =>
                     setApplication({
                       ...application,
@@ -131,7 +141,7 @@ const AddApplication = ({
               </div>
               <div className="flex-1 flex flex-col space-y-1">
                 <label htmlFor="Address" className="w-full">Adresse</label>
-                <Input
+                <Input value={application?.Adresse}
                   onChange={(e) =>
                     setApplication({ ...application, Adresse: e.target.value })
                   }
@@ -140,7 +150,7 @@ const AddApplication = ({
             </div>
             <div className="flex flex-col space-y-1 w-full">
               <label htmlFor="Description" className="w-full">Description</label>
-              <Input.TextArea
+              <Input.TextArea value={application?.Description}
                 onChange={(e) =>
                   setApplication({
                     ...application,
@@ -151,7 +161,7 @@ const AddApplication = ({
             </div>
             <div className="flex flex-col space-y-1 w-full">
               <label htmlFor="JobDescription" className="w-full">Fiche de Poste</label>
-              <Input.TextArea
+              <Input.TextArea value={application?.JobDescription}
                 onChange={(e) =>
                   setApplication({
                     ...application,

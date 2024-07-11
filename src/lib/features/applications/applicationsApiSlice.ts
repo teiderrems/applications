@@ -1,45 +1,8 @@
-import { BaseQueryApi, createApi, FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { logout, setToken } from '../auth/authSlice';
+import { createApi } from '@reduxjs/toolkit/query/react';
 import { Props } from '@/app/components/ApplicationDetail';
+import baseQueryWithReauth from '../baseQuery';
 
-//'http://localhost:5000/api/'
-const baseQuery = fetchBaseQuery({
-  baseUrl:'https://applications-api.vercel.app/api/',
-  prepareHeaders: (headers) => {
-    const token = sessionStorage.getItem('token');
-    if (token) {
-      headers.set('authorization', `Bearer ${token}`);
-    }
-    return headers;
-  },
-});
 
-const baseQueryWithReauth = async (args: string | FetchArgs, api: BaseQueryApi, extraOptions: {}) => {
-  let result = await baseQuery(args, api, extraOptions);
-
-  if (result.meta && result.meta.response?.status === 401) {
-    const refreshResult = await baseQuery({
-      url: 'users/refresh_token',
-      method: 'POST',
-      headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-      },
-      body:{
-        refresh:sessionStorage.getItem('refresh')??(api.getState() as any).auth.refreshResult
-      }
-  }, api, extraOptions);
-    if (refreshResult.data) {
-      api.dispatch(setToken((refreshResult.data as any).token));
-      sessionStorage.setItem('token',(refreshResult.data as any).token);
-      result = await baseQuery(args, api, extraOptions);
-    } else {
-      api.dispatch(logout());
-    }
-  }
-
-  return result;
-};
 
 const applicationsApi = createApi({
   baseQuery: baseQueryWithReauth,

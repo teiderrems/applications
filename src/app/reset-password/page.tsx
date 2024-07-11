@@ -3,22 +3,23 @@ import {Button, Card, Input, message} from "antd";
 import {FormEvent, Suspense, useEffect, useState} from "react";
 import Axios from "@/hooks/axios.config";
 import {useRouter, useSearchParams} from "next/navigation";
+import { useResetPasswordMutation } from "@/lib/features/auth/authApi";
 
 
 function ResetPassword() {
 
-    const [email, setEmail] = useState<string|null>("");
+    const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [confirmPassword, setConfirmPassword] = useState<string>("");
     const [messageApi, contextHolder] = message.useMessage();
     const params=useSearchParams();
-    const [loading,setLoading]=useState(false);
+    const [isSubmit,setIsubmit]=useState(false);
     const router=useRouter();
     useEffect(() => {
         if (!!params?.get('email')){
-            setEmail(params?.get('email'));
+            setEmail(params?.get('email')!);
         }
-    }, [params]);
+    }, [params,isSubmit,]);
     const success = () => {
         messageApi.open({
             type: "success",
@@ -33,26 +34,24 @@ function ResetPassword() {
             content: message,
         });
     };
+
+    const [resetPassword,{isError,isSuccess,error:Error,data,isLoading,isUninitialized}]=useResetPasswordMutation();
     const handleSubmit=async (e:FormEvent)=>{
         e.preventDefault();
-        setLoading(state=>!state);
-        try {
-            const res=await Axios.post('users/reset-password',{email,password});
-            if (res.status==200 || res.status==201){
-                router.replace('/login');
-                success();
-                setLoading(state=>!state);
-            }
+        setIsubmit(state=>!state);
+        const res=resetPassword({email,password});
+        if (isSuccess) {
+            success();
+            router.replace('/login');
         }
-        catch (e:any){
-            console.log(e);
-            error(e.message);
+        if (isError) {
+            error();
         }
     }
     return (
         <div className="flex flex-col flex-1 items-center justify-center">
             {contextHolder}
-            <Card title="Reset Password" className="md:w-1/3">
+            <Card title="Reset Password" className="">
                 <form className="w-full flex flex-col space-y-2" onSubmit={handleSubmit}>
                     <div className="flex flex-col space-y-1 w-full">
                         <label htmlFor="Password">Password</label>
@@ -80,7 +79,7 @@ function ResetPassword() {
                             </span>
                         )}
                     </div>
-                    <Button className="" disabled={loading} type="primary" htmlType="submit" loading={loading}>Submit</Button>
+                    <Button className="" type="primary" htmlType="submit">Submit</Button>
                 </form>
             </Card>
         </div>

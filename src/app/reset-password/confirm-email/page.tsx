@@ -1,7 +1,7 @@
 "use client"
 import {Button, Card, Input, message} from "antd";
 import {FormEvent, useState} from "react";
-import Axios from "@/hooks/axios.config";
+import { useConfirmEmailMutation } from "@/lib/features/auth/authApi";
 
 
 export default function ConfirmEmail() {
@@ -24,25 +24,22 @@ export default function ConfirmEmail() {
             content: message,
         });
     };
+
+    const [confirmEmail,{isError,isLoading,isSuccess}]=useConfirmEmailMutation();
     const handleSubmit=async (e:FormEvent)=>{
         e.preventDefault();
-        setLoading(state=>!state);
-        try {
-            const res=await Axios.post('users/confirm-email',{email});
-            if (res.status===200 || res.status===201){
-                success();
-                setLoading(state=>!state);
-                setTogle(state=>!state);
-            }
+        const res=confirmEmail(email);
+        if (isSuccess) {
+            success();
         }
-        catch (e:any){
+        if (isError) {
             error();
         }
     }
     return (
         <div className="flex flex-col flex-1 items-center justify-center">
             {contextHolder}
-            <Card title="Confirm Email" className="md:w-1/3">
+            <Card title="Confirm Email" className="">
                 <form className="w-full flex flex-col space-y-4" onSubmit={handleSubmit}>
                     <div className=" flex flex-col space-y-2">
                         <label htmlFor="Email">Email</label>
