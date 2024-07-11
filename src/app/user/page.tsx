@@ -95,10 +95,16 @@ const Role = [{
 }, {
   text:"instructor",
   value:"instructor"
-}, {
+}, 
+{
   text:"user",
   value:"user"
-},];
+}, 
+{
+  text:"student",
+  value:"student"
+},
+];
 
 export default function UserList() {
   const router = useRouter();
