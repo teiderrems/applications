@@ -85,7 +85,11 @@ export default function UserDetailInfo() {
   const {data:userData,error:userError,isError:userIsError,isLoading:userIsLoading,isSuccess:userIsSuccess}=useFindOneQuery(param as string);
 
   useEffect(() => {
+    if (!(!!sessionStorage.getItem('token'))) {
+      router.push(`/login`);
+    }
     if (userIsError && (userError as any)?.status===401) {
+      sessionStorage.clear();
       router.push(`/login?ReturnUrl=${pathname}`);
     }
     setParam(
@@ -111,7 +115,7 @@ export default function UserDetailInfo() {
     if (userEdit) {
       getProfile();
     }
-  }, [isError, isLoading, isSuccess, data, userData, userEdit, router, pathname]);
+  }, [isError, isLoading, isSuccess, data, userData, userEdit, router, pathname, userIsError, userError]);
 
   if (userIsLoading || !param) {
     return (

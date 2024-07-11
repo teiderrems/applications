@@ -23,11 +23,6 @@ import { StoreProvider } from "./components/StoreProvider";
 
 const { Header, Sider, Content } = Layout;
 
-
-
-
-
-
 const AppLayout = ({
   children,
 }: Readonly<{
@@ -309,7 +304,7 @@ const navBar: MenuItem[] = [
     if (user) {
       getProfile();
     }
-  }, [selected, pathname]);
+  }, [selected, pathname,]);
 
   return (
     <html lang="fr">

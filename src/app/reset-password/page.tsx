@@ -1,7 +1,6 @@
 "use client"
 import {Button, Card, Input, message} from "antd";
 import {FormEvent, Suspense, useEffect, useState} from "react";
-import Axios from "@/hooks/axios.config";
 import {useRouter, useSearchParams} from "next/navigation";
 import { useResetPasswordMutation } from "@/lib/features/auth/authApi";
 
@@ -24,7 +23,7 @@ function ResetPassword() {
         messageApi.open({
             type: "success",
             content: `Welcome please check your mail box for continue. Thank's`,
-            duration: 2000,
+            duration: 0,
         });
     };
 
@@ -39,7 +38,7 @@ function ResetPassword() {
     const handleSubmit=async (e:FormEvent)=>{
         e.preventDefault();
         setIsubmit(state=>!state);
-        const res=resetPassword({email,password});
+        const res= await resetPassword({email,password});
         if (isSuccess) {
             success();
             router.replace('/login');
@@ -47,6 +46,7 @@ function ResetPassword() {
         if (isError) {
             error();
         }
+        setIsubmit(state=>!state);
     }
     return (
         <div className="flex flex-col flex-1 items-center justify-center">
@@ -79,7 +79,7 @@ function ResetPassword() {
                             </span>
                         )}
                     </div>
-                    <Button className="" type="primary" htmlType="submit">Submit</Button>
+                    <Button className="" type="primary" htmlType="submit" loading={isSubmit}>Submit</Button>
                 </form>
             </Card>
         </div>

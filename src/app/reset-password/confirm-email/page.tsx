@@ -28,13 +28,15 @@ export default function ConfirmEmail() {
     const [confirmEmail,{isError,isLoading,isSuccess}]=useConfirmEmailMutation();
     const handleSubmit=async (e:FormEvent)=>{
         e.preventDefault();
-        const res=confirmEmail(email);
+        setLoading(state=>!state);
+        const res=await confirmEmail(email);
         if (isSuccess) {
             success();
         }
         if (isError) {
             error();
         }
+        setLoading(state=>!state);
     }
     return (
         <div className="flex flex-col flex-1 items-center justify-center">

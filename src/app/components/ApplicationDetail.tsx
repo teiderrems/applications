@@ -74,6 +74,7 @@ const ApplicationDetail = ({
     }
     if (isError && ((Error as any)?.status as number)===401) {
       error();
+      sessionStorage.clear();
       sessionStorage.setItem("application",JSON.stringify(application));
       router.push(`/login?ReturnUrl=${pathname}`);
     }

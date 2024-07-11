@@ -14,12 +14,10 @@ import {
   Form,
   FormProps,
   Input,
-  Spin,
   message,
 } from "antd";
 import { useLoginMutation } from "@/lib/features/auth/authApi";
 import { setToken } from "@/lib/features/auth/authSlice";
-import { useSelector } from "react-redux";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 type FieldType = {
@@ -32,8 +30,8 @@ function Login() {
     Username: string;
     Password: string;
   }>({
-    Username: "teida",
-    Password: "rems2001",
+    Username: "remi",
+    Password: "Rems2001",
   });
 
   const query = useSearchParams();
@@ -103,8 +101,10 @@ function Login() {
   };
   const [show, setShow] = useState(false);
   useEffect(() => {
-    localStorage.removeItem("token");
-  }, [query, isSubmit]);
+    if (!!sessionStorage.getItem('token')) {
+      router.push('/');
+    }
+  }, [query, isSubmit, router]);
 
   return (
     <div

@@ -300,25 +300,28 @@ const Application = () => {
     },
   ];
 
-  const {isError,isFetching,error:Error,isLoading,isSuccess,data}=useFindAllQuery(url);
+  const {isError,error:Error,data}=useFindAllQuery(url);
 
 
   useEffect(() => {
+    if (!(!!sessionStorage.getItem('token'))) {
+      router.push(`/login`);
+    }
     if (isError && ((Error as any)?.status as number)===401) {
+      sessionStorage.clear();
       router.push(`/login?ReturnUrl=${pathname}`);
     }
     if (isErrorDeleteOne && ((errorDeleteOne as any)?.status as number)===401) {
+      sessionStorage.clear();
       router.push(`/login?ReturnUrl=${pathname}`);
+
     }
     if (isErrorDeleteMany && ((errorDeleteMany as any)?.status as number)===401) {
+      sessionStorage.clear();
       router.push(`/login?ReturnUrl=${pathname}`);
     }
     if (sessionStorage) setUser(JSON.parse(sessionStorage.getItem("user")!));
   }, [url,data,page,limit,]);
-
-  // const onChange: TableProps<Props>['onChange'] = (pagination, filters, sorter, extra) => {
-  //   console.log('params', pagination, filters, sorter, extra);
-  // };
 
 
   return (

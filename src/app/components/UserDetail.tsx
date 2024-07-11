@@ -65,6 +65,7 @@ const UserDetail = ({
     }
     if (isError && ((Error as any)?.status as number)===401) {
       error();
+      sessionStorage.clear();
       router.push(`/login?ReturnUrl=${pathname}`);
     }
   }

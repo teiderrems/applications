@@ -186,7 +186,11 @@ export default function UserList() {
 
   const [currentUser,setCurrentUser]=useState<UserType>();
   useEffect(() => {
+    if (!(!!sessionStorage.getItem('token'))) {
+      router.push(`/login`);
+    }
     if (isError && ((error as any)?.status as number)===401) {
+      sessionStorage.clear();
       router.push(`/login?ReturnUrl=${pathname}`);
     }
     if(sessionStorage)
