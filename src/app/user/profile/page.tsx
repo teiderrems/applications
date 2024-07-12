@@ -15,9 +15,13 @@ export default function UserDetailInfo() {
   const { confirm } = Modal;
   const router = useRouter();
   const pathname = usePathname();
-  const [reload, setReload] = useState(false);
   const [submit, setSubmit] = useState(false);
-  const [userEdit, setUserEdit] = useState<any>();
+  const [user,setUser]=useState<UserType>({
+    Firstname:"",
+    Lastname:"",
+    Email:""
+  });
+  const [userEdit, setUserEdit] = useState<UserType>();
   const [isEditable, setIsEditable] = useState(false);
   const [profile, setProfile] = useState<any>("");
 
@@ -51,15 +55,31 @@ export default function UserDetailInfo() {
           },
         });
       };
+
+  const showUpdateConfirm = () => {
+    confirm({
+      title: 'Delete account!',
+      icon: <ExclamationCircleFilled />,
+      content: 'Are you sure to want to update your account?',
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk:async()=>{
+        await HandleClick();
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
+  };
   
   const [updateUser,{isError,error:errorUpdate,isLoading,isSuccess,data}]=usePutUserMutation();
 
   const HandleClick = async () => {
     setSubmit(true);
     setIsEditable(state=>!state);
-
-    const res= await updateUser(userEdit);
-    if (isSuccess) {
+    const res= await updateUser(user!);
+    if (res.data) {
       success()
     }
     if (isError && (errorUpdate as any)?.status===401) {
@@ -71,7 +91,7 @@ export default function UserDetailInfo() {
   const [deleteUser,{isError:isErrorDelete,error:errorDelete,isSuccess:isSuccessDelete,isLoading:isLoadingDelete}]=useDeleteUserMutation();
 
   const HandleDelete = async () => {
-    const res=await deleteUser(userEdit?._id);
+    const res=await deleteUser(userEdit?._id!);
     if (isSuccessDelete) {
       success();
       router.push('/')
@@ -99,6 +119,10 @@ export default function UserDetailInfo() {
     );
     if (userData) {
       setUserEdit(userData?.user);
+      setUser(state=>{
+        state={...state,Firstname:userData?.user?.Firstname,Lastname:userData?.user?.Lastname,Email:userData?.user?.Email,_id:userData?.user?._id};
+        return state;
+      })
     }
     
     const getProfile = async () => {
@@ -119,7 +143,7 @@ export default function UserDetailInfo() {
 
   if (userIsLoading || !param) {
     return (
-      <div className="flex flex-1 flex-col justify-center h-full items-center">
+      <div className="flex-1 flex  flex-col justify-center items-center">
         <p className=" animate-bounce text-center">Loading...</p>
       </div>
     );
@@ -134,7 +158,7 @@ export default function UserDetailInfo() {
   }
   if (userEdit) {
     return (
-      <div className="flex-1 flex justify-center h-full flex-col items-center">
+      <div className="flex-1 flex justify-center flex-col items-center">
         <div className=" justify-center items-center mx-2 md:mx-0 w-2/6 flex flex-col h-4/6">
         <div className="flex-1 flex space-y-4 flex-col">
           <div className=" w-full flex flex-row items-center space-x-5">
@@ -148,25 +172,25 @@ export default function UserDetailInfo() {
             size={"small"}
           />}
             <div className=" flex flex-col space-y-2">
-              <span className=" font-bold">{userEdit?.Username}</span>
-              <span className="">{userEdit.Email}</span>
+              <span className=" font-bold">{userData?.user?.Username}</span>
+              <span className="">{userData?.user.Email}</span>
             </div>
           </div>
             <Descriptions layout={"vertical"} size={"small"} title="User Info" column={1} items={[
               {
                 key: '1',
                 label: 'FirstName',
-                children: <Input defaultValue={userEdit?.Firstname} size={"large"} disabled={!isEditable} onChange={(e)=>setUserEdit({...userEdit,Firstname:e.target})}/>,
+                children: <Input defaultValue={userEdit?.Firstname} size={"large"} disabled={!isEditable} onChange={(e)=>setUser({...user,Firstname:e.target.value})}/>,
               },
               {
                 key: '2',
                 label: 'LastName',
-                children:<Input disabled={!isEditable} size={"large"} defaultValue={ userEdit?.Lastname} onChange={(e)=>setUserEdit({...userEdit,Lastname:e.target})}/>,
+                children:<Input disabled={!isEditable} size={"large"} defaultValue={ userEdit?.Lastname} onChange={(e)=>setUser({...user,Lastname:e.target.value})}/>,
               },
               {
                 key: '3',
                 label: 'Email',
-                children: <Input disabled={!isEditable} size={"large"} defaultValue={userEdit?.Email} type="email" onChange={(e)=>setUserEdit({...userEdit,Email:e.target})}/>,
+                children: <Input disabled={!isEditable} size={"large"} defaultValue={userEdit?.Email} type="email" onChange={(e)=>setUser({...user,Email:e.target.value})}/>,
               },
             ]}
             />
@@ -185,7 +209,7 @@ export default function UserDetailInfo() {
             ): (
               <Button htmlType="button"
                 icon={<SaveOutlined />}
-                onClick={HandleClick}
+                onClick={showUpdateConfirm}
               >
                 SaveChange
               </Button>

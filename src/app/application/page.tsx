@@ -352,6 +352,8 @@ const Application = () => {
         key={"_id"}
         columns={columns}
         dataSource={data?.applications}
+        bordered
+        size="middle"
         pagination={{
           onChange: (page, pageSize) => {
             setLimit((state) => (state = pageSize));
@@ -380,7 +382,7 @@ const Application = () => {
             1, 2, 3, 4, 5, 6, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55,
           ],
         }}
-        scroll={{ y: 300 }}
+        scroll={{ y: '695px' }}
       />
       {handleDetail && currentApp && (
         <ApplicationDetail

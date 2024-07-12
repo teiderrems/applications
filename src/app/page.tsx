@@ -8,7 +8,7 @@ import {MailOutlined, PhoneOutlined } from "@ant-design/icons";
 export default function Home() {
   
   return (
-    <main className="flex h-full justify-center items-center flex-col">
+    <main className="flex flex-1 justify-center items-center flex-col">
 
         <div className="container mx-auto p-4 pt-6 pb-8"><Head><title>Applications Manager</title>
             <link rel="icon" href="/favicon.ico"/>

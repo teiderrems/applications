@@ -75,15 +75,15 @@ moment.locale('fr', {
 
 
 export type UserType = {
-  ProfileId: string;
+  ProfileId?: string;
   Username?: string;
   Firstname?: string;
   Lastname?: string;
-  Profile: string;
+  Profile?: string;
   Role?: string;
-  CreatedAt: string;
-  _id: string;
-  Email: string;
+  CreatedAt?: string;
+  _id?: string;
+  Email?: string;
 };
 
 const Role = [{
@@ -199,7 +199,7 @@ export default function UserList() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col justify-center flex-1 items-center">
+      <div className="flex-1 flex flex-col justify-center items-center">
         <p className=" animate-bounce text-center">Loading...</p>
       </div>
     );
@@ -214,7 +214,7 @@ export default function UserList() {
   }
 
   return (
-    <div className="flex-1 flex overflow-hidden flex-col  mx-2">
+    <div className="flex-1 flex flex-col  mx-2">
       {user && user?.role === "admin" && (
         <div className="h-5  flex items-center rounded-t-md my-4 justify-end">
           {!open ? (
@@ -234,6 +234,8 @@ export default function UserList() {
         key={"_id"}
         columns={columns}
         dataSource={data?.users}
+        bordered={true}
+        size={'middle'}
         pagination={{
           onChange: (page,pageSize) => {
             setLimit(state=>state=pageSize);
@@ -250,7 +252,7 @@ export default function UserList() {
           },
           pageSizeOptions:[1,2,3,4,5,6,10,15,20,25,30,35,40,45,50,55]
         }}
-        scroll={{ y: 300 }}
+        scroll={{ y: '695px' }}
       />
       {edit && currentUser &&<UserDetail user={currentUser} open={edit} setOpen={setEdit} setUser={setCurrentUser}/>}
     </div>
