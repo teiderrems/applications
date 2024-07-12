@@ -2,17 +2,18 @@
 import "./globals.css";
 import React, { useEffect, useState } from "react";
 import {
+  DownOutlined,
   HomeOutlined,
   LoginOutlined,
   LogoutOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  ReadOutlined,
+  ReadOutlined, SmileOutlined,
   SolutionOutlined,
   UnorderedListOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Avatar, Button, Layout, Menu, MenuProps, theme } from "antd";
+import {Avatar, Button, Dropdown, Layout, Menu, MenuItemProps, MenuProps, Space, theme} from "antd";
 import { ItemType, MenuItemType } from "antd/es/menu/hooks/useItems";
 import { usePathname, useRouter } from "next/navigation";
 import logo from "../../public/icon.png";
@@ -33,7 +34,42 @@ const AppLayout = ({
     token: { colorBgContainer },
   } = theme.useToken();
 
+
   const [user, setUser] = useState<any>();
+
+  const items: MenuProps['items'] = [
+        {
+          key: "6",
+          icon: <UserOutlined />,
+          label: "Profile",
+          onClick: () => {
+            router.push("/user/profile");
+            setSelected("6");
+          },
+        },
+        {
+          key: "7",
+          icon: <LogoutOutlined />,
+          label: "LogOut",
+          onClick: () => {
+            setUser(null);
+            sessionStorage.clear();
+            router.push(`/login`);
+            setSelected("7");
+          },
+        },
+        {
+          key: "8",
+          icon: <ReadOutlined />,
+          label: "About",
+          onClick: () => {
+            router.push("/about");
+            setSelected("8");
+          },
+        },
+  ];
+
+
   const logItems: ItemType<MenuItemType>[] = [
     {
       key: "1",
@@ -51,74 +87,6 @@ const AppLayout = ({
       onClick: () => {
         router.push("/application");
         setSelected("4");
-      },
-    },
-    {
-      key: "6",
-      icon: <UserOutlined />,
-      label: "Profile",
-      onClick: () => {
-        router.push("/user/profile");
-        setSelected("6");
-      },
-    },
-    {
-      key: "7",
-      icon: <LogoutOutlined />,
-      label: "LogOut",
-      onClick: () => {
-        setItems([
-          {
-            key: "1",
-            icon: <HomeOutlined />,
-            label: "Home",
-            onClick: () => {
-              router.push("/");
-              setSelected("1");
-            },
-            disabled: false,
-          },
-          {
-            key: "2",
-            icon: <LoginOutlined />,
-            label: "Login",
-            onClick: () => {
-              router.replace("/login");
-              setSelected("2");
-            },
-          },
-          {
-            key: "3",
-            icon: <SolutionOutlined />,
-            label: "Register",
-            onClick: () => {
-              router.replace("/register");
-              setSelected("3");
-            },
-          },
-          {
-            key: "7",
-            icon: <ReadOutlined />,
-            label: "About",
-            onClick: () => {
-              router.push("/about");
-              setSelected("7");
-            },
-          },
-        ]);
-        setUser(null);
-        sessionStorage.clear();
-        router.push(`/login`);
-        setSelected("7");
-      },
-    },
-    {
-      key: "8",
-      icon: <ReadOutlined />,
-      label: "About",
-      onClick: () => {
-        router.push("/about");
-        setSelected("8");
       },
     },
   ];
@@ -140,35 +108,6 @@ const AppLayout = ({
         router.push("/user");
         setSelected("5");
       }
-    },
-    {
-      key: "6",
-      icon: <UserOutlined />,
-      label: "Profile",
-      onClick: () => {
-        router.push("/user/profile");
-        setSelected("6");
-      },
-    },
-    {
-      key: "7",
-      icon: <LogoutOutlined />,
-      label: "LogOut",
-      onClick: () => {
-        setUser(null);
-        sessionStorage.clear();
-        router.push(`/login`);
-        setSelected("7");
-      },
-    },
-    {
-      key: "8",
-      icon: <ReadOutlined />,
-      label: "About",
-      onClick: () => {
-        router.push("/about");
-        setSelected("8");
-      },
     },
   ];
 
@@ -207,45 +146,7 @@ const navBar: MenuItem[] = [
   const router = useRouter();
   const [selected, setSelected] = useState("1");
 
-  const [items, setItems] = useState<ItemType<MenuItemType>[]>([
-    {
-      key: "1",
-      icon: <HomeOutlined />,
-      label: "Home",
-      onClick: () => {
-        router.push("/");
-        setSelected("1");
-      },
-      disabled: false,
-    },
-    {
-      key: "2",
-      icon: <LoginOutlined />,
-      label: "Login",
-      onClick: () => {
-        router.replace("/login");
-        setSelected("2");
-      },
-    },
-    {
-      key: "3",
-      icon: <SolutionOutlined />,
-      label: "Register",
-      onClick: () => {
-        router.replace("/register");
-        setSelected("3");
-      },
-    },
-    {
-      key: "7",
-      icon: <ReadOutlined />,
-      label: "About",
-      onClick: () => {
-        router.push("/about");
-        setSelected("7");
-      },
-    },
-  ]);
+  const [items1, setItems] = useState<ItemType<MenuItemType>[]>();
 
   const isAdminOrInstructor=()=>user && (user.role==='admin'||user.role==='instructor');
 
@@ -329,7 +230,7 @@ const navBar: MenuItem[] = [
                 style={{
                   height: "100%",
                 }}
-                items={items}
+                items={items1}
             />
           </Sider>
           }
@@ -353,19 +254,19 @@ const navBar: MenuItem[] = [
                 className="h-12 w-52 cursor-pointer"
             />} type="link" href="/"  className="w-16 ml-2" />}
               {profile?user ? (
-                <Link href="/user/profile">
-                  <Avatar
-                    className="mr-2 cursor-pointer"
-                    icon={
-                      <Image
-                        src={profile}
-                        width={100}
-                        height={64}
-                        alt="profile"
-                      />
-                    }
-                  />
-                </Link>
+                  <Dropdown menu={{items}} placement="bottomLeft" autoAdjustOverflow className={"mr-5"}>
+                    <a onClick={(e) => e.preventDefault()}>
+                      <Space>
+                    <Avatar
+                        className="cursor-pointer"
+                        icon={<Image
+                            src={profile}
+                            width={100}
+                            height={64}
+                            alt="profile"/>}/>
+                      </Space>
+                    </a>
+                  </Dropdown>
               ) :<Avatar
                   className="mr-2 cursor-pointer"
               />: (
