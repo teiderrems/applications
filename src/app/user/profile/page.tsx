@@ -139,7 +139,7 @@ export default function UserDetailInfo() {
     if (userEdit) {
       getProfile();
     }
-  }, [isError, isLoading, isSuccess, data, userData, userEdit, router, pathname, userIsError, userError]);
+  }, [isError, isLoading, isSuccess, data, userData,profile, userEdit, router, pathname, userIsError, userError,]);
 
   if (userIsLoading || !param) {
     return (

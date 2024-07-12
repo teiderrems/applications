@@ -157,7 +157,7 @@ export default function UserList() {
       dataIndex: "CreatedAt",
       render: (value:string) =>{
         moment.locale('fr');
-        return moment(value,"YYYYMMDD").fromNow().toString();
+        return moment(new Date(value),"YYYYMMDD").fromNow(true).toString();
       },
       defaultSortOrder: 'ascend',
       sorter:{

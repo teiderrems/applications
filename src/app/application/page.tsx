@@ -97,7 +97,6 @@ const Application = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<any>([]);
   const params = useSearchParams();
   const { confirm } = Modal;
-  const [reload, setReload] = useState(false);
   const [user, setUser] = useState<any>();
 
   const [page, setPage] = useState(0);
@@ -153,7 +152,6 @@ const Application = () => {
         const res=await deleteManyApp(selectedRowKeys);
         if(res.data){
           success(title,'deleted');
-          setReload(state=>!state);
         }
         if (res.error) {
           error();
@@ -259,7 +257,7 @@ const Application = () => {
       dataIndex: "CreatedAt",
       render: (value:string) =>{
         moment.locale('fr');
-        return moment(value,"YYYYMMDD").fromNow().toString();
+        return moment(new Date(value),"YYYYMMDD").fromNow(true).toString();
       }
       ,
       defaultSortOrder: 'ascend',

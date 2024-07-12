@@ -304,7 +304,7 @@ const navBar: MenuItem[] = [
     if (user) {
       getProfile();
     }
-  }, [selected, pathname,]);
+  }, [selected, pathname,profile,]);
 
   return (
     <html lang="fr">
@@ -352,21 +352,23 @@ const navBar: MenuItem[] = [
                 alt="logo"
                 className="h-12 w-52 cursor-pointer"
             />} type="link" href="/"  className="w-16 ml-2" />}
-              {user ? (
+              {profile?user ? (
                 <Link href="/user/profile">
                   <Avatar
                     className="mr-2 cursor-pointer"
-                    // icon={
-                    //   <Image
-                    //     src={profile}
-                    //     width={100}
-                    //     height={64} profile && 
-                    //     alt="profile"
-                    //   />
-                    // }
+                    icon={
+                      <Image
+                        src={profile}
+                        width={100}
+                        height={64}
+                        alt="profile"
+                      />
+                    }
                   />
                 </Link>
-              ) : (
+              ) :<Avatar
+                  className="mr-2 cursor-pointer"
+              />: (
                 <Menu
                 theme="light"
                 mode="horizontal"

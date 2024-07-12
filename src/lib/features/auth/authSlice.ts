@@ -1,6 +1,5 @@
 import React from 'react';
 import { createSlice } from '@reduxjs/toolkit';
-import { useRouter } from 'next/navigation';
 
 const authSlice = createSlice({
   name: 'auth',

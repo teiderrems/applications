@@ -76,6 +76,7 @@ function Login() {
     }
     if (res.error as FetchBaseQueryError) {
         warning();
+        setIsSubmit((state) => !state);
     }
   };
   const success = () => {

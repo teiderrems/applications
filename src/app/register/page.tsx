@@ -35,7 +35,6 @@ export default function Register() {
     Profile: undefined,
   });
   const router = useRouter();
-  const [response, setResponse] = useState<CustomType>();
   const [isSubmit, setIsSubmit] = useState(false);
 
 
@@ -53,9 +52,12 @@ export default function Register() {
     console.log(res)
     if (res.data) {
       success();
+      router.replace('/login');
+      setIsSubmit((state) => !state);
     }
     if (res.error) {
       error();
+      setIsSubmit((state) => !state);
     }
   };
   useEffect(() => {}, []);
