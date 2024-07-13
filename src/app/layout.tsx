@@ -212,14 +212,14 @@ const navBar: MenuItem[] = [
       <head>
         <title>Applications Histories</title>
       </head>
-      <body className="h-screen overflow-hidden">
-        <Layout className="min-h-screen static">
-          { user && <Sider trigger={null} collapsible collapsed={collapsed}>
-            <Link href="/">
+      <body className="h-screen flex flex-col overflow-hidden">
+        <Layout className="flex-grow">
+          { user && <Sider trigger={null} className="h-screen bg-white border-r" theme="light" collapsible collapsed={collapsed}>
+            <Link href="/" className="">
               <Image
                   src={logo}
                   alt="logo"
-                  className="h-12 w-4/6 cursor-pointer"
+                  className="h-12 mx-auto w-4/6 cursor-pointer"
               />
             </Link>
 
@@ -229,6 +229,7 @@ const navBar: MenuItem[] = [
                 selectedKeys={[selected]}
                 style={{
                   height: "100%",
+                  marginTop:"25px"
                 }}
                 items={items1}
             />
@@ -283,7 +284,7 @@ const navBar: MenuItem[] = [
               )}
             </Header>
             <Content
-              className="flex-1 flex flex-col"
+              className="flex-1 flex flex-col overflow-y-auto"
               style={{
                 backgroundColor: "white",
               }}

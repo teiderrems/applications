@@ -12,6 +12,8 @@ import {
   EditTwoTone,
   ExclamationCircleFilled,
   PlusOutlined,
+  SortAscendingOutlined,
+  SortDescendingOutlined,
 } from "@ant-design/icons";
 import AddApplication from "../components/AddApplication";
 import { useDeleteApplicationMutation, useDeleteManyApplicationMutation, useFindAllQuery } from "@/lib/features/applications/applicationsApiSlice";
@@ -152,6 +154,7 @@ const Application = () => {
         const res=await deleteManyApp(selectedRowKeys);
         if(res.data){
           success(title,'deleted');
+          setSelectedRowKeys([]);
         }
         if (res.error) {
           error();
@@ -260,10 +263,15 @@ const Application = () => {
         return moment(new Date(value),"YYYYMMDD").fromNow(true).toString();
       }
       ,
-      defaultSortOrder: 'ascend',
+      sortIcon(props) {
+        if(props.sortOrder=='descend')
+          return (<SortAscendingOutlined />)
+        else
+        return(<SortDescendingOutlined />)   
+      },
       sorter:{
         compare(a,b){
-          return -(new Date(a.CreatedAt!).valueOf()+ new Date(b.CreatedAt!).valueOf());
+          return (new Date(a.CreatedAt!).valueOf()- new Date(b.CreatedAt!).valueOf());
         }
       }
 
@@ -319,11 +327,11 @@ const Application = () => {
       router.push(`/login?ReturnUrl=${pathname}`);
     }
     if (sessionStorage) setUser(JSON.parse(sessionStorage.getItem("user")!));
-  }, [url,data,page,limit,]);
+  }, [url,data,page,limit,selectedRowKeys,]);
 
 
   return (
-    <div className="mx-1 flex flex-col flex-1">
+    <div className="m-2 flex flex-col flex-1">
       {contextHolder}
       {!params.get("user") && (
         <div className="h-5  flex items-center rounded-t-md my-4 justify-end">
@@ -337,7 +345,6 @@ const Application = () => {
               }}
             />
           )}
-          {/* <Input.Search placeholder="Enter your filter content" className="w-2/6 self-center"/> */}
           <Button
             icon={<PlusOutlined />}
             onClick={() => setOpen(!open)}

@@ -3,7 +3,7 @@
 import Axios from "@/hooks/axios.config";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { EditTwoTone, MoreOutlined, PlusOutlined } from "@ant-design/icons";
+import { EditTwoTone, MoreOutlined, PlusOutlined, SortAscendingOutlined, SortDescendingOutlined } from "@ant-design/icons";
 
 import AddUser from "../components/AddUser";
 import {Button, Table, TableColumnsType} from "antd";
@@ -159,11 +159,16 @@ export default function UserList() {
         moment.locale('fr');
         return moment(new Date(value),"YYYYMMDD").fromNow(true).toString();
       },
-      defaultSortOrder: 'ascend',
+      sortIcon(props) {
+        if(props.sortOrder=='descend')
+          return (<SortAscendingOutlined />)
+        else
+        return(<SortDescendingOutlined />)   
+      },
       sorter:{
         compare(a,b){
-          return -(new Date(a.CreatedAt!).valueOf()+ new Date(b.CreatedAt!).valueOf());
-        }
+          return (new Date(a.CreatedAt!).valueOf()- new Date(b.CreatedAt!).valueOf());
+        },
       }
     },
     {
@@ -214,7 +219,7 @@ export default function UserList() {
   }
 
   return (
-    <div className="flex-1 flex flex-col  mx-2">
+    <div className="flex-1 flex flex-col  m-2">
       {user && user?.role === "admin" && (
         <div className="h-5  flex items-center rounded-t-md my-4 justify-end">
           {!open ? (
