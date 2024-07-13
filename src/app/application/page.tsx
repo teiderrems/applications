@@ -96,7 +96,7 @@ const Status = [{
   value:"reject"
 },];
 const Application = () => {
-  const [selectedRowKeys, setSelectedRowKeys] = useState<any>([]);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
   const params = useSearchParams();
   const { confirm } = Modal;
   const [user, setUser] = useState<any>();
@@ -152,9 +152,9 @@ const Application = () => {
   async function HandleDelete(id: string, title: string): Promise<void> {
       if (selectedRowKeys.length > 0) {
         const res=await deleteManyApp(selectedRowKeys);
+        setSelectedRowKeys(state=>state=[]);
         if(res.data){
           success(title,'deleted');
-          setSelectedRowKeys([]);
         }
         if (res.error) {
           error();

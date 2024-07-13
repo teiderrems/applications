@@ -63,7 +63,7 @@ const applicationsApi = createApi({
       },
       invalidatesTags: [{ type: 'Applications', id: 'LIST' }],
     }),
-    deleteManyApplication:builder.mutation<any,[string]>({
+    deleteManyApplication:builder.mutation<any,string[]>({
       query(body) {
         return{
           url:`applications`,
