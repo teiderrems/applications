@@ -214,22 +214,23 @@ const navBar: MenuItem[] = [
       </head>
       <body className="h-screen flex flex-col overflow-hidden">
         <Layout className="flex-grow">
-          { user && <Sider trigger={null} className="h-screen bg-white border-r" theme="light" collapsible collapsed={collapsed}>
-            <Link href="/" className="">
+          { user && <Sider trigger={null} className="h-screen bg-white" theme="dark" collapsible collapsed={collapsed}>
+            <Link href="/" className="w-full ">
               <Image
                   src={logo}
                   alt="logo"
-                  className="h-12 mx-auto w-4/6 cursor-pointer"
+                  className="h-14 mx-auto w-4/6 cursor-pointer"
               />
             </Link>
+            <hr />
 
             <Menu
-                theme="light"
+                theme="dark"
                 mode="inline"
                 selectedKeys={[selected]}
                 style={{
                   height: "100%",
-                  marginTop:"25px"
+                  paddingTop:"25px"
                 }}
                 items={items1}
             />
@@ -237,10 +238,11 @@ const navBar: MenuItem[] = [
           }
           <Layout className="">
             <Header
-              style={{ padding: 0, background: colorBgContainer,height:"48px" }}
+              style={{ padding: 0,height:"57px" }}
               className="flex justify-between items-center border-b"
             >
               {user?<Button
+              className="hover:bg-gray-50"
                   type="text"
                   icon={collapsed ? <MenuUnfoldOutlined/> : <MenuFoldOutlined/>}
                   onClick={() => setCollapsed(!collapsed)}
@@ -248,6 +250,7 @@ const navBar: MenuItem[] = [
                     fontSize: "16px",
                     width: 45,
                     height: 45,
+                    color:"gray"
                   }}
               />:<Button icon={<Image
                 src={logo}
@@ -272,12 +275,12 @@ const navBar: MenuItem[] = [
                   className="mr-2 cursor-pointer"
               />: (
                 <Menu
-                theme="light"
+                theme="dark"
                 mode="horizontal"
                 selectedKeys={[selected]}
                 style={{
                   width: "25%",
-                  height:"100%"
+                  height:"100%",
                 }}
                 items={navBar}
             />
@@ -285,9 +288,10 @@ const navBar: MenuItem[] = [
             </Header>
             <Content
               className="flex-1 flex flex-col overflow-y-auto"
-              style={{
-                backgroundColor: "white",
-              }}
+              // style={{
+              //   backgroundColor: "white",
+              // }}
+      
             >
               {children}
             </Content>
