@@ -104,7 +104,7 @@ const Application = () => {
   const [user, setUser] = useState<any>();
 
   const [page, setPage] = useState(0);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(3);
   const [url, setUrl] = useState<any>(
     `${Axios.defaults.baseURL}${params.get("user") ? "users/" : ""}` +
       `applications?page=${page}&limit=${limit}${
@@ -414,7 +414,8 @@ const Application = () => {
               }
           </div>)
       }
-      <Pagination onChange={(page, pageSize) => {
+      <Pagination
+          onChange={(page, pageSize) => {
         setLimit((state) => (state = pageSize));
         setPage((state) => (state = page));
         setUrl(
