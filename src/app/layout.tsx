@@ -1,6 +1,6 @@
 "use client";
 import "./globals.css";
-import React, { useEffect, useState } from "react";
+import React, {createContext, useEffect, useState} from "react";
 import {
   DownOutlined,
   HomeOutlined,
@@ -288,10 +288,6 @@ const navBar: MenuItem[] = [
             </Header>
             <Content
               className="flex-1 flex flex-col overflow-y-auto"
-              // style={{
-              //   backgroundColor: "white",
-              // }}
-      
             >
               {children}
             </Content>
@@ -307,7 +303,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>){
-  
+
   
   return(
     <StoreProvider>

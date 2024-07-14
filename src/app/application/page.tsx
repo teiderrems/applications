@@ -1,6 +1,6 @@
 "use client";
 import React, { Suspense, useEffect, useState } from "react";
-import { Button, Modal, Table, message, Checkbox } from "antd";
+import {Button, Modal, Table, message, Checkbox, Card, Pagination, Descriptions} from "antd";
 import type { TableColumnsType } from "antd";
 import ApplicationDetail, {
   Props,
@@ -8,12 +8,13 @@ import ApplicationDetail, {
 import Axios from "@/hooks/axios.config";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
+  AppstoreOutlined,
   DeleteOutlined,
   EditTwoTone,
   ExclamationCircleFilled,
   PlusOutlined,
   SortAscendingOutlined,
-  SortDescendingOutlined,
+  SortDescendingOutlined, TableOutlined,
 } from "@ant-design/icons";
 import AddApplication from "../components/AddApplication";
 import { useDeleteApplicationMutation, useDeleteManyApplicationMutation, useFindAllQuery } from "@/lib/features/applications/applicationsApiSlice";
@@ -95,6 +96,7 @@ const Status = [{
   text:"reject",
   value:"reject"
 },];
+moment.locale('fr');
 const Application = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
   const params = useSearchParams();
@@ -259,7 +261,7 @@ const Application = () => {
       title: "CreatedAt",
       dataIndex: "CreatedAt",
       render: (value:string) =>{
-        moment.locale('fr');
+
         return moment(new Date(value),"YYYYMMDD").fromNow(true).toString();
       }
       ,
@@ -305,6 +307,7 @@ const Application = () => {
         !!(selectedRowKeys.length > 0 || (user && user.role === 'instructor')),
     },
   ];
+  const [isGrid,setIsGrid]=useState(false);
 
   const {isError,error:Error,data}=useFindAllQuery(url);
 
@@ -327,67 +330,117 @@ const Application = () => {
       router.push(`/login?ReturnUrl=${pathname}`);
     }
     if (sessionStorage) setUser(JSON.parse(sessionStorage.getItem("user")!));
-  }, [url,data,page,limit,selectedRowKeys,]);
-
+  }, [url,data,page,limit,selectedRowKeys,isGrid,]);
 
   return (
     <div className="m-2 flex flex-col flex-1">
       {contextHolder}
       {!params.get("user") && (
-        <div className="h-5  flex items-center rounded-t-md my-4 justify-end">
-          {selectedRowKeys.length > 0 && (
-            <Button className="h-full"
-              icon={<DeleteOutlined />}
-              danger
-              size="small"
-              onClick={() => {
-                showDeleteConfirm(selectedRowKeys[0], "items");
-              }}
+        <div className="h-5  flex items-center rounded-t-md my-4 justify-between">
+          {
+            (isGrid)?(<Button icon={<TableOutlined className="cursor-pointer"/>}  onClick={()=>setIsGrid(state=>!state)} />):(<Button  onClick={()=>setIsGrid(state=>!state)} icon={<AppstoreOutlined className="cursor-pointer"/>}/>)
+          }
+          <div className="flex space-x-5">
+            {selectedRowKeys.length > 0 && (
+              <Button className="h-full"
+                icon={<DeleteOutlined />}
+                danger
+                size="small"
+                onClick={() => {
+                  showDeleteConfirm(selectedRowKeys[0], "items");
+                }}
+              />
+            )}
+            <Button
+              icon={<PlusOutlined />}
+              onClick={() => setOpen(!open)}
+              className="mx-2 rounded-full hover:bg-blue-500 hover:text-white text-2xl w-8 h-8"
             />
-          )}
-          <Button
-            icon={<PlusOutlined />}
-            onClick={() => setOpen(!open)}
-            className="mx-2 rounded-full hover:bg-blue-500 hover:text-white text-2xl w-8 h-8"
-          />
+          </div>
         </div>
       )}
-      <Table
-        className=" cursor-pointer flex-1"
-        key={"_id"}
-        columns={columns}
-        dataSource={data?.applications}
-        bordered
-        size="middle"
-        pagination={{
-          onChange: (page, pageSize) => {
-            setLimit((state) => (state = pageSize));
-            setPage((state) => (state = page));
-            setUrl(
-              (state :string)=>state=`${Axios.defaults.baseURL}${params.get("user") ? "users/" : ""}` +
+      {
+        (!isGrid)?(<Table
+            className=" cursor-pointer flex-1"
+            key={"_id"}
+            columns={columns}
+            dataSource={data?.applications}
+            bordered
+            size="middle"
+            pagination={false}
+            scroll={{ y: '695px' }}
+        />):
+            (<div className={`flex-1 grid md:grid-cols-3 xl:grid-cols-4 mx-4 grid-cols-1 mb-2`}>
+              {
+                data?.applications.map((application) => (<Card key={application._id} title={application?.Title} style={{
+                  height:'200px',
+                  width:'400px'
+                }} actions={[
+                  <Button  key="edit"
+                      size="small"
+                      icon={<EditTwoTone />}
+                      onClick={() => {
+                        setCurrentApp((state: Props | undefined) => (state = application));
+                        setHandleDetail(!handleDetail);
+                      }}
+                  />,
+                  <Button  key="delete"
+                      size="small"
+                      danger
+                      icon={<DeleteOutlined/>}
+                      onClick={() => {
+                        showDeleteConfirm(application._id as string, application.Title as string);
+                      }}
+                  />
+                ]}>
+                  <Descriptions
+                      column={1}
+                      layout={"horizontal"}
+                      items={[
+                    {
+                      key:"0",
+                      label:"Entreprise",
+                      children:<span>{application.Entreprise}</span>
+                    },
+                    {
+                      key:"1",
+                      label:"CreatedAt",
+                      children:<span className="text-[12px] py-1 truncate">{moment(new Date(application.CreatedAt!),"YYYYMMDD").fromNow(true).toString()}</span>
+                    }
+                  ]}
+                  />
+
+                </Card>))
+              }
+          </div>)
+      }
+      <Pagination onChange={(page, pageSize) => {
+        setLimit((state) => (state = pageSize));
+        setPage((state) => (state = page));
+        setUrl(
+            (state :string)=>state=`${Axios.defaults.baseURL}${params.get("user") ? "users/" : ""}` +
                 `applications?page=${page - 1}&limit=${pageSize}${
-                  params.get("user") ? `&owner=${params.get("user")}` : ""
+                    params.get("user") ? `&owner=${params.get("user")}` : ""
                 }`
-            );
-          },
-          total: data?.count,
-          pageSize: limit,
-          showSizeChanger: true,
-          onShowSizeChange: (current, size) => {
-            setLimit((state) => (state = size));
-            setPage((state) => (state = current));
-            setUrl(
-              (state :string)=>state=`${Axios.defaults.baseURL}${params.get("user") ? "users/" : ""}` +
-                `applications?page=${page - 1}&limit=${size}${
-                  params.get("user") ? `&owner=${params.get("user")}` : ""
-                }`
-            );
-          },
-          pageSizeOptions: [
-            1, 2, 3, 4, 5, 6, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55,
-          ],
-        }}
-        scroll={{ y: '695px' }}
+        );
+      }}
+                  total={data?.count}
+                  pageSize={limit}
+                  showSizeChanger={true}
+                  onShowSizeChange={(current, size) => {
+                    setLimit((state) => (state = size));
+                    setPage((state) => (state = current));
+                    setUrl(
+                        (state :string)=>state=`${Axios.defaults.baseURL}${params.get("user") ? "users/" : ""}` +
+                            `applications?page=${page - 1}&limit=${size}${
+                                params.get("user") ? `&owner=${params.get("user")}` : ""
+                            }`
+                    );
+                  }}
+                  pageSizeOptions={[
+                    1, 2, 3, 4, 5, 6, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55,
+                  ]}
+                  hideOnSinglePage={true}
       />
       {handleDetail && currentApp && (
         <ApplicationDetail
