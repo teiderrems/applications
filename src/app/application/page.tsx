@@ -414,7 +414,7 @@ const Application = () => {
               }
           </div>)
       }
-      <Pagination
+      <Pagination className="flex justify-end my-2"
           onChange={(page, pageSize) => {
         setLimit((state) => (state = pageSize));
         setPage((state) => (state = page));
