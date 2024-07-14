@@ -370,11 +370,11 @@ const Application = () => {
             pagination={false}
             scroll={{ y: '695px' }}
         />):
-            (<div className={`flex-1 grid md:grid-cols-3 xl:grid-cols-4 mx-4 grid-cols-1 mb-2`}>
+            (<div className={`flex-1 flex flex-wrap justify-center   flex-col sm:flex-row my-4 gap-10`}>
               {
                 data?.applications.map((application) => (<Card key={application._id} title={application?.Title} style={{
                   height:'200px',
-                  width:'400px'
+                  width:'300px'
                 }} actions={[
                   <Button  key="edit"
                       size="small"
