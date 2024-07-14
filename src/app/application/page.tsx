@@ -202,8 +202,13 @@ const Application = () => {
             render: (value, record, index) => {
                 return (
                     <Checkbox
-                        onChange={() => {
-                            setSelectedRowKeys((state: any) => [...state, record._id]);
+                        onChange={(e) => {
+                            if (e.target.checked) {
+                                setSelectedRowKeys((state: any) => [...state, record._id]);
+                            }
+                            else if (selectedRowKeys.find(id=>id === record._id)) {
+                                setSelectedRowKeys(state => state = state.filter(id=>id !== record._id));
+                            }
                         }}
                     />
                 );
@@ -389,7 +394,7 @@ const Application = () => {
                         pagination={false}
                         scroll={{y: '695px'}}
                     />) :
-                    (<div className={`flex-1 flex flex-wrap justify-center   flex-col sm:flex-row my-4 gap-10`}>
+                    (<div className={`flex-1 flex flex-wrap justify-center mb-4  flex-col sm:flex-row  gap-y-9 gap-x-9`}>
                         {
                             data?.applications.map((application) => (
                                 <Card key={application._id} title={application?.Title} style={{
