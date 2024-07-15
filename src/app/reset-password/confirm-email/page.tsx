@@ -39,7 +39,7 @@ export default function ConfirmEmail() {
         setLoading(state=>!state);
     }
     return (
-        <div className="flex flex-col flex-1 items-center justify-center">
+        <div className="flex flex-col flex-1 items-center justify-center bg-gradient-to-tr from-purple-500 via-rose-300 to-rose-400">
             {contextHolder}
             <Card title="Confirm Email" className="">
                 <form className="w-full flex flex-col space-y-4" onSubmit={handleSubmit}>
