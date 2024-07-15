@@ -15,9 +15,9 @@ export default function Home() {
 
         <div className="container mx-auto p-4 opacity-100 pt-6 z-10 pb-8"><Head><title>Applications Manager</title>
             <link rel="icon" href="/favicon.ico"/>
-        </Head> <h1 className="text-3xl text-white font-bold mb-8">Applications Manager</h1>
+        </Head> <h1 className="text-3xl  font-bold mb-8">Applications Manager</h1>
 
-            <div className="flex flex-wrap flex-col text-white text-xl space-y-2">
+            <div className="flex flex-wrap flex-col  text-xl space-y-2">
                 <p className="text-wrap text-justify h-full w-full p-2">Nous sommes enchantés de vous accueillir
                     sur
                     notre plateforme d&rsquo;enregistrement des candidatures. Chez <strong>Candidatura</strong>,
@@ -25,15 +25,15 @@ export default function Home() {
                     Que vous soyez un professionnel chevronné ou un jeune talent plein de potentiel, nous sommes
                     impatients
                     de découvrir ce que vous pouvez apporter à notre équipe.</p>
-                {/* <Card title="Contact" className="flex flex-col space-y-2"> */}
+                <div className="flex flex-col space-y-2">
                     <div className="flex space-x-3">
                         <MailOutlined/><span>teidaremi0@gmail.com</span>
-                        <PhoneOutlined/><span>0758703501</span>
                     </div>
                     <div className="flex space-x-3">
+                        <PhoneOutlined/><span>0758703501</span>
                     </div>
                     &copy; 2024
-                {/* </Card> */}
+                </div>
             </div>
         </div>
     </main>

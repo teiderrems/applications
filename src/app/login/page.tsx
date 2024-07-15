@@ -110,6 +110,9 @@ function Login() {
   return (
     <div
       className=" flex-1 flex flex-col justify-center items-center text-sm"
+      style={{
+        background: "linear-gradient(#e66465, #9198e5);"
+      }}
     >
       {contextHolder}
       <Card title="Login to continue">

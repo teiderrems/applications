@@ -214,7 +214,7 @@ const navBar: MenuItem[] = [
       </head>
       <body className="h-screen flex flex-col overflow-hidden">
         <Layout className="flex-grow">
-          { user && <Sider trigger={null} className="h-screen bg-white z-20" theme="dark" collapsible collapsed={collapsed}>
+          { user && <Sider trigger={null} className="h-screen z-20" theme="dark" collapsible collapsed={collapsed}>
             <Link href="/" className="w-full ">
               <Image
                   src={logo}
