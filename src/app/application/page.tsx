@@ -394,7 +394,7 @@ const Application = () => {
                         pagination={false}
                         scroll={{y: '695px'}}
                     />) :
-                    (<div className={`flex-1 flex flex-wrap justify-center mb-4  flex-col sm:flex-row  gap-y-9 gap-x-9`}>
+                    (<div className={`flex-1 flex flex-wrap justify-center mb-10  flex-col sm:flex-row  gap-12`}>
                         {
                             data?.applications.map((application) => (
                                 <Card key={application._id} title={application?.Title} style={{

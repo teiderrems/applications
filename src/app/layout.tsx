@@ -214,7 +214,7 @@ const navBar: MenuItem[] = [
       </head>
       <body className="h-screen flex flex-col overflow-hidden">
         <Layout className="flex-grow">
-          { user && <Sider trigger={null} className="h-screen bg-white" theme="dark" collapsible collapsed={collapsed}>
+          { user && <Sider trigger={null} className="h-screen bg-white z-20" theme="dark" collapsible collapsed={collapsed}>
             <Link href="/" className="w-full ">
               <Image
                   src={logo}
@@ -239,7 +239,7 @@ const navBar: MenuItem[] = [
           <Layout className="">
             <Header
               style={{ padding: 0,height:"57px" }}
-              className="flex justify-between items-center border-b"
+              className="flex justify-between z-20 items-center border-b"
             >
               {user?<Button
               className="hover:bg-gray-50"
