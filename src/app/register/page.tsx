@@ -78,10 +78,7 @@ export default function Register() {
   };
   return (
     <div
-      className="flex-1 justify-center flex flex-col text-sm items-center"
-      style={{
-        background: "linear-gradient(#e66465, #9198e5);"
-      }}
+      className="flex-1 justify-center flex flex-col text-sm items-center bg-gradient-to-tr from-purple-500 via-rose-300 to-rose-400"
     >
       {contextHolder}
       <Card title="SignIn to continue" className="">
