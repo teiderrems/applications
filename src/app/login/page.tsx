@@ -1,13 +1,7 @@
 "use client";
-
-import Axios from "@/hooks/axios.config";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
-import { CustomType } from "../components/ApplicationDetail";
-import {
-  LoadingOutlined,
-} from "@ant-design/icons";
 import {
   Button,
   Card,
@@ -30,8 +24,8 @@ function Login() {
     Username: string;
     Password: string;
   }>({
-    Username: "remi",
-    Password: "Rems2001",
+    Username: "test",
+    Password: "rems2001",
   });
 
   const query = useSearchParams();
