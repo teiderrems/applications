@@ -23,6 +23,7 @@ import {
 } from "@/lib/features/applications/applicationsApiSlice";
 
 import moment from "moment";
+import capitalize from "antd/es/_util/capitalize";
 
 
 moment.locale('fr', {
@@ -220,6 +221,7 @@ const Application = () => {
             dataIndex: "Title",
             filterMode: 'tree',
             filterSearch: true,
+
         },
         {
             title: "Entreprise",
@@ -398,7 +400,7 @@ const Application = () => {
                         {
                             data?.applications.map((application) => (
                                 <Card key={application._id} title={application?.Title} style={{
-                                    height: '200px',
+                                    height:"200px",
                                     width: '300px'
                                 }} actions={[
                                     <Button key="edit"
@@ -421,17 +423,18 @@ const Application = () => {
                                     <Descriptions
                                         column={1}
                                         layout={"horizontal"}
+
                                         items={[
                                             {
                                                 key: "0",
                                                 label: "Entreprise",
-                                                children: <span>{application.Entreprise}</span>
+                                                children: <span className="text-[10px] w-full py-1 capitalize truncate">{application.Entreprise}</span>
                                             },
                                             {
                                                 key: "1",
                                                 label: "CreatedAt",
                                                 children: <span
-                                                    className="text-[12px] py-1 truncate">{moment(new Date(application.CreatedAt!), "YYYYMMDD").fromNow(true).toString()}</span>
+                                                    className="text-[10px] py-1 w-full truncate">{moment(new Date(application.CreatedAt!), "YYYYMMDD").fromNow(true).toString()}</span>
                                             }
                                         ]}
                                     />
