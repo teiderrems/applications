@@ -418,7 +418,7 @@ const Application = () => {
                                             showDeleteConfirm(application._id as string, application.Title as string);
                                         }}
                                     />,
-                                    <Checkbox
+                                    <Checkbox key="select"
                                         onChange={(e) => {
                                             if (e.target.checked) {
                                                 setSelectedRowKeys((state: any) => [...state, application._id]);
