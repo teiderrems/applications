@@ -1,25 +1,25 @@
-"use client";
-import React, {Suspense, useEffect, useState} from "react";
-import type {TableColumnsType} from "antd";
-import {Button, Card, Checkbox, Descriptions, message, Modal, Pagination, Table} from "antd";
-import ApplicationDetail, {Props,} from "../components/ApplicationDetail";
+﻿"use client";
+import React, { Suspense, useEffect, useState } from "react";
+import type { TableColumnsType } from "antd";
+import { Button, Card, Checkbox, Descriptions, message, Modal, Pagination, Table } from "antd";
+import ApplicationDetail, { Props, } from "../components/ApplicationDetail";
 import Axios from "@/hooks/axios.config";
-import {usePathname, useRouter, useSearchParams} from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
-  AppstoreOutlined,
-  DeleteOutlined,
-  EditTwoTone,
-  ExclamationCircleFilled,
-  PlusOutlined,
-  SortAscendingOutlined,
-  SortDescendingOutlined,
-  TableOutlined,
+    AppstoreOutlined,
+    DeleteOutlined,
+    EditTwoTone,
+    ExclamationCircleFilled,
+    PlusOutlined,
+    SortAscendingOutlined,
+    SortDescendingOutlined,
+    TableOutlined,
 } from "@ant-design/icons";
 import AddApplication from "../components/AddApplication";
 import {
-  useDeleteApplicationMutation,
-  useDeleteManyApplicationMutation,
-  useFindAllQuery
+    useDeleteApplicationMutation,
+    useDeleteManyApplicationMutation,
+    useFindAllQuery
 } from "@/lib/features/applications/applicationsApiSlice";
 
 import moment from "moment";
@@ -104,15 +104,14 @@ moment.locale('fr');
 const Application = () => {
     const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
     const params = useSearchParams();
-    const {confirm} = Modal;
+    const { confirm } = Modal;
     const [user, setUser] = useState<any>();
 
     const [page, setPage] = useState(0);
     const [limit, setLimit] = useState(3);
     const [url, setUrl] = useState<any>(
         `${Axios.defaults.baseURL}${params.get("user") ? "users/" : ""}` +
-        `applications?page=${page}&limit=${limit}${
-            params.get("user") ? `&owner=${params.get("user")}` : ""
+        `applications?page=${page}&limit=${limit}${params.get("user") ? `&owner=${params.get("user")}` : ""
         }`
     );
 
@@ -136,10 +135,9 @@ const Application = () => {
     const showDeleteConfirm = (id: string, title: string) => {
         confirm({
             title: "Delete application!",
-            icon: <ExclamationCircleFilled/>,
-            content: `Are you sure to want to delete ${
-                selectedRowKeys.length > 0 ? "these items" : "this item"
-            }?`,
+            icon: <ExclamationCircleFilled />,
+            content: `Are you sure to want to delete ${selectedRowKeys.length > 0 ? "these items" : "this item"
+                }?`,
             okText: "Yes",
             okType: "danger",
             cancelText: "No",
@@ -207,8 +205,8 @@ const Application = () => {
                             if (e.target.checked) {
                                 setSelectedRowKeys((state: any) => [...state, record._id]);
                             }
-                            else if (selectedRowKeys.find(id=>id === record._id)) {
-                                setSelectedRowKeys(state => state = state.filter(id=>id !== record._id));
+                            else if (selectedRowKeys.find(id => id === record._id)) {
+                                setSelectedRowKeys(state => state = state.filter(id => id !== record._id));
                             }
                         }}
                     />
@@ -290,9 +288,9 @@ const Application = () => {
             ,
             sortIcon(props) {
                 if (props.sortOrder == 'descend')
-                    return (<SortAscendingOutlined/>)
+                    return (<SortAscendingOutlined />)
                 else
-                    return (<SortDescendingOutlined/>)
+                    return (<SortDescendingOutlined />)
             },
             sorter: {
                 compare(a, b) {
@@ -306,10 +304,10 @@ const Application = () => {
             dataIndex: "action",
             render: (value, record, index) => {
                 return (
-                    <div className="flex space-x-4">
+                    <div className="space-x-4 flex">
                         <Button
                             size="small"
-                            icon={<EditTwoTone/>}
+                            icon={<EditTwoTone />}
                             onClick={() => {
                                 setCurrentApp((state: Props | undefined) => (state = record));
                                 setHandleDetail(!handleDetail);
@@ -318,7 +316,7 @@ const Application = () => {
                         <Button
                             size="small"
                             danger
-                            icon={<DeleteOutlined/>}
+                            icon={<DeleteOutlined />}
                             onClick={() => {
                                 showDeleteConfirm(record._id as string, record.Title as string);
                             }}
@@ -332,7 +330,7 @@ const Application = () => {
     ];
     const [isGrid, setIsGrid] = useState(false);
 
-    const {isError, error: Error, data} = useFindAllQuery(url);
+    const { isError, error: Error, data } = useFindAllQuery(url);
 
 
     useEffect(() => {
@@ -358,27 +356,28 @@ const Application = () => {
     return (
         <div className="m-2 flex flex-col flex-1">
             {contextHolder}
+
             {!params.get("user") && (
                 <div className="h-5  flex items-center rounded-t-md my-4 justify-between">
                     {
-                        (isGrid) ? (<Button icon={<TableOutlined className="cursor-pointer"/>}
-                                            onClick={() => setIsGrid(state => !state)}/>) : (
+                        (isGrid) ? (<Button icon={<TableOutlined className="cursor-pointer" />}
+                            onClick={() => setIsGrid(state => !state)} />) : (
                             <Button onClick={() => setIsGrid(state => !state)}
-                                    icon={<AppstoreOutlined className="cursor-pointer"/>}/>)
+                                icon={<AppstoreOutlined className="cursor-pointer" />} />)
                     }
-                    <div className="flex space-x-5">
+                    <div className="flex space-x-5 items-center">
                         {selectedRowKeys.length > 0 && (
-                            <Button className="h-full"
-                                    icon={<DeleteOutlined/>}
-                                    danger
-                                    size="small"
-                                    onClick={() => {
-                                        showDeleteConfirm(selectedRowKeys[0], "items");
-                                    }}
-                            />
+                            <Button className=""
+                                icon={<DeleteOutlined />}
+                                danger
+                                size="small"
+                                onClick={() => {
+                                    showDeleteConfirm(selectedRowKeys[0], "items");
+                                }}
+                            > Delete All</Button>
                         )}
                         <Button
-                            icon={<PlusOutlined/>}
+                            icon={<PlusOutlined />}
                             onClick={() => setOpen(!open)}
                             className="mx-2 rounded-full hover:bg-blue-500 hover:text-white text-2xl w-8 h-8"
                         />
@@ -387,37 +386,48 @@ const Application = () => {
             )}
             {
                 (!isGrid) ? (<Table
-                        className=" cursor-pointer flex-1"
-                        key={"_id"}
-                        columns={columns}
-                        dataSource={data?.applications}
-                        bordered
-                        size="middle"
-                        pagination={false}
-                        scroll={{y: '695px'}}
-                    />) :
+                    className=" cursor-pointer flex-1"
+                    key={"_id"}
+                    columns={columns}
+                    dataSource={data?.applications}
+                    bordered
+                    size="middle"
+                    pagination={false}
+                    scroll={{ y: '695px' }}
+                />) :
                     (<div className={`flex-1 flex flex-wrap justify-center mb-10  flex-col sm:flex-row  gap-12`}>
                         {
                             data?.applications.map((application) => (
                                 <Card key={application._id} title={application?.Title} style={{
-                                    height:"200px",
+                                    height: "200px",
                                     width: '300px'
                                 }} actions={[
                                     <Button key="edit"
-                                            size="small"
-                                            icon={<EditTwoTone/>}
-                                            onClick={() => {
-                                                setCurrentApp((state: Props | undefined) => (state = application));
-                                                setHandleDetail(!handleDetail);
-                                            }}
+                                        size="small"
+                                        icon={<EditTwoTone />}
+                                        onClick={() => {
+                                            setCurrentApp((state: Props | undefined) => (state = application));
+                                            setHandleDetail(!handleDetail);
+                                        }}
                                     />,
                                     <Button key="delete"
-                                            size="small"
-                                            danger
-                                            icon={<DeleteOutlined/>}
-                                            onClick={() => {
-                                                showDeleteConfirm(application._id as string, application.Title as string);
-                                            }}
+                                        size="small"
+                                        danger
+                                        icon={<DeleteOutlined />}
+                                        onClick={() => {
+                                            showDeleteConfirm(application._id as string, application.Title as string);
+                                        }}
+                                    />,
+                                    <Checkbox
+                                        onChange={(e) => {
+                                            if (e.target.checked) {
+                                                setSelectedRowKeys((state: any) => [...state, application._id]);
+                                            }
+                                            else if (selectedRowKeys.find(id => id === application._id!)) {
+                                                setSelectedRowKeys(state => state = state.filter(id => id !== application._id));
+                                            }
+                                        }}
+                                        disabled={!!(user && user.role === 'instructor')}
                                     />
                                 ]}>
                                     <Descriptions
@@ -444,33 +454,31 @@ const Application = () => {
                     </div>)
             }
             <Pagination className="flex justify-end my-2"
-                        onChange={(page, pageSize) => {
-                            setLimit((state) => (state = pageSize));
-                            setPage((state) => (state = page));
-                            setUrl(
-                                (state: string) => state = `${Axios.defaults.baseURL}${params.get("user") ? "users/" : ""}` +
-                                    `applications?page=${page - 1}&limit=${pageSize}${
-                                        params.get("user") ? `&owner=${params.get("user")}` : ""
-                                    }`
-                            );
-                        }}
-                        total={data?.count}
-                        pageSize={limit}
-                        showSizeChanger={true}
-                        onShowSizeChange={(current, size) => {
-                            setLimit((state) => (state = size));
-                            setPage((state) => (state = current));
-                            setUrl(
-                                (state: string) => state = `${Axios.defaults.baseURL}${params.get("user") ? "users/" : ""}` +
-                                    `applications?page=${page - 1}&limit=${size}${
-                                        params.get("user") ? `&owner=${params.get("user")}` : ""
-                                    }`
-                            );
-                        }}
-                        pageSizeOptions={[
-                            1, 2, 3, 4, 5, 6, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55,
-                        ]}
-                        hideOnSinglePage={true}
+                onChange={(page, pageSize) => {
+                    setLimit((state) => (state = pageSize));
+                    setPage((state) => (state = page));
+                    setUrl(
+                        (state: string) => state = `${Axios.defaults.baseURL}${params.get("user") ? "users/" : ""}` +
+                            `applications?page=${page - 1}&limit=${pageSize}${params.get("user") ? `&owner=${params.get("user")}` : ""
+                            }`
+                    );
+                }}
+                total={data?.count}
+                pageSize={limit}
+                showSizeChanger={true}
+                onShowSizeChange={(current, size) => {
+                    setLimit((state) => (state = size));
+                    setPage((state) => (state = current));
+                    setUrl(
+                        (state: string) => state = `${Axios.defaults.baseURL}${params.get("user") ? "users/" : ""}` +
+                            `applications?page=${page - 1}&limit=${size}${params.get("user") ? `&owner=${params.get("user")}` : ""
+                            }`
+                    );
+                }}
+                pageSizeOptions={[
+                    1, 2, 3, 4, 5, 6, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55,
+                ]}
+                hideOnSinglePage={true}
             />
             {handleDetail && currentApp && (
                 <ApplicationDetail
@@ -481,7 +489,7 @@ const Application = () => {
                     open={handleDetail}
                 />
             )}
-            {open && <AddApplication isSubmit={isSubmit} setIsSubmit={setIsSubmit} setOpen={setOpen} open={open}/>}
+            {open && <AddApplication isSubmit={isSubmit} setIsSubmit={setIsSubmit} setOpen={setOpen} open={open} />}
         </div>
     );
 };
@@ -489,7 +497,7 @@ const Application = () => {
 export default function ApplicationView() {
     return (
         <Suspense>
-            <Application/>
+            <Application />
         </Suspense>
     );
 }
